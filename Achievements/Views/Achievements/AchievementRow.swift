@@ -1,13 +1,13 @@
 //
-//  LandmarkRow.swift
-//  Landmarks
+//  AchievementRow.swift
+//  Achievements
 //
 //  Created by Yuki Takahashi on 02/01/2021.
 //
 
 import SwiftUI
 
-struct LandmarkRow: View {
+struct AchievementRow: View {
     var landmark: Landmark
     
     var body: some View {
@@ -27,13 +27,13 @@ struct LandmarkRow: View {
     }
 }
 
-struct LandmarkRow_Previews: PreviewProvider {
+struct AchievementRow_Previews: PreviewProvider {
     static var landmarks = ModelData().landmarks
     
     static var previews: some View {
         Group {
-            LandmarkRow(landmark: landmarks[0])
-            LandmarkRow(landmark: landmarks[1])
+            AchievementRow(landmark: landmarks[0])
+            AchievementRow(landmark: landmarks[1])
         }
         .previewLayout(.fixed(width: 300, height: 70))
         

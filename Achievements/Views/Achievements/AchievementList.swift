@@ -1,16 +1,17 @@
 //
-//  LandmarkList.swift
-//  Landmarks
+//  AchievementList.swift
+//  Achievements
 //
 //  Created by Yuki Takahashi on 02/01/2021.
 //
 
 import SwiftUI
 
-struct LandmarkList: View {
+struct  AchievementList: View {
     @EnvironmentObject var modelData: ModelData
     @State private var showFavoritesOnly = false
-    
+    @State private var showingProfile = false
+
     var filteredLandmarks: [Landmark] {
         modelData.landmarks.filter { landmark in
             (!showFavoritesOnly || landmark.isFavorite)
@@ -21,20 +22,30 @@ struct LandmarkList: View {
         NavigationView {
             List {
                 Toggle(isOn: $showFavoritesOnly) {
-                    Text("Favorites only")
+                    Text("Completed only")
                 }
                 ForEach(filteredLandmarks) { landmark in
-                    NavigationLink(destination: LandmarkDetail(landmark: landmark)) {
-                        LandmarkRow(landmark: landmark)
+                    NavigationLink(destination: AchievementDetail(landmark: landmark)) {
+                        AchievementRow(landmark: landmark)
                     }
                 }
             }
-            .navigationTitle("Landmarks")
+            .navigationTitle("Achievement")
+            .toolbar {
+                Button(action: { showingProfile.toggle() }) {
+                    Image(systemName: "magnifyingglass")
+                        .accessibilityLabel("Search")
+                }
+            }
+            .sheet(isPresented: $showingProfile) {
+                ProfileHost()
+                    .environmentObject(modelData)
+            }
         }
     }
 }
 
-struct LandmarkList_Previews: PreviewProvider {
+struct  AchievementList_Previews: PreviewProvider {
     static var landmarks = ModelData().landmarks
     
     static var previews: some View {
@@ -45,7 +56,7 @@ struct LandmarkList_Previews: PreviewProvider {
                 .previewDisplayName(deviceName)
         }
         */
-        LandmarkList()
+        AchievementList()
             .environmentObject(ModelData())
     }
 }

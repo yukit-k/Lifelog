@@ -1,13 +1,13 @@
 //
-//  LandmarkDetail.swift
-//  Landmarks
+//  AchievementDetail.swift
+//  Achievements
 //
 //  Created by Yuki Takahashi on 02/01/2021.
 //
 
 import SwiftUI
 
-struct LandmarkDetail: View {
+struct AchievementDetail: View {
     @EnvironmentObject var modelData: ModelData
     var landmark: Landmark
     
@@ -56,11 +56,11 @@ struct LandmarkDetail: View {
     }
 }
 
-struct LandmarkDetail_Previews: PreviewProvider {
+struct AchievementDetail_Previews: PreviewProvider {
     static let modelData = ModelData()
     
     static var previews: some View {
-        LandmarkDetail(landmark: ModelData().landmarks[0])
+        AchievementDetail(landmark: ModelData().landmarks[0])
             .environmentObject(modelData)
     }
 }
