@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CategoryHome: View {
+struct Highlight: View {
     @EnvironmentObject var modelData: ModelData
     @State private var showingProfile = false
     
@@ -27,7 +27,7 @@ struct CategoryHome: View {
                 .listRowInsets(EdgeInsets())
             }
             .listStyle(InsetListStyle())
-            .navigationTitle("Featured")
+            .navigationTitle("Highlight")
             .toolbar {
                 Button(action: { showingProfile.toggle() }) {
                     Image(systemName: "person.crop.circle")
@@ -42,9 +42,9 @@ struct CategoryHome: View {
     }
 }
 
-struct CategoryHome_Previews: PreviewProvider {
+struct Highlight_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryHome()
+        Highlight()
             .environmentObject(ModelData())
     }
 }

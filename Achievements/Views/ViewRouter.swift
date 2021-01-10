@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 class ViewRouter: ObservableObject {
     @Published var currentTab: Tab = .highlight

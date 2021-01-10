@@ -18,9 +18,9 @@ struct ContentView: View {
                 Spacer()
                 switch viewRouter.currentTab {
                 case .highlight:
-                    CategoryHome()
+                    Highlight()
                 case .list:
-                    LandmarkList()
+                    AchievementList()
                 case .chart:
                     Text("Chart View")
                 case .calendar:
