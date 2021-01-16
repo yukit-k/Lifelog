@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var viewRouter: ViewRouter
     @State var showPopup: Bool = false
+    @State var showAddBookSheet: Bool = false
     
     var body: some View {
         // LandmarkList()
@@ -32,6 +33,9 @@ struct ContentView: View {
                     if showPopup {
                         PlusMenu(widthAndHeight: geometry.size.width/6)
                             .offset(y: -geometry.size.height/6)
+                            .onTapGesture {
+                                showAddBookSheet = true
+                            }
                     }
                     HStack {
                         TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "star", tabName: "Highlight")
@@ -61,7 +65,12 @@ struct ContentView: View {
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
+            .sheet(isPresented: $showAddBookSheet) {
+                AddBook()
+            }
+        
         }
+
     }
 }
             
