@@ -9,14 +9,16 @@ import SwiftUI
 import Combine
 
 struct AddBook: View {
-    let genre = ["Fiction","Fairy Tales", "Sci-Fi", "History", "Biography", "Poetry", "Non-Fiction", "Textbook", "Others"]
+    @Environment(\.managedObjectContext) var moc
+    @Environment(\.presentationMode) var presentationMode
     
+    let genre = ["Fiction","Fairy Tales", "Sci-Fi", "History", "Biography", "Poetry", "Non-Fiction", "Textbook", "Others"]
     @State var selectedGenreIndex = 8
     @State var title = ""
-    @State var description = ""
+    @State var shortDescription = ""
     @State var recordDate = Date()
     @State var comment = ""
-    @State var pageCount = ""
+    @State var totalPage = ""
     @State var fromPage = 1
     @State var toPage = 1
     @State var rating: Int = 3
@@ -28,16 +30,16 @@ struct AddBook: View {
                 Section(header: Text("About the book")) {
                     TextField("Title", text: $title)
                         .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
-                    TextField("Short Description", text: $description)
+                    TextField("Short Description", text: $shortDescription)
                         .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
-                    TextField("Number of pages", text: $pageCount)
+                    TextField("Number of pages", text: $totalPage)
                         .keyboardType(.numberPad)
-                        .onReceive(Just(pageCount)) { newValue in
+                        .onReceive(Just(totalPage)) { newValue in
                             let filtered = newValue.filter { "0123456789".contains($0) }
                             if filtered != newValue {
-                                self.pageCount = filtered
+                                self.totalPage = filtered
                             }
-                            self.toPage = Int(self.pageCount) ?? 1
+                            self.toPage = Int(self.totalPage) ?? 1
                         }
                     Picker(selection: $selectedGenreIndex, label: Text("Genre")) {
                         ForEach(0 ..< genre.count) {
@@ -66,10 +68,23 @@ struct AddBook: View {
 
                 }
                 
-                Button(action: {
-                    print("Book added!")
-                }) {
-                    Text("Add Book")
+                Button("Save") {
+                    let newBook = Book(context: self.moc)
+                    newBook.title = self.title
+                    newBook.shortDesc = self.shortDescription
+                    newBook.totalPage = self.totalPage
+                    newBook.genre = self.genre[selectedGenreIndex]
+                    newBook.recordDate = self.recordDate
+                    newBook.fromPage = Int16(self.fromPage)
+                    newBook.toPage = Int16(self.toPage)
+                    newBook.comment = self.comment
+                    newBook.rating = Int16(self.rating)
+                    
+                    
+                    try? self.moc.save()
+                    
+                    self.presentationMode.wrappedValue.dismiss()
+                    
                 }
             }
             .navigationTitle("Add Book")
@@ -80,6 +95,8 @@ struct AddBook: View {
 
 struct AddBook_Previews: PreviewProvider {
     static var previews: some View {
+//        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//        return AddBook().environment(\.managedObjectContext, context)
         AddBook()
     }
 }
