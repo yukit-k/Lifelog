@@ -9,41 +9,36 @@ import SwiftUI
 
 struct BookList: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(entity: Book.entity(), sortDescriptors: [])
-    var books: FetchedResults<Book>
+    @FetchRequest(entity: Book.entity(), sortDescriptors: [
+        NSSortDescriptor(keyPath: \Book.recordDate, ascending: false),
+        NSSortDescriptor(keyPath: \Book.title, ascending: true)
+    ]) var books: FetchedResults<Book>
     @State private var showingAddScreen = false
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(books, id: \.id) { book in
-                    HStack {
-                        VStack {
-                            Text(book.title ?? "Unknown")
+                ForEach(books, id: \.self) { book in
+                    NavigationLink(destination: BookDetail(book: book)) {
+                        EmojiRating(rating: book.rating)
+                            .font(.largeTitle)
+                        VStack(alignment: .leading) {
+                            Text(book.title ?? "Unknown Ttile")
                                 .font(.headline)
+                            
+                            Text(book.shortDesc ?? "No Description")
+                                .font(.subheadline)
                             //Text(book.recordDate)
                             //    .font(.subheadline)
                         }
-                        Spacer()
-                        Button(action: {print("Update Book")}) {
                             //let progress = Int((book.toPage - book.fromPage) / book.totalPage * 100)
                             //Text("\(progress) %")
-                        }
                     }
                 }
-                .onDelete { indexSet in
-                    for index in indexSet {
-                        moc.delete(books[index])
-                    }
-                    do {
-                        try moc.save()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
+                .onDelete(perform: deleteBooks)
             }
             .navigationBarTitle("Book List")
-            .navigationBarItems(trailing:
+            .navigationBarItems(leading: EditButton(), trailing:
                                 Button(action: {
                                     self.showingAddScreen.toggle()
                                 }) {
@@ -56,6 +51,16 @@ struct BookList: View {
 
         }
     }
+    
+    func deleteBooks(at offsets: IndexSet) {
+        for offset in offsets {
+            let book = books[offset]
+            moc.delete(book)
+        }
+        
+        try? moc.save()
+    }
+    
 }
 
 struct BookList_Previews: PreviewProvider {
