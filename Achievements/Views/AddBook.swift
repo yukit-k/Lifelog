@@ -22,11 +22,43 @@ struct AddBook: View {
     @State var fromPage = 1
     @State var toPage = 1
     @State var rating: Int = 3
-    @State var image: Image? = nil
+    
+    @State var image: Image? = Image(systemName: "book")
+    @State var inputImage: UIImage?
+    @State var showingImagePicker = false
+    @State var showingImageActionSheet = false
+    @State var useCamera = false
+    
 
     var body: some View {
         NavigationView {
             Form {
+                Section() {
+                    HStack {
+                        Spacer()
+                        image?
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 150)
+                            //.clipShape(Rectangle())
+                            //.overlay(Rectangle().stroke(Color.white, lineWidth: 4))
+                            //.shadow(radius: 4)
+                            .onTapGesture { self.showingImageActionSheet = true }
+                            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                                ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage, isPresented: self.$showingImagePicker)
+                            }
+                            .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
+                                ActionSheet(title: Text("Choose Mode"), message: Text("Please choose the photo source"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
+                                    self.showingImagePicker = true
+                                    self.useCamera = true
+                                }), ActionSheet.Button.default(Text("Photo Library"), action: {
+                                    self.showingImagePicker = true
+                                    self.useCamera = false
+                                }), ActionSheet.Button.cancel()])
+                        }
+                        Spacer()
+                    }
+                }
                 Section(header: Text("About the book")) {
                     TextField("Title", text: $title)
                         .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
@@ -80,6 +112,8 @@ struct AddBook: View {
                     newBook.comment = self.comment
                     newBook.rating = Int16(self.rating)
                     
+                    let pickedImage = inputImage?.jpegData(compressionQuality: 1.00)
+                    newBook.image = pickedImage
                     
                     try? self.moc.save()
                     
@@ -88,8 +122,16 @@ struct AddBook: View {
                 }
             }
             .navigationTitle("Add Book")
+            //.sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+            //    ImagePicker(image: self.$inputImage)
+            //}
         }
         
+    }
+    
+    func loadImage() {
+        guard let inputImage = inputImage else { return }
+        image = Image(uiImage: inputImage)
     }
 }
 
