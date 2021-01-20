@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PlusMenu: View {
+    @StateObject var viewRouter: ViewRouter
     let widthAndHeight: CGFloat
     var body: some View {
         HStack(spacing: 50) {
@@ -22,6 +23,26 @@ struct PlusMenu: View {
                         .aspectRatio(contentMode: .fit)
                         .padding(.top, widthAndHeight/8)
                     Text("Book")
+                        .font(.footnote)
+                        .padding(.bottom, widthAndHeight/10)
+                }
+                    .foregroundColor(.white)
+                    .frame(width: widthAndHeight, height: widthAndHeight)
+            }
+            .onTapGesture {
+                viewRouter.showAddBookSheet = true
+            }
+            ZStack {
+                Circle()
+                    .foregroundColor(Color("Lavendar"))
+                    .frame(width: widthAndHeight, height: widthAndHeight)
+                    .shadow(radius: 4)
+                VStack {
+                    Image(systemName: "pencil")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(.top, widthAndHeight/5)
+                    Text("Task")
                         .font(.footnote)
                         .padding(.bottom, widthAndHeight/10)
                 }
@@ -52,6 +73,6 @@ struct PlusMenu: View {
 
 struct PlusMenu_Previews: PreviewProvider {
     static var previews: some View {
-        PlusMenu(widthAndHeight: 80)
+        PlusMenu(viewRouter: ViewRouter(), widthAndHeight: 80)
     }
 }
