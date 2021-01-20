@@ -9,10 +9,10 @@ import SwiftUI
 
 struct BookList: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(entity: Book.entity(), sortDescriptors: [
-        NSSortDescriptor(keyPath: \Book.recordDate, ascending: false),
-        NSSortDescriptor(keyPath: \Book.title, ascending: true)
-    ]) var books: FetchedResults<Book>
+    @FetchRequest(entity: CommonTask.entity(), sortDescriptors: [
+        NSSortDescriptor(keyPath: \CommonTask.recordDate, ascending: false),
+        NSSortDescriptor(keyPath: \CommonTask.title, ascending: true)
+    ]) var books: FetchedResults<CommonTask>
     @State private var showingAddScreen = false
     
     var body: some View {

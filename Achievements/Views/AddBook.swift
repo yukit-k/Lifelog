@@ -101,14 +101,14 @@ struct AddBook: View {
                 }
                 
                 Button("Save") {
-                    let newBook = Book(context: self.moc)
+                    let newBook = CommonTask(context: self.moc)
                     newBook.title = self.title
                     newBook.shortDesc = self.shortDescription
-                    newBook.totalPage = self.totalPage
+                    newBook.totalCount = Int16(self.totalPage) ?? 0
                     newBook.genre = self.genre[selectedGenreIndex]
                     newBook.recordDate = self.recordDate
-                    newBook.fromPage = Int16(self.fromPage)
-                    newBook.toPage = Int16(self.toPage)
+                    newBook.fromCount = Int16(self.fromPage)
+                    newBook.toCount = Int16(self.toPage)
                     newBook.comment = self.comment
                     newBook.rating = Int16(self.rating)
                     

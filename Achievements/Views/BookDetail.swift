@@ -13,7 +13,7 @@ struct BookDetail: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var showingDeleteAlert = false
     
-    let book: Book
+    let book: CommonTask
 
     var body: some View {
         GeometryReader { geometry in
@@ -84,7 +84,7 @@ struct BookDetail_Previews: PreviewProvider {
     
     static var previews: some View {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let bookTest = Book(context: context)
+        let bookTest = CommonTask(context: context)
         bookTest.title = "Test book"
         bookTest.shortDesc = "Some interesting book."
         bookTest.genre = "Fantasy"
