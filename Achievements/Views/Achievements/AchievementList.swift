@@ -9,45 +9,47 @@ import SwiftUI
 
 struct  AchievementList: View {
     @EnvironmentObject var modelData: ModelData
-    @State private var showFavoritesOnly = false
-    @State private var showingProfile = false
+    @State private var hideCompletedTasks = false
+    @Environment(\.managedObjectContext) var moc
+    @FetchRequest(entity: CommonTask.entity(), sortDescriptors: [
+        NSSortDescriptor(keyPath: \CommonTask.recordDate, ascending: false),
+        NSSortDescriptor(keyPath: \CommonTask.title, ascending: true)
+    ]) var tasks: FetchedResults<CommonTask>
+    
 
-    var filteredLandmarks: [Landmark] {
-        modelData.landmarks.filter { landmark in
-            (!showFavoritesOnly || landmark.isFavorite)
+    var filteredTasks: [CommonTask] {
+        tasks.filter { task in
+            (!hideCompletedTasks || task.status == "Completed")
         }
     }
     
     var body: some View {
         NavigationView {
             List {
-                Toggle(isOn: $showFavoritesOnly) {
-                    Text("Completed only")
+                Toggle(isOn: $hideCompletedTasks) {
+                    Text("Hide completed tasks")
                 }
-                ForEach(filteredLandmarks) { landmark in
-                    NavigationLink(destination: AchievementDetail(landmark: landmark)) {
-                        AchievementRow(landmark: landmark)
+                ForEach(filteredTasks) { task in
+                    NavigationLink(destination: AchievementDetail(task: task)) {
+                        AchievementRow(task: task)
                     }
                 }
             }
-            .navigationTitle("Achievement")
+            .navigationTitle("Tasks")
             .toolbar {
-                Button(action: { showingProfile.toggle() }) {
+                Button(action: { Text("Search") }) {
                     Image(systemName: "magnifyingglass")
                         .accessibilityLabel("Search")
                 }
-            }
-            .sheet(isPresented: $showingProfile) {
-                ProfileHost()
-                    .environmentObject(modelData)
             }
         }
     }
 }
 
 struct  AchievementList_Previews: PreviewProvider {
-    static var landmarks = ModelData().landmarks
     
+//    static var landmarks = ModelData().landmarks
+
     static var previews: some View {
         /*
         ForEach(["iPhone SE", "iPhone XS Max"], id: \.self) { deviceName in
@@ -57,6 +59,6 @@ struct  AchievementList_Previews: PreviewProvider {
         }
         */
         AchievementList()
-            .environmentObject(ModelData())
+//            .environmentObject(ModelData())
     }
 }
