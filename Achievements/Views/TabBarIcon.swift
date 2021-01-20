@@ -27,6 +27,9 @@ struct TabBarIcon: View {
         }
             .padding(.horizontal, -4)
             .onTapGesture {
+                withAnimation {
+                    viewRouter.showPopup.toggle()
+                }
                 viewRouter.currentTab = assignedTab
             }
             .foregroundColor(viewRouter.currentTab == assignedTab ? .accentColor : .gray)

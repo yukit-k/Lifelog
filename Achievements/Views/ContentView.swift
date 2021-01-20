@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var viewRouter: ViewRouter
-    @State var showPopup: Bool = false
-    @State var showAddBookSheet: Bool = false
+    //@State var showPopup: Bool = false
+    //@State var showAddBookSheet: Bool = false
     
     var body: some View {
         // LandmarkList()
@@ -30,16 +30,14 @@ struct ContentView: View {
                 
                 Spacer()
                 ZStack {
-                    if showPopup {
-                        PlusMenu(widthAndHeight: geometry.size.width/6)
+                    if viewRouter.showPopup {
+                        PlusMenu(viewRouter: viewRouter, widthAndHeight: geometry.size.width/6)
                             .offset(y: -geometry.size.height/6)
-                            .onTapGesture {
-                                showAddBookSheet = true
-                            }
+                            
                     }
                     HStack {
-                        TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "star", tabName: "Highlight")
-                        TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "list.bullet", tabName: "List")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "star", tabName: "Achieved")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "list.bullet", tabName: "To Do")
                         ZStack {
                             Circle()
                                 .foregroundColor(.white)
@@ -49,12 +47,12 @@ struct ContentView: View {
                                 .resizable()
                                 .frame(width: geometry.size.width/7-6, height: geometry.size.width/7-6)
                                 .foregroundColor(.accentColor)
-                                .rotationEffect(Angle(degrees: showPopup ? 90 : 0))
+                                .rotationEffect(Angle(degrees: viewRouter.showPopup ? 90 : 0))
                         }
                             .offset(y: -geometry.size.height/10/2.5)
                         .onTapGesture {
                             withAnimation {
-                                showPopup.toggle()
+                                viewRouter.showPopup.toggle()
                             }
                         }
                         TabBarIcon(viewRouter: viewRouter, assignedTab: .chart, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "chart.bar", tabName: "Chart")
@@ -65,7 +63,7 @@ struct ContentView: View {
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
-            .sheet(isPresented: $showAddBookSheet) {
+            .sheet(isPresented: $viewRouter.showAddBookSheet) {
                 AddBook()
             }
         
