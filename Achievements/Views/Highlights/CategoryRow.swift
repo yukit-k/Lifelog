@@ -9,8 +9,13 @@ import SwiftUI
 
 struct CategoryRow: View {
     var categoryName: String
-    var items: [Landmark]
-    
+    //var items: [Landmark]
+    @Environment(\.managedObjectContext) var moc
+    @FetchRequest(entity: CommonTask.entity(), sortDescriptors: [
+        NSSortDescriptor(keyPath: \CommonTask.recordDate, ascending: false),
+        NSSortDescriptor(keyPath: \CommonTask.title, ascending: true)
+    ]) var tasks: FetchedResults<CommonTask>
+
     var body: some View {
         VStack(alignment: .leading) {
             Text(categoryName)
@@ -20,9 +25,9 @@ struct CategoryRow: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 0) {
-                    ForEach(items) { landmark in
-                        NavigationLink(destination: AchievementDetail(landmark: landmark)) {
-                            CategoryItem(landmark: landmark)
+                    ForEach(tasks) { task in
+                        NavigationLink(destination: AchievementDetail(task: task)) {
+                            CategoryItem(task: task)
                         }
                     }
                 }
@@ -36,9 +41,6 @@ struct CategoryRow_Previews: PreviewProvider {
     static var landmarks = ModelData().landmarks
     
     static var previews: some View {
-        CategoryRow(
-            categoryName: landmarks[0].category.rawValue,
-            items: Array(landmarks.prefix(3))
-        )
+        CategoryRow(categoryName: "Book")
     }
 }

@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct CategoryItem: View {
-    var landmark: Landmark
+    @Environment(\.managedObjectContext) var moc
+    var task: CommonTask
     
     var body: some View {
         VStack(alignment: .leading) {
-            landmark.image
-                .renderingMode(.original)
-                .resizable()
-                .frame(width: 155, height:155)
-                .cornerRadius(5)
+            self.task.image.map({
+                UIImage(data: $0)
+                    .map({
+                            Image(uiImage: $0)
+                                .resizable()
+                                .frame(width: 155, height:155)
+                                .cornerRadius(5)
+                    })
+            })
             
-            Text(landmark.name)
+            Text(task.title ?? "Unknown Title")
                 .foregroundColor(.primary)
                 .font(.caption)
         }
@@ -27,7 +32,18 @@ struct CategoryItem: View {
 }
 
 struct CategoryItem_Previews: PreviewProvider {
+//    static let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+    
     static var previews: some View {
-        CategoryItem(landmark: ModelData().landmarks[0])
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let bookTest = CommonTask(context: context)
+        bookTest.title = "Test book"
+        bookTest.shortDesc = "Some interesting book."
+        bookTest.genre = "Fantasy"
+        bookTest.rating = 4
+        bookTest.comment = "This was a great book"
+        bookTest.recordDate = Date()
+        return CategoryItem(task: bookTest).environment(\.managedObjectContext, context)
+        
     }
 }

@@ -22,7 +22,8 @@ struct Highlight: View {
                     .listRowInsets(EdgeInsets())
 
                 ForEach(modelData.categories.keys.sorted(), id: \.self) { key in
-                    CategoryRow(categoryName: key, items: modelData.categories[key]!)
+//                    CategoryRow(categoryName: key, items: modelData.categories[key]!)
+                    CategoryRow(categoryName: key)
                 }
                 .listRowInsets(EdgeInsets())
             }
