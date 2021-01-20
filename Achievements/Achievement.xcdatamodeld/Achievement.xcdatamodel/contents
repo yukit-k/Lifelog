@@ -13,6 +13,22 @@
         <attribute name="toPage" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="totalPage" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="CommonTask" representedClassName="Book" syncable="YES" codeGenerationType="class">
+        <attribute name="comment" optional="YES" attributeType="String"/>
+        <attribute name="fromCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="genre" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="rating" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="recordDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="shortDesc" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="taskType" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="toCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="totalCount" optional="YES" attributeType="String"/>
+        <attribute name="updateDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <entity name="Log" representedClassName="Log" syncable="YES">
         <attribute name="comment" optional="YES" attributeType="String"/>
         <attribute name="fromPosition" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
@@ -47,8 +63,9 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="Book" positionX="-63" positionY="-18" width="128" height="194"/>
         <element name="Log" positionX="-54" positionY="90" width="128" height="179"/>
         <element name="Material" positionX="-63" positionY="63" width="128" height="164"/>
+        <element name="CommonTask" positionX="-63" positionY="117" width="128" height="239"/>
+        <element name="Book" positionX="-63" positionY="117" width="128" height="194"/>
     </elements>
 </model>
