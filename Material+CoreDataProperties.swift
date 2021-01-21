@@ -2,7 +2,7 @@
 //  Material+CoreDataProperties.swift
 //  Achievements
 //
-//  Created by Yuki Takahashi on 17/01/2021.
+//  Created by Yuki Takahashi on 21/01/2021.
 //
 //
 
@@ -16,25 +16,50 @@ extension Material {
         return NSFetchRequest<Material>(entityName: "Material")
     }
 
-    @NSManaged public var name: String?
-    @NSManaged public var desc: String?
-    @NSManaged public var id: UUID?
-    @NSManaged public var author: String?
+    @NSManaged public var creater: String?
     @NSManaged public var category: String?
+    @NSManaged public var desc: String?
     @NSManaged public var genre: String?
     @NSManaged public var image: Data?
-    @NSManaged public var total: String?
+    @NSManaged public var name: String?
+    @NSManaged public var totalCount: Int16
+    @NSManaged public var version: String?
+    @NSManaged public var updateDate: Date?
     @NSManaged public var log: NSSet?
+    
+    public var wrappedCreater: String {
+        creater ?? "Not specified"
+    }
+    
+    public var wrappedCategory: String {
+        category ?? "Others"
+    }
+    
+    public var wrappedDesc: String {
+        category ?? "Not specified"
+    }
+    
+    public var wrappedGenre: String {
+        genre ?? "Others"
+    }
     
     public var wrappedName: String {
         name ?? "Unknown Name"
+    }
+    
+    public var wrappedVersion: String {
+        version ?? ""
+    }
+        
+    public var wrappedUpdateDate: Date {
+        updateDate ?? Date()
     }
     
     public var logArray: [Log] {
         let set = log as? Set<Log> ?? []
         
         return set.sorted {
-            $0.wrappedTaskDate < $1.wrappedTaskDate
+            $0.wrappedRecordDate > $1.wrappedRecordDate
         }
     }
 
