@@ -7,19 +7,17 @@
 
 import SwiftUI
 
-struct  AchievementList: View {
-    @EnvironmentObject var modelData: ModelData
+struct  ActivityList: View {
+    //@EnvironmentObject var modelData: ModelData
     @State private var hideCompletedTasks = false
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(entity: CommonTask.entity(), sortDescriptors: [
-        NSSortDescriptor(keyPath: \CommonTask.recordDate, ascending: false),
-        NSSortDescriptor(keyPath: \CommonTask.title, ascending: true)
-    ]) var tasks: FetchedResults<CommonTask>
+    @FetchRequest(entity: Log.entity(), sortDescriptors: [
+        NSSortDescriptor(keyPath: \Log.recordDate, ascending: false)
+    ]) var logs: FetchedResults<Log>
     
-
-    var filteredTasks: [CommonTask] {
-        tasks.filter { task in
-            (!hideCompletedTasks || task.status == "Completed")
+    var outstandingLog: [Log] {
+        logs.filter { log in
+            (!hideCompletedTasks || log.status != "Completed")
         }
     }
     
@@ -29,9 +27,9 @@ struct  AchievementList: View {
                 Toggle(isOn: $hideCompletedTasks) {
                     Text("Hide completed tasks")
                 }
-                ForEach(filteredTasks) { task in
-                    NavigationLink(destination: AchievementDetail(task: task)) {
-                        AchievementRow(task: task)
+                ForEach(outstandingLog) { log in
+                    NavigationLink(destination: ActivityDetail(log: log)) {
+                        ActivityRow(log: log)
                     }
                 }
             }
@@ -46,7 +44,7 @@ struct  AchievementList: View {
     }
 }
 
-struct  AchievementList_Previews: PreviewProvider {
+struct  ActivityList_Previews: PreviewProvider {
     
 //    static var landmarks = ModelData().landmarks
 
@@ -58,7 +56,7 @@ struct  AchievementList_Previews: PreviewProvider {
                 .previewDisplayName(deviceName)
         }
         */
-        AchievementList()
+        ActivityList()
 //            .environmentObject(ModelData())
     }
 }

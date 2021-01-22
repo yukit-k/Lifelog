@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct AchievementRow: View {
-    @Environment(\.managedObjectContext) var moc
+struct ActivityRow: View {
+    //@Environment(\.managedObjectContext) var moc
     //var landmark: Landmark
-    var task: CommonTask
-    static let taskDateFormat: DateFormatter = {
+    var log: Log
+    static let logDateFormat: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         return formatter
@@ -19,7 +19,7 @@ struct AchievementRow: View {
 
     var body: some View {
         HStack {
-            task.image.map({
+            log.material?.image.map({
                 UIImage(data: $0)
                     .map({
                             Image(uiImage: $0)
@@ -28,13 +28,13 @@ struct AchievementRow: View {
                     })
             })
             VStack(alignment: .leading) {
-                Text(task.title ?? "Unknown Ttile")
+                Text(log.material?.name ?? "Unknown Name")
                     .font(.headline)
                 
                 HStack {
-                    Text(task.taskType ?? "Unknown Type")
+                    Text(log.material?.category ?? "Others")
                         .font(.subheadline)
-                    Text("\(task.recordDate ?? Date(), formatter: Self.taskDateFormat)" )
+                    Text("\(log.recordDate ?? Date(), formatter: Self.logDateFormat)" )
                         .font(.subheadline)
                 }
             }
@@ -46,7 +46,7 @@ struct AchievementRow: View {
             
             Spacer()
             
-            EmojiRating(rating: task.rating)
+            EmojiRating(rating: log.rating)
                 .font(.headline)
 
 //            if landmark.isFavorite {
@@ -57,19 +57,18 @@ struct AchievementRow: View {
     }
 }
 
-struct AchievementRow_Previews: PreviewProvider {
-    //    static var landmarks = ModelData().landmarks
-    //
+struct ActivityRow_Previews: PreviewProvider {
     static var previews: some View {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let taskTest = CommonTask(context: context)
-        taskTest.title = "Test book"
-        taskTest.shortDesc = "Some interesting book."
-        taskTest.genre = "Fantasy"
-        taskTest.rating = 4
-        taskTest.comment = "This was a great book"
-        taskTest.recordDate = Date()
-        return AchievementRow(task: taskTest).environment(\.managedObjectContext, context)
+        let log1 = Log(context: context)
+        log1.material?.name = "Test book"
+        log1.material?.category = "Book"
+        log1.material?.updateDate = Date()
+        log1.material?.genre = "Fantasy"
+        log1.rating = 4
+        log1.comment = "This was a great book"
+        log1.recordDate = Date()
+        return ActivityRow(log: log1).environment(\.managedObjectContext, context)
 //        Group {
 //            AchievementRow(landmark: landmarks[0])
 //            AchievementRow(landmark: landmarks[1])

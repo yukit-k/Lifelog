@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct AchievementDetail: View {
+struct ActivityDetail: View {
     //@EnvironmentObject var modelData: ModelData
     //var landmark: Landmark
-    var task: CommonTask
+    var log: Log
     
 //    var landmarkIndex: Int {
 //        modelData.landmarks.firstIndex(where: { $0.id == landmark.id })!
@@ -58,19 +58,20 @@ struct AchievementDetail: View {
     }
 }
 
-struct AchievementDetail_Previews: PreviewProvider {
+struct ActivityDetail_Previews: PreviewProvider {
     //static let modelData = ModelData()
     
     static var previews: some View {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let bookTest = CommonTask(context: context)
-        bookTest.title = "Test book"
-        bookTest.shortDesc = "Some interesting book."
-        bookTest.genre = "Fantasy"
-        bookTest.rating = 4
-        bookTest.comment = "This was a great book"
-        bookTest.recordDate = Date()
-        return AchievementDetail(task: bookTest).environment(\.managedObjectContext, context)
+        let log1 = Log(context: context)
+        log1.material?.name = "Test book"
+        log1.material?.category = "Book"
+        log1.material?.updateDate = Date()
+        log1.material?.genre = "Fantasy"
+        log1.rating = 4
+        log1.comment = "This was a great book"
+        log1.recordDate = Date()
+        return ActivityDetail(log: log1).environment(\.managedObjectContext, context)
 
 //        AchievementDetail(landmark: ModelData().landmarks[0])
 //            .environmentObject(modelData)
