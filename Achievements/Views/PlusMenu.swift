@@ -55,11 +55,11 @@ struct PlusMenu: View {
                     .frame(width: widthAndHeight, height: widthAndHeight)
                     .shadow(radius: 4)
                 VStack {
-                    Image(systemName: "film")
+                    Image(systemName: "figure.walk")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .padding(.top, widthAndHeight/5)
-                    Text("Film")
+                        .padding(.top, widthAndHeight/10)
+                    Text("Execise")
                         .font(.footnote)
                         .padding(.bottom, widthAndHeight/10)
                 }
