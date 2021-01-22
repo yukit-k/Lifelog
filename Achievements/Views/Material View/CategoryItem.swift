@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct CategoryItem: View {
-    @Environment(\.managedObjectContext) var moc
-    var task: CommonTask
+    var material: Material
     
     var body: some View {
         VStack(alignment: .leading) {
-            self.task.image.map({
+            self.material.image.map({
                 UIImage(data: $0)
                     .map({
                             Image(uiImage: $0)
@@ -23,7 +22,7 @@ struct CategoryItem: View {
                     })
             })
             
-            Text(task.title ?? "Unknown Title")
+            Text(material.wrappedName)
                 .foregroundColor(.primary)
                 .font(.caption)
         }
@@ -36,14 +35,12 @@ struct CategoryItem_Previews: PreviewProvider {
     
     static var previews: some View {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let bookTest = CommonTask(context: context)
-        bookTest.title = "Test book"
-        bookTest.shortDesc = "Some interesting book."
-        bookTest.genre = "Fantasy"
-        bookTest.rating = 4
-        bookTest.comment = "This was a great book"
-        bookTest.recordDate = Date()
-        return CategoryItem(task: bookTest).environment(\.managedObjectContext, context)
+        let material1 = Material(context: context)
+        material1.name = "Test book"
+        material1.category = "Book"
+        material1.updateDate = Date()
+        return CategoryItem(material: material1)
+            //.environment(\.managedObjectContext, context)
         
     }
 }
