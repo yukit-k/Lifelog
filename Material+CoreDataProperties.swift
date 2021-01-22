@@ -62,7 +62,6 @@ extension Material {
             $0.wrappedRecordDate > $1.wrappedRecordDate
         }
     }
-
 }
 
 // MARK: Generated accessors for log
