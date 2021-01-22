@@ -30,6 +30,7 @@ struct PlusMenu: View {
                     .frame(width: widthAndHeight, height: widthAndHeight)
             }
             .onTapGesture {
+                viewRouter.showPopup = false
                 viewRouter.showAddBookSheet = true
             }
             ZStack {
@@ -49,6 +50,10 @@ struct PlusMenu: View {
                     .foregroundColor(.white)
                     .frame(width: widthAndHeight, height: widthAndHeight)
             }
+            .onTapGesture {
+                viewRouter.showPopup = false
+                viewRouter.showAddBookSheet = true
+            }
             ZStack {
                 Circle()
                     .foregroundColor(Color("Lavendar"))
@@ -65,6 +70,10 @@ struct PlusMenu: View {
                 }
                     .foregroundColor(.white)
                     .frame(width: widthAndHeight, height: widthAndHeight)
+            }
+            .onTapGesture {
+                viewRouter.showPopup = false
+                viewRouter.showAddBookSheet = true
             }
         }
             .transition(.scale)

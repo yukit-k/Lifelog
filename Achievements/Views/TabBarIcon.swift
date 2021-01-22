@@ -28,7 +28,7 @@ struct TabBarIcon: View {
             .padding(.horizontal, -4)
             .onTapGesture {
                 withAnimation {
-                    viewRouter.showPopup.toggle()
+                    viewRouter.showPopup = false
                 }
                 viewRouter.currentTab = assignedTab
             }
