@@ -29,6 +29,10 @@ struct AddBook: View {
     @State var showingImageActionSheet = false
     @State var useCamera = false
     
+    @State private var showingError = false
+    @State private var errorTitle: String = ""
+    @State private var errorMessage: String = ""
+    
 
     var body: some View {
         NavigationView {
@@ -62,7 +66,7 @@ struct AddBook: View {
                 Section(header: Text("About the book")) {
                     TextField("Title", text: $title)
                         .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
-                    TextField("Short Description", text: $shortDescription)
+                    TextField("Description", text: $shortDescription)
                         .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                     TextField("Number of pages", text: $totalPage)
                         .keyboardType(.numberPad)
@@ -101,30 +105,56 @@ struct AddBook: View {
                 }
                 
                 Button("Save") {
-                    let newBook = CommonTask(context: self.moc)
-                    newBook.title = self.title
-                    newBook.shortDesc = self.shortDescription
-                    newBook.totalCount = Int16(self.totalPage) ?? 0
-                    newBook.genre = self.genre[selectedGenreIndex]
-                    newBook.recordDate = self.recordDate
-                    newBook.fromCount = Int16(self.fromPage)
-                    newBook.toCount = Int16(self.toPage)
-                    newBook.comment = self.comment
-                    newBook.rating = Int16(self.rating)
-                    
-                    let pickedImage = inputImage?.jpegData(compressionQuality: 1.00)
-                    newBook.image = pickedImage
-                    
-                    try? self.moc.save()
-                    
+                    if self.title != "" {
+                        let newBookLog = Log(context: self.moc)
+                        newBookLog.recordDate = self.recordDate
+                        newBookLog.fromPosition = Int16(self.fromPage)
+                        newBookLog.toPosition = Int16(self.toPage)
+                        newBookLog.comment = self.comment
+                        newBookLog.rating = Int16(self.rating)
+                        
+                        newBookLog.material = Material(context: self.moc)
+                        newBookLog.material?.name = self.title
+                        newBookLog.material?.desc = self.shortDescription
+                        newBookLog.material?.totalCount = Int16(self.totalPage) ?? 0
+                        newBookLog.material?.genre = self.genre[selectedGenreIndex]
+                        newBookLog.material?.updateDate = Date()
+                        newBookLog.material?.category = "Book"
+                        
+                        let pickedImage = inputImage?.jpegData(compressionQuality: 1.00)
+                        newBookLog.material?.image = pickedImage
+                        
+                        if self.moc.hasChanges {
+                            do {
+                                try self.moc.save()
+                                print("New Book: \(self.title) added.")
+                            } catch {
+                                print(error)
+                            }
+                        }
+                            
+                    } else {
+                        self.showingError = true
+                        self.errorTitle = "Invalid Title"
+                        self.errorMessage = "Make sure to enter something for \nthe new item."
+                        return
+                    }
                     self.presentationMode.wrappedValue.dismiss()
-                    
                 }
             }
             .navigationTitle("Add Book")
+            .navigationBarItems(trailing: Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "xmark")
+            }
+            )
             //.sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
             //    ImagePicker(image: self.$inputImage)
             //}
+            .alert(isPresented: $showingError) {
+                Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
+            }
         }
         
     }
