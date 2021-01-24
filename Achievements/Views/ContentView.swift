@@ -19,11 +19,11 @@ struct ContentView: View {
                 Spacer()
                 switch viewRouter.currentTab {
                 case .highlight:
-                    Highlight()
+                    MaterialView()
                 case .list:
-                    AchievementList()
+                    ActivityList()
                 case .chart:
-                    Text("Chart View")
+                    ChartView()
                 case .calendar:
                     Text("Calendar View")
                 }
@@ -36,8 +36,8 @@ struct ContentView: View {
                             
                     }
                     HStack {
-                        TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "star", tabName: "Achieved")
-                        TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "list.bullet", tabName: "To Do")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "star", tabName: "Achievement")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: geometry.size.height/32, systemIconName: "list.bullet", tabName: "Activity")
                         ZStack {
                             Circle()
                                 .foregroundColor(.white)
@@ -68,7 +68,12 @@ struct ContentView: View {
             }
         
         }
-
+//        .gesture(
+//            DragGesture(minimumDistance: 0, coordinateSpace: .global)
+//                .onEnded { value in
+//                    viewRouter.showPopup = false
+//                }
+//        )
     }
 }
             
