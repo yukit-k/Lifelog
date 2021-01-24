@@ -22,9 +22,11 @@ extension Material {
     @NSManaged public var genre: String?
     @NSManaged public var image: Data?
     @NSManaged public var name: String?
-    @NSManaged public var totalCount: Int16
+    @NSManaged public var totalAmount: Double
     @NSManaged public var version: String?
     @NSManaged public var updateDate: Date?
+    @NSManaged public var percentageToDate: Double
+    @NSManaged public var status: String?
     @NSManaged public var log: NSSet?
     
     public var wrappedCreater: String {
@@ -36,7 +38,7 @@ extension Material {
     }
     
     public var wrappedDesc: String {
-        category ?? "Not specified"
+        desc ?? "No description"
     }
     
     public var wrappedGenre: String {
@@ -55,6 +57,10 @@ extension Material {
         updateDate ?? Date()
     }
     
+    public var wrappedStatus: String {
+        status ?? "Undefined"
+    }
+        
     public var logArray: [Log] {
         let set = log as? Set<Log> ?? []
         

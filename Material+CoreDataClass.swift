@@ -14,10 +14,12 @@ public class Material: NSManagedObject {
     enum Category: String, CaseIterable, Identifiable {
         case book = "Book"
         case task = "Task"
-        case watch = "Watch"
+        case exercise = "Exercise"
         case others = "Others"
 
         var id: String { self.rawValue }
     }
+    
+    
 
 }
