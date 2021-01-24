@@ -9,6 +9,11 @@ import SwiftUI
 
 struct CategoryItem: View {
     var material: Material
+    static let updateDateFormat: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter
+    }()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -17,14 +22,21 @@ struct CategoryItem: View {
                     .map({
                             Image(uiImage: $0)
                                 .resizable()
+                                .scaledToFill()
                                 .frame(width: 155, height:155)
                                 .cornerRadius(5)
                     })
             })
             
-            Text(material.wrappedName)
-                .foregroundColor(.primary)
-                .font(.caption)
+            HStack {
+                Text(material.wrappedName)
+                    .foregroundColor(.primary)
+                    .font(.caption)
+                Spacer()
+                Text("\(material.wrappedUpdateDate, formatter: Self.updateDateFormat)" )
+                    .foregroundColor(.secondary)
+                    .font(.caption)
+            }
         }
         .padding(.leading, 15)
     }

@@ -15,25 +15,12 @@ struct MaterialView: View {
 //    ]) var materials: FetchedResults<Material>
 
     @State private var showingProfile = false
-    private let topImages = [
-        "silversalmoncreek",
-        "chilkoottrail",
-        "stmarylake",
-        "twinlake",
-        "lakemcdonald",
-        "charleyrivers",
-        "icybay",
-        "rainbowlake",
-        "hiddenlake",
-        "chincoteague",
-        "umbagog"
-    ]
-    //private let imageIndex = Int.random(in: 0..<11)
+    private let topImages = "mountains-190056"
     
     var body: some View {
         NavigationView {
             List {
-                Image(topImages[4])
+                Image(topImages)
                     .resizable()
                     .scaledToFill()
                     .frame(height: 200)
@@ -48,7 +35,7 @@ struct MaterialView: View {
                 .listRowInsets(EdgeInsets())
             }
             .listStyle(InsetListStyle())
-            .navigationTitle("Materaials")
+            .navigationTitle("Achievement")
             //.navigationBarHidden(true)
             .toolbar {
                 Button(action: { showingProfile.toggle() }) {
