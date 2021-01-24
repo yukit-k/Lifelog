@@ -25,7 +25,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
-                parent.image = uiImage
+                parent.image = uiImage.size.width > 600 ? uiImage.resized(toWidth: 600.0) : uiImage
             }
             //parent.presentationMode.wrappedValue.dismiss()
             parent.isPresented = false
