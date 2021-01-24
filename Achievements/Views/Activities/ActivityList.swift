@@ -10,6 +10,7 @@ import SwiftUI
 struct  ActivityList: View {
     //@EnvironmentObject var modelData: ModelData
     @State private var hideCompletedTasks = false
+    @ObservedObject var searchBar: SearchBar = SearchBar()
     @Environment(\.managedObjectContext) var moc
     @FetchRequest(entity: Log.entity(), sortDescriptors: [
         NSSortDescriptor(keyPath: \Log.recordDate, ascending: false)
@@ -17,7 +18,11 @@ struct  ActivityList: View {
     
     var outstandingLog: [Log] {
         logs.filter { log in
-            (!hideCompletedTasks || log.status != "Completed")
+            ((!hideCompletedTasks || log.isToDo) &&
+                (searchBar.text.isEmpty ||
+                    log.wrappedMaterial.wrappedName.localizedCaseInsensitiveContains(searchBar.text) ||
+                    log.wrappedMaterial.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text))
+            )
         }
     }
     
@@ -27,20 +32,24 @@ struct  ActivityList: View {
                 Toggle(isOn: $hideCompletedTasks) {
                     Text("Hide completed tasks")
                 }
-                ForEach(outstandingLog) { log in
-                    NavigationLink(destination: ActivityDetail(log: log)) {
-                        ActivityRow(log: log)
-                    }
+                ForEach(outstandingLog, id: \.self) { log in
+                    ActivityRow(log: log, nextView: ActivityDetailBook(log: log))
                 }
+                .onDelete(perform: deleteLogs)
             }
-            .navigationTitle("Tasks")
-            .toolbar {
-                Button(action: { Text("Search") }) {
-                    Image(systemName: "magnifyingglass")
-                        .accessibilityLabel("Search")
-                }
-            }
+            .navigationTitle("Acitivty Log")
+            .add(self.searchBar)
+            .navigationBarItems(trailing: EditButton())
         }
+    }
+    
+    func deleteLogs(at offsets: IndexSet) {
+        for offset in offsets {
+            let log = logs[offset]
+            moc.delete(log)
+        }
+        
+        try? moc.save()
     }
 }
 
