@@ -14,28 +14,7 @@ struct PlusMenu: View {
         HStack(spacing: 50) {
             ZStack {
                 Circle()
-                    .foregroundColor(Color("Lavendar"))
-                    .frame(width: widthAndHeight, height: widthAndHeight)
-                    .shadow(radius: 4)
-                VStack {
-                    Image(systemName: "text.book.closed")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding(.top, widthAndHeight/8)
-                    Text("Book")
-                        .font(.footnote)
-                        .padding(.bottom, widthAndHeight/10)
-                }
-                    .foregroundColor(.white)
-                    .frame(width: widthAndHeight, height: widthAndHeight)
-            }
-            .onTapGesture {
-                viewRouter.showPopup = false
-                viewRouter.showAddBookSheet = true
-            }
-            ZStack {
-                Circle()
-                    .foregroundColor(Color("Lavendar"))
+                    .foregroundColor(.accentColor)
                     .frame(width: widthAndHeight, height: widthAndHeight)
                     .shadow(radius: 4)
                 VStack {
@@ -43,37 +22,39 @@ struct PlusMenu: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(.top, widthAndHeight/5)
-                    Text("Task")
+                    Text("New Item")
                         .font(.footnote)
-                        .padding(.bottom, widthAndHeight/10)
+                        .padding(.bottom, widthAndHeight/6)
                 }
                     .foregroundColor(.white)
                     .frame(width: widthAndHeight, height: widthAndHeight)
             }
             .onTapGesture {
                 viewRouter.showPopup = false
-                viewRouter.showAddBookSheet = true
+                viewRouter.activeSheet = .first
+                viewRouter.showAddSheet = true
             }
             ZStack {
                 Circle()
-                    .foregroundColor(Color("Lavendar"))
+                    .foregroundColor(.accentColor)
                     .frame(width: widthAndHeight, height: widthAndHeight)
                     .shadow(radius: 4)
                 VStack {
-                    Image(systemName: "figure.walk")
+                    Image(systemName: "plus.rectangle.on.folder")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .padding(.top, widthAndHeight/10)
-                    Text("Execise")
+                        .padding(.top, widthAndHeight/5)
+                    Text("Add Log")
                         .font(.footnote)
-                        .padding(.bottom, widthAndHeight/10)
+                        .padding(.bottom, widthAndHeight/7)
                 }
                     .foregroundColor(.white)
                     .frame(width: widthAndHeight, height: widthAndHeight)
             }
             .onTapGesture {
                 viewRouter.showPopup = false
-                viewRouter.showAddBookSheet = true
+                viewRouter.activeSheet = .second
+                viewRouter.showAddSheet = true
             }
         }
             .transition(.scale)
