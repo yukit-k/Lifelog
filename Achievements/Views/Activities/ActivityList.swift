@@ -43,7 +43,7 @@ struct  ActivityList: View {
                     Text("Hide completed tasks")
                 }
                 ForEach(outstandingLog, id: \.self) { log in
-                    ActivityRow(log: log, nextView: ActivityDetailBook(log: log))
+                    ActivityRow(log: log, nextView: ActivityDetail(log: log))
                 }
                     .onDelete(perform: deleteLogs)
 //                ForEach(update(outstandingLog), id: \.self) { (section: [Log]) in
