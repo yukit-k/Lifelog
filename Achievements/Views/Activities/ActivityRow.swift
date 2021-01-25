@@ -17,7 +17,7 @@ struct ActivityRow<TargetView: View>: View {
         return formatter
     }()
     var nextView: TargetView
-
+    
     var body: some View {
         NavigationLink(destination: nextView) {
             HStack {
@@ -26,13 +26,13 @@ struct ActivityRow<TargetView: View>: View {
                         .map({
                                 Image(uiImage: $0)
                                     .resizable()
-                                    .scaledToFill()
+                                    .scaledToFit()
                                     .frame(width: 50, height: 50)
                         })
                 })
                 VStack(alignment: .leading) {
                     HStack {
-                        Image(systemName: log.wrappedMaterial.wrappedCategory == "Book" ? "book" : "questionmark.circle")
+                        Text(log.wrappedMaterial.getCategoryIcon(log.wrappedMaterial.wrappedCategory))
                             .font(.caption)
                         Text(log.wrappedMaterial.wrappedName)
                             .font(.headline)
@@ -40,7 +40,7 @@ struct ActivityRow<TargetView: View>: View {
 
                     HStack {
                         Text("\(log.wrappedRecordDate, formatter: self.logDateFormat)" )
-                        Text("\(log.taskAmount, specifier: "%.0f")\(log.wrappedTaskUnit)" )
+                        Text("\(log.taskVolume, specifier: "%.0f") \(log.wrappedMaterial.wrappedTaskUnit)" )
                         if self.log.isToDo {
                             Text(" To Do ")
                                 .font(.caption)
