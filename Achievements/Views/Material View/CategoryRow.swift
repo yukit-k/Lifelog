@@ -27,7 +27,7 @@ struct CategoryRow: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 0) {
                     ForEach(fetchRequest.wrappedValue, id: \.self) { material in
-                        NavigationLink(destination: ItemDetailBook(material: material)) {
+                        NavigationLink(destination: ItemDetail(material: material)) {
                             CategoryItem(material: material)
                         }
                     }
