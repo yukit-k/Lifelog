@@ -25,7 +25,17 @@ struct  ActivityList: View {
             )
         }
     }
-    
+    var dateFormatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter
+    }
+    func update(_ result : [Log])-> [[Log]]{
+          return  Dictionary(grouping: result){ (element : Log)  in
+                dateFormatter.string(from: element.recordDate!)
+          }.values.map{$0}
+    }
+
     var body: some View {
         NavigationView {
             List {
@@ -35,28 +45,43 @@ struct  ActivityList: View {
                 ForEach(outstandingLog, id: \.self) { log in
                     ActivityRow(log: log, nextView: ActivityDetailBook(log: log))
                 }
-                .onDelete(perform: deleteLogs)
+                    .onDelete(perform: deleteLogs)
+//                ForEach(update(outstandingLog), id: \.self) { (section: [Log]) in
+//                    Section(header: Text(self.dateFormatter.string(from: section[0].recordDate!))) {
+//                        ForEach(section, id: \.self) { log in
+//                            ActivityRow(log: log, nextView: ActivityDetailBook(log: log))
+//                        }
+//                        .onDelete(perform: deleteLogs)
+//                    }
+//                }
+//                    .id(outstandingLog.count)
             }
-            .navigationTitle("Acitivty Log")
-            .add(self.searchBar)
-            .navigationBarItems(trailing: EditButton())
+                .navigationTitle("Acitivty Log")
+                .add(self.searchBar)
+                .navigationBarItems(trailing: EditButton())
         }
     }
     
     func deleteLogs(at offsets: IndexSet) {
         for offset in offsets {
             let log = logs[offset]
+            print("Deleting a log...")
             moc.delete(log)
         }
         
-        try? moc.save()
+        if self.moc.hasChanges {
+            do {
+                try self.moc.save()
+                print("Delete Log Completed.")
+            } catch {
+                print(error)
+            }
+        }
     }
 }
 
 struct  ActivityList_Previews: PreviewProvider {
     
-//    static var landmarks = ModelData().landmarks
-
     static var previews: some View {
         /*
         ForEach(["iPhone SE", "iPhone XS Max"], id: \.self) { deviceName in
@@ -66,6 +91,5 @@ struct  ActivityList_Previews: PreviewProvider {
         }
         */
         ActivityList()
-//            .environmentObject(ModelData())
     }
 }
