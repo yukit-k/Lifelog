@@ -83,7 +83,7 @@ struct ActivityRow_Previews: PreviewProvider {
         log1.rating = 4
         log1.comment = "This was a great book"
         log1.recordDate = Date()
-        return ActivityRow(log: log1, nextView: ActivityDetailBook(log: log1)).environment(\.managedObjectContext, context)
+        return ActivityRow(log: log1, nextView: ActivityDetail(log: log1)).environment(\.managedObjectContext, context)
 //        Group {
 //            AchievementRow(landmark: landmarks[0])
 //            AchievementRow(landmark: landmarks[1])

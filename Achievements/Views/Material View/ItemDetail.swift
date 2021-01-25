@@ -73,7 +73,7 @@ struct ItemDetail: View {
                 }
                 List {
                     ForEach(material.logArray, id: \.self) { log in
-                        ItemDetailLogRow(log: log, nextView: ActivityDetailBook(log: log))
+                        ItemDetailLogRow(log: log, nextView: ActivityDetail(log: log))
                     }
                         .onDelete(perform: deleteLogs)
                 }
