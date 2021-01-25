@@ -10,9 +10,9 @@ import Foundation
 
 class ViewRouter: ObservableObject {
     @Published var currentTab: Tab = .highlight
-    @Published var showAddBookSheet: Bool = false
     @Published var showPopup: Bool = false
-
+    @Published var showAddSheet: Bool = false
+    @Published var activeSheet: ActiveSheet = .first
 }
 
 enum Tab {
@@ -22,3 +22,6 @@ enum Tab {
     case calendar
 }
 
+enum ActiveSheet {
+   case first, second
+}
