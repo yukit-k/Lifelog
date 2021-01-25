@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ActivityDetail: View {
+struct ActivityDetailTravel: View {
     //@EnvironmentObject var modelData: ModelData
     //var landmark: Landmark
     var log: Log
@@ -58,7 +58,7 @@ struct ActivityDetail: View {
     }
 }
 
-struct ActivityDetail_Previews: PreviewProvider {
+struct AActivityDetailTravel_Previews: PreviewProvider {
     //static let modelData = ModelData()
     
     static var previews: some View {
@@ -71,7 +71,7 @@ struct ActivityDetail_Previews: PreviewProvider {
         log1.rating = 4
         log1.comment = "This was a great book"
         log1.recordDate = Date()
-        return ActivityDetail(log: log1).environment(\.managedObjectContext, context)
+        return ActivityDetailTravel(log: log1).environment(\.managedObjectContext, context)
 
 //        AchievementDetail(landmark: ModelData().landmarks[0])
 //            .environmentObject(modelData)
