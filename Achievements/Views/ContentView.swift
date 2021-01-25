@@ -9,11 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var viewRouter: ViewRouter
-    //@State var showPopup: Bool = false
-    //@State var showAddBookSheet: Bool = false
     
     var body: some View {
-        // LandmarkList()
         GeometryReader { geometry in
             VStack {
                 Spacer()
@@ -63,74 +60,20 @@ struct ContentView: View {
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
-            .sheet(isPresented: $viewRouter.showAddBookSheet) {
-                AddBook()
-            }
-        
-        }
-//        .gesture(
-//            DragGesture(minimumDistance: 0, coordinateSpace: .global)
-//                .onEnded { value in
-//                    viewRouter.showPopup = false
-//                }
-//        )
-    }
-}
-            
-/*
-            TabView(selection: $selection) {
-                CategoryHome()
-                    .tabItem {
-                        Label("Highlight", systemImage: "star")
-                    }
-                    .tag(Tab.featured)
-                LandmarkList()
-                    .tabItem {
-                        Label("List", systemImage: "list.bullet")
-                    }
-                    .tag(Tab.list)
-
-                Text("some actions")
-                    .tabItem {
-                    }
-
-                Text("Show Chart")
-                    .tabItem {
-                        Label("Chart", systemImage: "chart.bar")
-                    }
-                    .tag(Tab.chart)
-
-                Text("Calendar")
-                    .tabItem {
-                        Label("Calendar", systemImage: "calendar")
-                    }
-                    .tag(Tab.calendar)
-            }
-            ZStack {
-                Circle()
-                    .foregroundColor(.white)
-                    .frame(width: geometry.size.width/7, height: geometry.size.width/7)
-                    .shadow(radius: 4)
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .frame(width: geometry.size.width/7-6, height: geometry.size.width/7-6)
-                    .foregroundColor(Color("DarkPurple"))
-            }
-            .offset(x: geometry.size.width / 2 - 20, y: geometry.size.height - 80)
-            .onTapGesture {
-                self.showActionSheet.toggle()
-            }
-            
-            
-        }
-        .actionSheet(isPresented: $showActionSheet) {
-                    ActionSheet(title: Text("some actions"))
+            .sheet(isPresented: $viewRouter.showAddSheet) {
+                switch viewRouter.activeSheet {
+                case .first:
+                    AddNewItem()
+                case .second:
+                    AddLog()
                 }
- */
-        
+            }
+        }
+    }
+}        
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(viewRouter: ViewRouter())
-            .environmentObject(ModelData())
+            .environmentObject(StartupData())
     }
 }
