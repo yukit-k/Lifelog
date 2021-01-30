@@ -48,7 +48,6 @@ struct BookList: View {
         }
         .sheet(isPresented: $showingAddScreen) {
             AddBook().environment(\.managedObjectContext, self.moc)
-
         }
     }
     

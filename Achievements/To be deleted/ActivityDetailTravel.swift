@@ -58,22 +58,10 @@ struct ActivityDetailTravel: View {
     }
 }
 
-struct AActivityDetailTravel_Previews: PreviewProvider {
-    //static let modelData = ModelData()
-    
-    static var previews: some View {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let log1 = Log(context: context)
-        log1.material?.name = "Test book"
-        log1.material?.category = "Book"
-        log1.material?.updateDate = Date()
-        log1.material?.genre = "Fantasy"
-        log1.rating = 4
-        log1.comment = "This was a great book"
-        log1.recordDate = Date()
-        return ActivityDetailTravel(log: log1).environment(\.managedObjectContext, context)
-
-//        AchievementDetail(landmark: ModelData().landmarks[0])
-//            .environmentObject(modelData)
-    }
-}
+//struct AActivityDetailTravel_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        return ActivityDetailTravel(log: log1)
+//            .environment(\.managedObjectContext, context)
+//
+//}
