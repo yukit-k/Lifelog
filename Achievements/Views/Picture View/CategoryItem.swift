@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct CategoryItem: View {
-    var material: Material
-    static let updateDateFormat: DateFormatter = {
+    var log: Log
+    static let updatedDateFormat: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         return formatter
@@ -17,7 +17,7 @@ struct CategoryItem: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            self.material.image.map({
+            self.log.image.map({
                 UIImage(data: $0)
                     .map({
                             Image(uiImage: $0)
@@ -29,11 +29,11 @@ struct CategoryItem: View {
             })
             
             HStack {
-                Text(material.wrappedName)
+                Text(log.wrappedName)
                     .foregroundColor(.primary)
                     .font(.caption)
                 Spacer()
-                Text("\(material.wrappedUpdateDate, formatter: Self.updateDateFormat)" )
+                Text("\(log.wrappedActivityDate, formatter: Self.updatedDateFormat)" )
                     .foregroundColor(.secondary)
                     .font(.caption)
             }
@@ -47,11 +47,11 @@ struct CategoryItem_Previews: PreviewProvider {
     
     static var previews: some View {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let material1 = Material(context: context)
-        material1.name = "Test book"
-        material1.category = "Book"
-        material1.updateDate = Date()
-        return CategoryItem(material: material1)
+        let log1 = Log(context: context)
+        log1.name = "Test book"
+        log1.category = "Book"
+        log1.updatedDate = Date()
+        return CategoryItem(log: log1)
             //.environment(\.managedObjectContext, context)
         
     }

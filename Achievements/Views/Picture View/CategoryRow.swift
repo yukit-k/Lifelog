@@ -10,25 +10,25 @@ import SwiftUI
 struct CategoryRow: View {
 //    var categoryName: String
 //    @Environment(\.managedObjectContext) var moc
-    var fetchRequest: FetchRequest<Material>
+    var fetchRequest: FetchRequest<Log>
     var categoryName: String
-    var categoryNameWithIcon: String
+    var categoryIcon: String
 //    @FetchRequest(entity: Material.entity(), sortDescriptors: [
 //        NSSortDescriptor(keyPath: \Material.updateDate, ascending: false)
 //    ]) var materials: FetchedResults<Material>
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(categoryNameWithIcon)
+            Text(categoryIcon + categoryName)
                 .font(.headline)
                 .padding(.leading, 15)
                 .padding(.top, 15)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 0) {
-                    ForEach(fetchRequest.wrappedValue, id: \.self) { material in
-                        NavigationLink(destination: ItemDetail(material: material)) {
-                            CategoryItem(material: material)
+                    ForEach(fetchRequest.wrappedValue, id: \.self) { log in
+                        NavigationLink(destination: ActivityDetail(log: log)) {
+                            CategoryItem(log: log)
                         }
                     }
                 }
@@ -38,16 +38,10 @@ struct CategoryRow: View {
     }
     
     init(filter: String) {
-        fetchRequest = FetchRequest<Material>(entity: Material.entity(), sortDescriptors: [ NSSortDescriptor(keyPath: \Material.updateDate, ascending: false)
+        fetchRequest = FetchRequest<Log>(entity: Log.entity(), sortDescriptors: [ NSSortDescriptor(keyPath: \Log.updatedDate, ascending: false)
         ], predicate: NSPredicate(format: "category == %@", filter))
         categoryName = filter
-        switch filter {
-        case Material.Category.Book.rawValue: categoryNameWithIcon = Material.CategoryIcon.Book.rawValue + filter
-        case Material.Category.Task.rawValue: categoryNameWithIcon = Material.CategoryIcon.Task.rawValue + filter
-        case Material.Category.Cook.rawValue: categoryNameWithIcon = Material.CategoryIcon.Cook.rawValue + filter
-        case Material.Category.Exercise.rawValue: categoryNameWithIcon = Material.CategoryIcon.Exercise.rawValue + filter
-        default: categoryNameWithIcon = Material.CategoryIcon.Others.rawValue + filter
-        }
+        categoryIcon = Log.getCategoryIcon(categoryName)
     }
 }
 
