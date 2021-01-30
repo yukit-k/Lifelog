@@ -14,7 +14,7 @@ struct ItemDetail: View {
     @State private var showingDeleteAlert = false
     
 //    var fetchRequest: FetchRequest<Log>
-    let material: Material
+    let log: Log
     
     let logDateFormat: DateFormatter = {
         let formatter = DateFormatter()
