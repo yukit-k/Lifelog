@@ -21,7 +21,7 @@ struct ActivityRow<TargetView: View>: View {
     var body: some View {
         NavigationLink(destination: nextView) {
             HStack {
-                log.wrappedMaterial.image.map({
+                log.image.map({
                     UIImage(data: $0)
                         .map({
                                 Image(uiImage: $0)
@@ -32,15 +32,15 @@ struct ActivityRow<TargetView: View>: View {
                 })
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(log.wrappedMaterial.getCategoryIcon(log.wrappedMaterial.wrappedCategory))
+                        Text(Log.getCategoryIcon(log.wrappedCategory))
                             .font(.caption)
-                        Text(log.wrappedMaterial.wrappedName)
+                        Text(log.wrappedName)
                             .font(.headline)
                     }
 
                     HStack {
-                        Text("\(log.wrappedRecordDate, formatter: self.logDateFormat)" )
-                        Text("\(log.taskVolume, specifier: "%.0f") \(log.wrappedMaterial.wrappedTaskUnit)" )
+                        Text("\(log.wrappedActivityDate, formatter: self.logDateFormat)" )
+                        Text("\(log.activityVolume, specifier: "%.0f") / \(log.totalVolume, specifier: "%.0f")" )
                         if self.log.isToDo {
                             Text(" To Do ")
                                 .font(.caption)
@@ -75,21 +75,14 @@ struct ActivityRow_Previews: PreviewProvider {
     static var previews: some View {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let log1 = Log(context: context)
-        log1.material?.name = "Test book"
-        log1.material?.category = "Book"
-        log1.material?.updateDate = Date()
-        log1.material?.genre = "Fantasy"
-        log1.material?.image = UIImage(named: "defaultBook")?.pngData()
+        log1.name = "Test book"
+        log1.category = "Book"
+        log1.updatedDate = Date()
+        log1.genre = "Fantasy"
+        log1.image = UIImage(named: "defaultBook")?.pngData()
         log1.rating = 4
         log1.comment = "This was a great book"
-        log1.recordDate = Date()
+        log1.activityDate = Date()
         return ActivityRow(log: log1, nextView: ActivityDetail(log: log1)).environment(\.managedObjectContext, context)
-//        Group {
-//            AchievementRow(landmark: landmarks[0])
-//            AchievementRow(landmark: landmarks[1])
-//        }
-//        .previewLayout(.fixed(width: 300, height: 70))
-//
-        
     }
 }
