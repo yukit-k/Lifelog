@@ -10,12 +10,14 @@ import SwiftUI
 struct ChartView: View {
     var body: some View {
         NavigationView {
-
-            Image("snowman_nana")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 300)
-                .navigationTitle("Chart View")
+            VStack {
+                Text("Sorry! I'm working hard....")
+                Image("snowman_nana")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 300)
+                    .navigationTitle("Charts (WIP)")
+            }
         }
     }
 }
