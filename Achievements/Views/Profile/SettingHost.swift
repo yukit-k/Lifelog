@@ -7,17 +7,15 @@
 
 import SwiftUI
 
-struct ProfileHost: View {
+struct SettingHost: View {
     @Environment(\.editMode) var editMode
-    @EnvironmentObject var modelData: ModelData
-    @State private var draftProfile = Profile.default
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
                 if editMode?.wrappedValue == .active {
                     Button("Cancel") {
-                        draftProfile = modelData.profile
+                        //draftProfile = startupData.profile
                         editMode?.animation().wrappedValue = .inactive
                     }
                 }
@@ -25,14 +23,14 @@ struct ProfileHost: View {
                 EditButton()
             }
             if editMode?.wrappedValue == .inactive {
-                ProfileSummary(profile: modelData.profile)
+                SettingSummary()
             } else {
-                ProfileEditor(profile: $draftProfile)
+                SettingEditor()
                     .onAppear {
-                        draftProfile = modelData.profile
+                        //draftProfile = draftProfile
                     }
                     .onDisappear {
-                        modelData.profile = draftProfile
+                        //startupData.profile = draftProfile
                     }
             }
         }
@@ -40,9 +38,8 @@ struct ProfileHost: View {
     }
 }
 
-struct ProfileHost_Previews: PreviewProvider {
+struct SettingHost_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileHost()
-            .environmentObject(ModelData())
+        SettingHost()
     }
 }
