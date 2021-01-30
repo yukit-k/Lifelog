@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var startupData: StartupData
     @StateObject var viewRouter: ViewRouter
     
     var body: some View {
@@ -16,9 +17,10 @@ struct ContentView: View {
                 Spacer()
                 switch viewRouter.currentTab {
                 case .highlight:
-                    MaterialView()
+                    PictureView()
+                        .environmentObject(startupData)
                 case .list:
-                    ActivityList()
+                    ListView()
                 case .chart:
                     ChartView()
                 case .calendar:
@@ -58,14 +60,15 @@ struct ContentView: View {
                          .frame(width: geometry.size.width, height: geometry.size.height/10)
                     .background(Color(.secondarySystemBackground).shadow(radius: 2))
                 }
+                .edgesIgnoringSafeArea(.all)
             }
-            .edgesIgnoringSafeArea(.bottom)
+            
             .sheet(isPresented: $viewRouter.showAddSheet) {
                 switch viewRouter.activeSheet {
                 case .first:
-                    AddNewItem()
+                    AddNewLog(isToDo: true)
                 case .second:
-                    AddLog()
+                    AddNewLog(isToDo: false)
                 }
             }
         }
