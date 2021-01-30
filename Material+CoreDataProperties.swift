@@ -16,25 +16,24 @@ extension Material {
         return NSFetchRequest<Material>(entityName: "Material")
     }
 
-    @NSManaged public var createdBy: String?
+    @NSManaged public var author: String?
     @NSManaged public var category: String?
     @NSManaged public var desc: String?
     @NSManaged public var genre: String?
     @NSManaged public var image: Data?
     @NSManaged public var name: String?
+    @NSManaged public var status: String?
+    @NSManaged public var volumeUnit: String?
     @NSManaged public var totalVolume: Double
     @NSManaged public var version: String?
-    @NSManaged public var updateDate: Date?
-    @NSManaged public var percentageToDate: Double
-    @NSManaged public var status: String?
-    @NSManaged public var taskUnit: String?
+    @NSManaged public var updatedDate: Date?
     @NSManaged public var log: NSSet?
     
     public var wrappedName: String {
         name ?? "Unknown Name"
     }
-    public var wrappedCreatedBy: String {
-        createdBy ?? ""
+    public var wrappedAuthor: String {
+        author ?? ""
     }
     public var wrappedCategory: String {
         category ?? "Others"
@@ -48,51 +47,21 @@ extension Material {
     public var wrappedVersion: String {
         version ?? ""
     }
-    public var wrappedUpdateDate: Date {
-        updateDate ?? Date()
+    public var wrappedUpdatedDate: Date {
+        updatedDate ?? Date()
     }
     public var wrappedStatus: String {
         status ?? "Undefined"
     }
-    public var wrappedTaskUnit: String {
-        taskUnit ?? ""
+    public var wrappedVolumeUnit: String {
+        volumeUnit ?? ""
     }
     public var logArray: [Log] {
         let set = log as? Set<Log> ?? []
         
         return set.sorted {
-            $0.wrappedRecordDate > $1.wrappedRecordDate
+            $0.wrappedUpdatedDate > $1.wrappedUpdatedDate
         }
-    }
-    
-    enum Category: String, CaseIterable, Identifiable {
-        case Book = "Book"
-        case Task = "Task"
-        case Exercise = "Exercise"
-        case Cook = "Cook"
-        case Others = "Others"
-
-        var id: String { self.rawValue }
-    }
-    enum CategoryIcon: String, CaseIterable, Identifiable {
-        case Book = "📚"
-        case Task = "🧾"
-        case Exercise = "🏃‍♀️"
-        case Cook = "🥕"
-        case Others = "🗂"
-
-        var id: String { self.rawValue }
-    }
-    func getCategoryIcon(_ name: String) -> String {
-        var categoryIcon: String
-        switch name {
-        case Material.Category.Book.rawValue: categoryIcon = Material.CategoryIcon.Book.rawValue
-        case Material.Category.Task.rawValue: categoryIcon = Material.CategoryIcon.Task.rawValue
-        case Material.Category.Cook.rawValue: categoryIcon = Material.CategoryIcon.Cook.rawValue
-        case Material.Category.Exercise.rawValue: categoryIcon = Material.CategoryIcon.Exercise.rawValue
-        default: categoryIcon = Material.CategoryIcon.Others.rawValue
-        }
-        return categoryIcon
     }
 }
 
