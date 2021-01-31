@@ -27,21 +27,21 @@ struct ImagePicker: UIViewControllerRepresentable {
             if let uiImage = info[.originalImage] as? UIImage {
                 parent.image = uiImage.size.width > 600 ? uiImage.resized(toWidth: 600.0) : uiImage
             }
-            //parent.presentationMode.wrappedValue.dismiss()
-            parent.isPresented = false
+            parent.presentationMode.wrappedValue.dismiss()
+            //parent.isPresented = false
         }
         
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            //parent.presentationMode.wrappedValue.dismiss()
-            parent.isPresented = false
+            parent.presentationMode.wrappedValue.dismiss()
+            //parent.isPresented = false
         }
 
     }
     
     var sourceType: UIImagePickerController.SourceType = .camera
     @Binding var image: UIImage?
-    //@Environment(\.presentationMode) var presentationMode
-    @Binding var isPresented: Bool
+    @Environment(\.presentationMode) var presentationMode
+    //@Binding var isPresented: Bool
     
     func makeCoordinator() -> Coordicator {
         //return BookImagePickerCoordicator(image: $image, isPresented: $isPresented)
