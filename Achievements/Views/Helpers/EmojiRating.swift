@@ -20,8 +20,11 @@ struct EmojiRating: View {
             return Text("😐")
         case 4:
             return Text("😀")
-        default:
+        case 5:
             return Text("🤩")
+        default:
+            return Text("🐼")
+
         }
     }
 }
