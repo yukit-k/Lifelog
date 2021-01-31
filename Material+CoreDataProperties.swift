@@ -16,15 +16,15 @@ extension Material {
         return NSFetchRequest<Material>(entityName: "Material")
     }
 
-    @NSManaged public var author: String?
+    @NSManaged public var creator: String?
     @NSManaged public var category: String?
+    @NSManaged public var categoryIcon: String?
     @NSManaged public var desc: String?
-    @NSManaged public var genre: String?
+    @NSManaged public var subCategory: String?
     @NSManaged public var image: Data?
     @NSManaged public var name: String?
     @NSManaged public var status: String?
-    @NSManaged public var volumeUnit: String?
-    @NSManaged public var totalVolume: Double
+    @NSManaged public var unit: String?
     @NSManaged public var version: String?
     @NSManaged public var updatedDate: Date?
     @NSManaged public var log: NSSet?
@@ -32,17 +32,20 @@ extension Material {
     public var wrappedName: String {
         name ?? "Unknown Name"
     }
-    public var wrappedAuthor: String {
-        author ?? ""
+    public var wrappedCreator: String {
+        creator ?? ""
     }
     public var wrappedCategory: String {
         category ?? "Others"
     }
+    public var wrappedCategoryIcon: String {
+        categoryIcon ?? ""
+    }
     public var wrappedDesc: String {
         desc ?? "No description"
     }
-    public var wrappedGenre: String {
-        genre ?? "Others"
+    public var wrappedSubCategory: String {
+        subCategory ?? "Others"
     }
     public var wrappedVersion: String {
         version ?? ""
@@ -53,8 +56,8 @@ extension Material {
     public var wrappedStatus: String {
         status ?? "Undefined"
     }
-    public var wrappedVolumeUnit: String {
-        volumeUnit ?? ""
+    public var wrappedUnit: String {
+        unit ?? ""
     }
     public var logArray: [Log] {
         let set = log as? Set<Log> ?? []

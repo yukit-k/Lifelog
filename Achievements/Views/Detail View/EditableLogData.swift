@@ -8,40 +8,40 @@
 import Foundation
 
 struct EditableLogData {
+    var id: UUID
     var activityDate: Date?
-    var author: String?
+    var creator: String?
     var category: String?
+    var categoryIcon: String?
+    var subCategory: String?
     var comment: String?
     var desc: String?
-    var genre: String?
-    var id: UUID
     var image: Data?
     var isToDo: Bool
     var name: String?
     var rating: Int16
     var status: String?
-    var activityVolume: Double
-    var totalVolume: Double
-    var volumeUnit: String?
+    var amount: Double
+    var unit: String?
     var updatedDate: Date?
     var material: Material?
     
     init(from log: Log) {
+        id = log.id
         activityDate = log.activityDate
-        author = log.author
+        creator = log.creator
         category = log.category
+        categoryIcon = log.categoryIcon
+        subCategory = log.subCategory
         comment = log.comment
         desc = log.desc
-        genre = log.genre
-        id = log.id
         image = log.image
         isToDo = log.isToDo
         name = log.name
         rating = log.rating
         status = log.status
-        activityVolume = log.activityVolume
-        totalVolume = log.totalVolume
-        volumeUnit = log.volumeUnit
+        amount = log.amount
+        unit = log.unit
         updatedDate = log.updatedDate
         material = log.material
     }
@@ -49,21 +49,21 @@ struct EditableLogData {
 
 extension Log {
     func updateValues(from editableLogData: EditableLogData) {
+        id = editableLogData.id
         activityDate = editableLogData.activityDate
-        author = editableLogData.author
+        creator = editableLogData.creator
         category = editableLogData.category
+        categoryIcon = editableLogData.categoryIcon
+        subCategory = editableLogData.subCategory
         comment = editableLogData.comment
         desc = editableLogData.desc
-        genre = editableLogData.genre
-        id = editableLogData.id
         image = editableLogData.image
         isToDo = editableLogData.isToDo
         name = editableLogData.name
         rating = editableLogData.rating
         status = editableLogData.status
-        activityVolume = editableLogData.activityVolume
-        totalVolume = editableLogData.totalVolume
-        volumeUnit = editableLogData.volumeUnit
+        amount = editableLogData.amount
+        unit = editableLogData.unit
         updatedDate = editableLogData.updatedDate
         material = editableLogData.material
     }
