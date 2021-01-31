@@ -7,40 +7,52 @@
 
 import Foundation
 
-class UserSettings: ObservableObject {
-    @Published var username: String {
+struct UserSettings {
+    var username: String {
         didSet {
             UserDefaults.standard.set(username, forKey: "username")
         }
     }
     
-    @Published var notification: Bool {
+    var notification: Bool {
         didSet {
             UserDefaults.standard.set(notification, forKey: "notification")
         }
     }
     
-    @Published var categories: [Category] {
+    var categories: [Category] {
         didSet {
             UserDefaults.standard.set(categories, forKey: "categories")
         }
     }
-    
-    public var bookGenre = ["Not Selected", "Picture Book", "Fiction", "Non-Fiction", "Textbook", "Others"]
-    public var taskGenre = ["Not Selected", "Study", "Choir", "Hobby", "Job", "Others"]
-    public var exerciseGenre = ["Not Selected", "Running", "Walking", "Cycling", "Indoor", "Outdoor", "Others"]
-    public var cookGenre = ["Not Selected", "Dinner", "Lunch", "Breakfast", "Desert", "Others"]
-    public var othersGenre = ["Not Selected", "Others"]
-    
+        
     init() {
-        self.username = UserDefaults.standard.string(forKey: "username") ?? "Nana"
+        self.username = UserDefaults.standard.string(forKey: "username") ?? "Your Name"
+        self.notification = UserDefaults.standard.bool(forKey: "notification")
         self.categories = UserDefaults.standard.object(forKey: "categories") as? [Category] ?? [
-            Category(name: "Book", icon: "📚"),
-            Category(name: "Task", icon: "🧾"),
-            Category(name: "Exercise", icon: "🏃‍♀️"),
-            Category(name: "Cook", icon: "🥕"),
-            Category(name: "Others", icon: "🗂")
+            Category(name: "Book", icon: "📚", unit: "page", subCategories: [Category(name: "Not Selected"), Category(name: "Picture Book"), Category(name: "Fiction"), Category(name: "Non-Fiction"), Category(name: "Textbook"), Category(name: "Others")]),
+            Category(name: "Task", icon: "🧾", unit: "minutes", subCategories: [Category(name: "Not Selected"), Category(name: "Study"), Category(name: "Choir"), Category(name: "Hobby"), Category(name: "Job"), Category(name: "Others")]),
+            Category(name: "Exercise", icon: "🏃‍♀️", unit: "minutes", subCategories: [Category(name: "Not Selected"), Category(name: "Running"), Category(name: "Walking"), Category(name: "Cycling"), Category(name: "Indoor"), Category(name: "Outdoor"), Category(name: "Others")]),
+            Category(name: "Health", icon: "💖", subCategories: [Category(name: "Not Selected"), Category(name: "Height", unit:"cm"), Category(name: "Weight", unit:"kg"), Category(name: "BMI"), Category(name: "Others")]),
+            Category(name: "Cook", icon: "🥕", subCategories: [Category(name: "Not Selected"), Category(name: "Dinner"), Category(name: "Lunch"), Category(name: "Breakfast"), Category(name: "Desert"), Category(name: "Others")]),
+            Category(name: "Others", icon: "🗂", subCategories: [Category(name: "Not Selected"), Category(name: "Others")])
         ]
-        self.notification = false
+        
+    }
+    
+    func getSubCategories(categoryName: String) -> [Category] {
+        if let found = self.categories.first(where: {$0.name == categoryName}) {
+            return found.subCategories ?? []
+        } else {
+            return []
+        }
+    }
+    
+    func getCategoryIcon(categoryName: String) -> String {
+        if let found = self.categories.first(where: {$0.name == categoryName}) {
+            return found.icon ?? ""
+        } else {
+            return ""
+        }
     }
 }
