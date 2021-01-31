@@ -7,33 +7,6 @@
 
 import SwiftUI
 
-struct FileIOController {
-    func write(_ value: Data, toDocumentNamed documentName: String) throws {
-        let folderURL = FileManager.default.urls(
-            for: .documentDirectory,
-            in: .userDomainMask
-        )[0]
-        let fileURL = folderURL.appendingPathComponent(documentName)
-        print(fileURL)
-        try value.write(to: fileURL)
-    }
-    func loadImage(name: String, type: String = "png") -> Image? {
-        let folderURL = FileManager.default.urls(
-            for: .documentDirectory,
-            in: .userDomainMask
-        )[0]
-        let fileURL = folderURL.appendingPathComponent(name)
-        print(fileURL)
-        do {
-            let data = try Data(contentsOf: fileURL)
-            guard let uiImage = UIImage(data: data) else { return nil }
-            return Image(uiImage: uiImage)
-        } catch {
-            return nil
-        }
-    }
-}
-
 enum ActiveSheetProfileView: Identifiable {
     case profile, background
     
@@ -43,7 +16,7 @@ enum ActiveSheetProfileView: Identifiable {
 }
 
 struct ProfileSummary: View {
-    @EnvironmentObject var startupData: StartupData
+    @EnvironmentObject var modelData: ModelData
     let fileController = FileIOController()
     
     @State private var image: Image?
@@ -54,9 +27,7 @@ struct ProfileSummary: View {
     
     @State private var backImage: Image?
     @State private var inputBackImage: UIImage?
-    @State private var activeSheet: ActiveSheetProfileView?
-    
-    @State private var userName = UserDefaults.standard.string(forKey: "username")
+    @State private var activeSheet: ActiveSheetProfileView = .profile
     
     init () {
         _image = State(initialValue: fileController.loadImage(name: "profile.png") ?? Image("snowman_nana"))
@@ -70,13 +41,13 @@ struct ProfileSummary: View {
                     backImage?
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 150)
-                        .edgesIgnoringSafeArea(.top)
+                        .frame(height: 250)
+                        .clipped()
                         .onTapGesture {
                             activeSheet = .background
                             showingImagePicker = true
                         }
-                    
+                        
                     HStack {
                         Spacer()
                         image?
@@ -86,18 +57,20 @@ struct ProfileSummary: View {
                             .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
                             .overlay(Circle().stroke(Color.white, lineWidth: 4))
                             .shadow(radius: 10)
-                            .offset(x: 0, y: -50)
-                            .padding(.bottom, -50)
+                            .offset(x: 0, y: -100)
+                            .padding(.bottom, -100)
                             .onTapGesture {
+                                activeSheet = .profile
                                 showingImageActionSheet = true
                             }
                         Spacer()
                     }
                 }
                 
+                
                 HStack {
                     Spacer()
-                    Text(userName ?? "Nana")
+                    Text(modelData.userSettings.username)
                         .bold()
                         .font(.title)
                         .padding()
@@ -120,11 +93,11 @@ struct ProfileSummary: View {
                 .padding()
             }
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                switch activeSheet! {
+                switch activeSheet {
                 case .profile:
-                    ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage, isPresented: self.$showingImagePicker)
+                    ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage)
                 case .background:
-                    ImagePicker(sourceType: .photoLibrary, image: self.$inputBackImage, isPresented: self.$showingImagePicker)
+                    ImagePicker(sourceType: .photoLibrary, image: self.$inputBackImage)
                 }
             }
             .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
@@ -140,6 +113,8 @@ struct ProfileSummary: View {
             }
 
         }
+        .edgesIgnoringSafeArea(.top)
+
     }
     
     
