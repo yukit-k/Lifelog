@@ -37,16 +37,16 @@ struct CategoryRow: View {
         }
     }
     
-    init(filter: String) {
+    init(filter: Category) {
         fetchRequest = FetchRequest<Log>(entity: Log.entity(), sortDescriptors: [ NSSortDescriptor(keyPath: \Log.updatedDate, ascending: false)
-        ], predicate: NSPredicate(format: "category == %@", filter))
-        categoryName = filter
-        categoryIcon = Log.getCategoryIcon(categoryName)
+        ], predicate: NSPredicate(format: "category == %@", filter.name))
+        categoryName = filter.name
+        categoryIcon = filter.icon ?? ""
     }
 }
 
 struct CategoryRow_Previews: PreviewProvider {    
     static var previews: some View {
-        CategoryRow(filter: "Book")
+        CategoryRow(filter: Category(name: "Book", icon: "📚"))
     }
 }
