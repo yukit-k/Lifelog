@@ -11,6 +11,7 @@ import CoreData
 struct ActivityDetail: View {
     @Environment(\.managedObjectContext) var moc
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var modelData: ModelData
     @State private var showingDeleteAlert = false
     
     // @ObservedObject var log: Log
@@ -22,29 +23,7 @@ struct ActivityDetail: View {
         formatter.dateStyle = .short
         return formatter
     }()
-    private func getScrollOffset(_ geometry: GeometryProxy) -> CGFloat {
-            geometry.frame(in: .global).minY
-        }
-    private func getOffsetForHeaderImage(_ geometry: GeometryProxy) -> CGFloat {
-            let offset = getScrollOffset(geometry)
-            
-            // Image was pulled down
-            if offset > 0 {
-                return -offset
-            }
-            
-            return 0
-        }
-    private func getHeightForHeaderImage(_ geometry: GeometryProxy) -> CGFloat {
-        let offset = getScrollOffset(geometry)
-        let imageHeight = geometry.size.height
-
-        if offset > 0 {
-            return imageHeight + offset
-        }
-
-        return imageHeight
-    }
+    let imageHelper = ImageHelper()
     var body: some View {
         ScrollView {
             VStack(spacing: 15) {
@@ -56,20 +35,20 @@ struct ActivityDetail: View {
                                         Image(uiImage: $0)
                                             .resizable()
                                             .scaledToFill()
-                                            .frame(width:geometry.size.width, height:self.getHeightForHeaderImage(geometry))
+                                            .frame(width:geometry.size.width, height:imageHelper.getHeightForHeaderImage(geometry))
                                             .clipped()
-                                            .offset(x: 0, y: self.getOffsetForHeaderImage(geometry))
+                                            .offset(x: 0, y: imageHelper.getOffsetForHeaderImage(geometry))
                                 })
                         })
                         
-                        Text(log.wrappedGenre.uppercased())
+                        Text(log.wrappedSubCategory.uppercased())
                             .font(.caption)
                             .fontWeight(.black)
                             .padding(8)
                             .foregroundColor(.white)
                             .background(Color.black.opacity(0.75))
                             .clipShape(Capsule())
-                            .offset(x: -5, y: self.getOffsetForHeaderImage(geometry)-5)
+                            .offset(x: -5, y: imageHelper.getOffsetForHeaderImage(geometry)-5)
                     }
                 }
                 .frame(height: 300)
@@ -102,6 +81,10 @@ struct ActivityDetail: View {
 
                             }
                     }
+                    if (log.amount > 0) {
+                        Text("\(log.amount, specifier: "%.0f") \(log.wrappedUnit)")
+                    }
+
                     if !log.isToDo {
                         RatingView(rating: .constant(Int(log.rating)))
                             .font(.headline)
@@ -120,22 +103,11 @@ struct ActivityDetail: View {
                     Divider()
                         .padding(.top)
                     HStack{
-                        Text("Volume")
+                        Text("Created by")
                             .font(.headline)
                             .padding(.trailing, 10)
-                        if (log.activityVolume > 0 || log.totalVolume > 0) {
-                            Text("\(log.activityVolume, specifier: "%.0f") / \(log.totalVolume, specifier: "%.0f") \(log.wrappedVolumeUnit)")
-                        } else {
-                            Text("Undefined")
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                    HStack{
-                        Text("Author")
-                            .font(.headline)
-                            .padding(.trailing, 10)
-                        if log.wrappedAuthor != "" {
-                            Text(log.wrappedAuthor)
+                        if log.wrappedCreator != "" {
+                            Text(log.wrappedCreator)
                         } else {
                             Text("Undefined")
                                 .foregroundColor(.secondary)
@@ -157,7 +129,7 @@ struct ActivityDetail: View {
                 .padding(.top, 12)
             }
         }
-        .navigationBarTitle(Text(Log.getCategoryIcon(log.wrappedCategory) + log.wrappedCategory), displayMode: .inline)
+        .navigationBarTitle(Text("\(log.wrappedCategory) Detail"), displayMode: .inline)
         .alert(isPresented: $showingDeleteAlert) {
             Alert(title: Text("Delete book"), message: Text("Are you sure?"), primaryButton: .destructive(Text("Delete")){
                     self.deleteLog()
@@ -172,6 +144,7 @@ struct ActivityDetail: View {
         })
         .sheet(isPresented: $showingEditScreen) {
             EditLog(log: self.log)
+                .environmentObject(modelData)
         }
         .edgesIgnoringSafeArea(.all)
         
@@ -199,12 +172,12 @@ struct ActivityDetail_Previews: PreviewProvider {
         let log1 = Log(context: context)
         log1.name = "Test book"
         log1.category = "Book"
-        log1.updatedDate = Date()
-        log1.genre = "Fantasy"
+        log1.subCategory = "Fantasy"
         log1.image = UIImage(named: "defaultBook")?.pngData()
         log1.rating = 4
         log1.comment = "This was a great book"
         log1.activityDate = Date()
+        log1.updatedDate = Date()
         return ActivityDetail(log: log1).environment(\.managedObjectContext, context)
         
     }

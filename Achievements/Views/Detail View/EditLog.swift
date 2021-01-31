@@ -26,12 +26,10 @@ struct CheckboxToggleStyle: ToggleStyle {
 struct EditLog: View {
     @Environment(\.managedObjectContext) var moc
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var modelData: ModelData
 
     @State private var editableLog: EditableLogData
-    @State private var dateFieldName: String = ""
-    @State private var nameFieldName: String = "Name"
-    @State private var activityVolumeS: String = ""
-    @State private var totalVolumeS: String = ""
+    @State private var amountString: String = ""
     @State private var ratingInt: Int = 3
     @State private var isCompleted: Bool
     
@@ -45,57 +43,69 @@ struct EditLog: View {
     @State private var errorMessage: String = ""
     @State private var showingOverrideAlert = false
 
-    let bookGenre = ["Not Selected", "Picture Book", "Fiction", "Non-Fiction", "Textbook", "Others"]
-    let taskGenre = ["Not Selected", "Study", "Choir", "Hobby", "Job", "Others"]
-    let exerciseGenre = ["Not Selected", "Running", "Walking", "Cycling", "Indoor", "Outdoor", "Others"]
-    let cookGenre = ["Not Selected", "Dinner", "Lunch", "Breakfast", "Desert", "Others"]
-    let othersGenre = ["Not Selected", "Others"]
-
     init(log: Log) {
         _editableLog = State(initialValue: EditableLogData(from: log))
-        if log.isToDo {
-            _dateFieldName = State(initialValue: "Planned Date")
-        } else {
-            _dateFieldName = State(initialValue: "Record Date")
-        }
-        _activityVolumeS = log.activityVolume > 0 ? State(initialValue: String(log.activityVolume)) : State(initialValue: "")
-        _totalVolumeS = log.totalVolume > 0 ? State(initialValue: String(log.totalVolume)) : State(initialValue: "")
+        _amountString = log.amount > 0 ? State(initialValue: String(log.amount)) : State(initialValue: "")
         _ratingInt = State(initialValue: Int(log.rating))
         _isCompleted = State(initialValue: Bool(!log.isToDo))
     }
     var body: some View {
         NavigationView {
             Form {
-                Section {
+                Section(header: Text("Activity Log")) {
                     Toggle(isOn: $isCompleted.animation()) {
                         Text("Task Completed!")
                             .font(.headline)
                     }.toggleStyle(CheckboxToggleStyle())
                     if isCompleted {
                         RatingView(rating: $ratingInt)
-                            .font(.headline)
                         HStack {
                             Text("Comment")
-                                .font(.headline)
+                                .padding(.trailing)
                             TextField("Add a comment...", text: $editableLog.comment.bounds)
                                 .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                         }
                     }
                 }
                 Section(header: Text("Overview")) {
-                    Picker("Category", selection: $editableLog.category.bounds) {
-                        ForEach(Log.Category.allCases) { category in
-                            Text(Log.getCategoryIcon(category)+category.rawValue)
-                                .tag(category)
+                    DatePicker(isCompleted ? "Record Date" : "Planned Date", selection: $editableLog.activityDate.boundd, displayedComponents: .date)
+                    HStack {
+                        Text("Name")
+                            .padding(.trailing)
+                        TextField("Name", text: $editableLog.name.bounds)
+                            .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
+                    }
+                    Picker(selection: $editableLog.category.bounds, label: Text("Category")) {
+                        ForEach(modelData.userSettings.categories, id: \.self) { category in
+                            Text("\(category.icon ?? "") \(category.name)")
+                                .tag(category.name)
                         }
                     }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .onReceive(Just(editableLog.category.bounds)) { value in
-                        self.updateForCategory(category: value)
+//                    .onReceive(Just(editableLog.category.bounds)) { value in
+//                        self.updateForCategory(category: value)
+//                    }
+                    Picker(selection: $editableLog.subCategory.bounds, label: Text("Sub Category")) {
+                        ForEach(modelData.userSettings.getSubCategories(categoryName: editableLog.category ?? "")) { subCategory in
+                            Text("\(subCategory.icon ?? "") \(subCategory.name)")
+                                .tag(subCategory.name)
+                        }
+                    }
+                    HStack {
+                        Text("Amount")
+                            .padding(.trailing)
+                        TextField("Add amount...", text: $amountString)
+                            .keyboardType(.numberPad)
+                            .onReceive(Just(amountString)) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                if filtered != newValue {
+                                    amountString = filtered
+                                }
+                            }
+                        Text(editableLog.unit.bounds)
+                            .foregroundColor(.secondary)
                     }
                     HStack {
                         Text("Image")
-                            .font(.headline)
                         Spacer()
                         editableLog.image.map({
                             UIImage(data: $0)
@@ -113,84 +123,23 @@ struct EditLog: View {
                         })
                         Spacer()
                     }
-                    HStack {
-                        Text(nameFieldName)
-                            .font(.headline)
-                            .padding(.trailing)
-                        TextField(nameFieldName, text: $editableLog.name.bounds)
-                            .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
-                    }
-                    DatePicker(dateFieldName, selection: $editableLog.activityDate.boundd, displayedComponents: .date)
-                        .font(.headline)
-                    Picker(selection: $editableLog.genre.bounds, label: Text("Genre").font(.headline)) {
-                        switch editableLog.category {
-                        case Log.Category.Book.rawValue:
-                            ForEach(0 ..< bookGenre.count) {
-                                Text(bookGenre[$0]).tag(bookGenre[$0])
-                            }
-                        case Log.Category.Task.rawValue:
-                            ForEach(0 ..< taskGenre.count) {
-                                Text(taskGenre[$0]).tag(taskGenre[$0])
-                            }
-                        case Log.Category.Exercise.rawValue:
-                            ForEach(0 ..< exerciseGenre.count) {
-                                Text(exerciseGenre[$0]).tag(exerciseGenre[$0])
-                            }
-                        default:
-                            ForEach(0 ..< othersGenre.count) {
-                                Text(othersGenre[$0]).tag(othersGenre[$0])
-                            }
-
-                        }
-                    }
-
                 }
-                Section(header: Text("Detail Info")) {
+                Section(header: Text("Detail")) {
                     HStack {
-                        Text("Volume")
-                            .font(.headline)
-                        TextField("Done", text: $activityVolumeS)
-                            .multilineTextAlignment(.center)
-                            .keyboardType(.numberPad)
-                            .onReceive(Just(activityVolumeS)) { newValue in
-                                let filtered = newValue.filter { "0123456789.".contains($0) }
-                                if filtered != newValue {
-                                    activityVolumeS = filtered
-                                }
-                            }
-                        Text("/")
-                        TextField("Total", text: $totalVolumeS)
-                            .multilineTextAlignment(.center)
-                            .keyboardType(.numberPad)
-                            .onReceive(Just(totalVolumeS)) { newValue in
-                                let filtered = newValue.filter { "0123456789.".contains($0) }
-                                if filtered != newValue {
-                                    totalVolumeS = filtered
-                                }
-                            }
-                        Divider()
-                        TextField("Unit", text: $editableLog.volumeUnit.bounds)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.secondary)
-                    }
-
-                    HStack {
-                        Text("Author")
-                            .font(.headline)
+                        Text("Created by")
                             .padding(.trailing)
-                        TextField("Author", text: $editableLog.author.bounds)
+                        TextField("Add creator..", text: $editableLog.creator.bounds)
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                     }
                     HStack {
                         Text("Description")
-                            .font(.headline)
                             .padding(.trailing)
-                        TextField("Description", text: $editableLog.desc.bounds)
+                        TextField("Add description...", text: $editableLog.desc.bounds)
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                     }
                 }
             }
-            .navigationTitle("Edit Log")
+            .navigationTitle("Edit \(editableLog.categoryIcon ?? "")\(editableLog.category ?? "") Log")
             .navigationBarItems(
                 leading: Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
@@ -201,7 +150,7 @@ struct EditLog: View {
                         SaveButton(function: {self.saveLog()})
             )
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage, isPresented: self.$showingImagePicker)
+                ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage)
             }
             .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
                 ActionSheet(title: Text("Choose Mode"), message: Text("Please choose the photo source"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
@@ -230,43 +179,26 @@ struct EditLog: View {
     }
 
     func saveLog() {
-        if editableLog.name != "" {
-            editableLog.activityVolume = (activityVolumeS as NSString).doubleValue
-            editableLog.totalVolume = (totalVolumeS as NSString).doubleValue
-            editableLog.rating = Int16(ratingInt)
-            editableLog.isToDo = !isCompleted
-            let newLog = Log(context: self.moc)
-            newLog.updateValues(from: editableLog)
-            
-            if self.moc.hasChanges {
-                do {
-                    try self.moc.save()
-                    print("New Log: \(editableLog.name!) added.")
-                } catch {
-                    print(error)
-                }
-            }
-                
-        } else {
-            self.showingError = true
-            self.errorTitle = "Invalid Title"
-            self.errorMessage = "Make sure to enter something for \nthe new item."
-            return
+        if editableLog.name == "" {
+            editableLog.name = "New \(editableLog.category ?? "Item") (\(editableLog.subCategory ?? ""))"
         }
-
+        editableLog.amount = (amountString as NSString).doubleValue
+        editableLog.rating = Int16(ratingInt)
+        editableLog.isToDo = !isCompleted
+        let newLog = Log(context: self.moc)
+        newLog.updateValues(from: editableLog)
+        
+        if self.moc.hasChanges {
+            do {
+                try self.moc.save()
+                print("New Log: \(editableLog.name!) added.")
+            } catch {
+                print(error)
+            }
+        }
+        
         self.presentationMode.wrappedValue.dismiss()
     }
-    
-    func updateForCategory(category: String) {
-        switch category {
-        case Log.Category.Book.rawValue: nameFieldName = "Book Name"
-        case Log.Category.Task.rawValue: nameFieldName = "Task Name"
-        case Log.Category.Exercise.rawValue: nameFieldName = "Exercise Name"
-        case Log.Category.Cook.rawValue: nameFieldName = "Dish Name"
-        default: nameFieldName = "Name"
-        }
-    }
-
 }
 
 struct EditLog_Previews: PreviewProvider {
@@ -276,12 +208,14 @@ struct EditLog_Previews: PreviewProvider {
         log1.name = "Test book"
         log1.category = "Book"
         log1.updatedDate = Date()
-        log1.genre = "Fantasy"
+        log1.subCategory = "Fantasy"
         log1.image = UIImage(named: "defaultBook")?.pngData()
         log1.rating = 4
         log1.comment = "This was a great book"
         log1.activityDate = Date()
 
-        return EditLog(log: log1).environment(\.managedObjectContext, context)
+        return EditLog(log: log1)
+            .environment(\.managedObjectContext, context)
+            .environmentObject(ModelData())
     }
 }
