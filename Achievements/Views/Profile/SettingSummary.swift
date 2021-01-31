@@ -7,26 +7,32 @@
 
 import SwiftUI
 
-struct Category: Identifiable, Hashable {
-    var id = UUID()
-    var name: String
-    var icon: String
-}
-
 struct CategoryConfigRow: View {
     var category: Category
     
     var body: some View {
         HStack {
-            Text(category.icon)
+            Text(category.icon ?? "")
             Text(category.name)
+            Spacer()
+            if category.unit != nil {
+                Text("(Unit: \(category.unit!))")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.trailing)
+            }
         }
-        .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
     }
 }
 
 struct SettingSummary: View {
-    @ObservedObject var userSettings = UserSettings()
+    var userSettings: UserSettings
+    @State private var flags: [Bool] = []
+    
+    init(userSettings: UserSettings) {
+        _flags = State(initialValue: Array(repeating: false, count: userSettings.categories.count))
+        self.userSettings = userSettings
+    }
     
     var body: some View {
         VStack {
@@ -34,42 +40,46 @@ struct SettingSummary: View {
                 .font(.title)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
             List {
-                HStack {
-                    Text("Username")
-                        .font(.headline)
-                        .frame(width: 100)
-                    Divider()
-                    Text(userSettings.username)
-                        .padding(4)
+                Section(header: Text("Profile")){
+                    HStack {
+                        Text("Username")
+                            .font(.headline)
+                            .frame(width: 100)
+                        Divider()
+                        Text(userSettings.username)
+                            .padding(4)
+                    }
+                    HStack {
+                        Text("Notification")
+                            .font(.headline)
+                            .frame(width: 100)
+                        Divider()
+                        Text(userSettings.notification ? "On" : "Off")
+                            .padding(4)
+                    }
+
                 }
-                HStack {
-                    Text("Category")
-                        .font(.headline)
-                        .frame(width: 100)
-                    Divider()
-                    VStack(alignment: .leading) {
-                        ForEach(userSettings.categories, id: \.self) { category in
+                Section(header: Text("Category")){
+                    ForEach(Array(userSettings.categories.enumerated()), id: \.1.id) { i, category in
+                        DisclosureGroup(isExpanded: $flags[i]) {
+                            ForEach(category.subCategories ?? []) { subCategory in
+                                CategoryConfigRow(category: subCategory)
+                                    .padding(.leading, 20)
+                            }
+                        } label: {
                             CategoryConfigRow(category: category)
-                                .padding(4)
                         }
-                        .onDelete(perform: delete)
-                        .onMove(perform: move)
                     }
                 }
+
             }
+            .listStyle(InsetGroupedListStyle())
         }
-    }
-    
-    func delete(at offsets: IndexSet) {
-        userSettings.categories.remove(atOffsets: offsets)
-    }
-    func move(from source: IndexSet, to destination: Int) {
-        userSettings.categories.move(fromOffsets: source, toOffset: destination)
-    }
+    }    
 }
 
 struct SettingSummary_Previews: PreviewProvider {
     static var previews: some View {
-        SettingSummary()
+        SettingSummary(userSettings: UserSettings())
     }
 }

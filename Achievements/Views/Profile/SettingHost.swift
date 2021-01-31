@@ -9,37 +9,42 @@ import SwiftUI
 
 struct SettingHost: View {
     @Environment(\.editMode) var editMode
+    @EnvironmentObject var modelData: ModelData
+    @State private var draftSettings = UserSettings()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             HStack {
                 if editMode?.wrappedValue == .active {
                     Button("Cancel") {
-                        //draftProfile = startupData.profile
+                        draftSettings = modelData.userSettings
                         editMode?.animation().wrappedValue = .inactive
                     }
+                    .padding()
                 }
                 Spacer()
                 EditButton()
+                    .padding()
             }
             if editMode?.wrappedValue == .inactive {
-                SettingSummary()
+                SettingSummary(userSettings: modelData.userSettings)
             } else {
-                SettingEditor()
+                SettingEditor(userSettings: $draftSettings)
                     .onAppear {
-                        //draftProfile = draftProfile
+                        draftSettings = modelData.userSettings
                     }
                     .onDisappear {
-                        //startupData.profile = draftProfile
+                        modelData.userSettings = draftSettings
                     }
             }
         }
-        .padding()
+        //.padding()
     }
 }
 
 struct SettingHost_Previews: PreviewProvider {
     static var previews: some View {
         SettingHost()
+            .environmentObject(ModelData())
     }
 }
