@@ -9,7 +9,7 @@ import SwiftUI
 
 
 enum ActiveSheetPictureView: Identifiable {
-    case first, second
+    case settings, profile
     
     var id: Int {
         hashValue
@@ -17,85 +17,71 @@ enum ActiveSheetPictureView: Identifiable {
 }
 
 struct PictureView: View {
-    @EnvironmentObject var startupData: StartupData
+    @EnvironmentObject var modelData: ModelData
     @Environment(\.managedObjectContext) var moc
 
     @State private var showingProfile = false
     @State private var activeSheet: ActiveSheetPictureView?
-    private func getScrollOffset(_ geometry: GeometryProxy) -> CGFloat {
-            geometry.frame(in: .global).minY
-        }
-    private func getOffsetForHeaderImage(_ geometry: GeometryProxy) -> CGFloat {
-            let offset = getScrollOffset(geometry)
-            
-            // Image was pulled down
-            if offset > 0 {
-                return -offset
-            }
-            
-            return 0
-        }
-    private func getHeightForHeaderImage(_ geometry: GeometryProxy) -> CGFloat {
-        let offset = getScrollOffset(geometry)
-        let imageHeight = geometry.size.height
-
-        if offset > 0 {
-            return imageHeight + offset
-        }
-
-        return imageHeight
-    }
+    let imageHelper = ImageHelper()
+    
     var body: some View {
         NavigationView {
-            List {
-                Image(startupData.topImages[startupData.photoIndex])
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 200)
-                    .clipped()
-                    .listRowInsets(EdgeInsets())
+            GeometryReader { geometry1 in
+                List {
+                    GeometryReader { geometry2 in
+                        Image(modelData.topImages[modelData.photoIndex])
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width:geometry1.size.width, height:imageHelper.getHeightForHeaderImage(geometry2))
+                            .clipped()
+                            .offset(x: 0, y: imageHelper.getOffsetForHeaderImage(geometry2))
+                        }
+                        .frame(height: 200)
+                        .listRowInsets(EdgeInsets())
                 
-                ForEach(Log.Category.allCases) { category in
-                    CategoryRow(filter: category.rawValue)
+                    ForEach(modelData.userSettings.categories) { category in
+                        CategoryRow(filter: category)
+                    }
+                    .listRowInsets(EdgeInsets())
                 }
-                .listRowInsets(EdgeInsets())
-            }
-            .listStyle(InsetListStyle())
-            .navigationBarTitle("Achievement")
-            .navigationBarTitleDisplayMode(.inline)
-            //.navigationBarHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        activeSheet = .second
-                    }) {
-                        Image(systemName: "person.crop.circle")
-                            .accessibilityLabel("User Profile")
+                .listStyle(PlainListStyle())
+                .navigationBarTitle("Achievement")
+                .navigationBarTitleDisplayMode(.inline)
+                //.navigationBarHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            activeSheet = .profile
+                        }) {
+                            Image(systemName: "person.crop.circle")
+                                .accessibilityLabel("User Profile")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            activeSheet = .settings
+                        }) {
+                            Image(systemName: "gearshape")
+                        }
                     }
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        activeSheet = .first
-                    }) {
-                        Image(systemName: "gearshape")
+                .sheet(item: $activeSheet) {item in
+                    switch item {
+                    case .settings:
+                        SettingHost()
+                    case .profile:
+                        ProfileSummary()
                     }
-                }
-            }
-            .sheet(item: $activeSheet) {item in
-                switch item {
-                case .first:
-                    SettingHost()
-                case .second:
-                    ProfileSummary()
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 struct PictureView_Previews: PreviewProvider {
     static var previews: some View {
         PictureView()
-            .environmentObject(StartupData())
+            .environmentObject(ModelData())
     }
 }
