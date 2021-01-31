@@ -32,7 +32,7 @@ struct ActivityRow<TargetView: View>: View {
                 })
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(Log.getCategoryIcon(log.wrappedCategory))
+                        Text(log.wrappedCategoryIcon)
                             .font(.caption)
                         Text(log.wrappedName)
                             .font(.headline)
@@ -40,7 +40,10 @@ struct ActivityRow<TargetView: View>: View {
 
                     HStack {
                         Text("\(log.wrappedActivityDate, formatter: self.logDateFormat)" )
-                        Text("\(log.activityVolume, specifier: "%.0f") / \(log.totalVolume, specifier: "%.0f")" )
+                        if log.amount > 0 {
+                            Text("\(log.amount, specifier: "%.0f") \(log.wrappedUnit)")
+                        }
+                        Spacer()
                         if self.log.isToDo {
                             Text(" To Do ")
                                 .font(.caption)
@@ -57,12 +60,11 @@ struct ActivityRow<TargetView: View>: View {
                                 .foregroundColor(.white)
                                 .background(Color.green.opacity(0.85))
                                 .clipShape(Capsule())
-                            EmojiRating(rating: log.rating)
-
                         }
+                        EmojiRating(rating: log.rating)
 
                     }
-                        .font(.subheadline)
+                    .font(.subheadline)
 
                 }
                 Spacer()
@@ -78,7 +80,7 @@ struct ActivityRow_Previews: PreviewProvider {
         log1.name = "Test book"
         log1.category = "Book"
         log1.updatedDate = Date()
-        log1.genre = "Fantasy"
+        log1.subCategory = "Fantasy"
         log1.image = UIImage(named: "defaultBook")?.pngData()
         log1.rating = 4
         log1.comment = "This was a great book"

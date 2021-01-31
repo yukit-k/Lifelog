@@ -69,7 +69,7 @@ struct  ListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        activeSheet = .second
+                        activeSheet = .profile
                     }) {
                         Image(systemName: "person.crop.circle")
                             .accessibilityLabel("User Profile")
@@ -77,7 +77,7 @@ struct  ListView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        activeSheet = .first
+                        activeSheet = .settings
                     }) {
                         Image(systemName: "gearshape")
                     }
@@ -85,9 +85,9 @@ struct  ListView: View {
             }
             .sheet(item: $activeSheet) {item in
                 switch item {
-                case .first:
+                case .settings:
                     SettingHost()
-                case .second:
+                case .profile:
                     ProfileSummary()
                 }
             }
