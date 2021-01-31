@@ -12,7 +12,7 @@ class ViewRouter: ObservableObject {
     @Published var currentTab: Tab = .highlight
     @Published var showPopup: Bool = false
     @Published var showAddSheet: Bool = false
-    @Published var activeSheet: ActiveSheet = .first
+    @Published var category: Category = Category(name: "Others")
 }
 
 enum Tab {
