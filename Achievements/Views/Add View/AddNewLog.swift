@@ -19,7 +19,7 @@ struct AddNewLog: View {
     @State private var nameFieldName: String = "Name"
 
     @State private var isToDo: Bool = false
-    @State private var subCategory = Category(name: "Not Selected")
+    @State private var subCategory = SubCategory(name: "Not Selected")
     @State private var name = ""
     @State private var activityDate = Date()
     @State private var amount = ""
@@ -72,7 +72,7 @@ struct AddNewLog: View {
 //                    }
                     DatePicker(dateFieldName, selection: $activityDate, displayedComponents: .date)
                     Picker("\(category.name) Category", selection: $subCategory) {
-                        ForEach(category.subCategories ?? [], id: \.self) { subCategory in
+                        ForEach(category.subCategories, id: \.self) { subCategory in
                             Text("\(subCategory.icon ?? "")\((subCategory.name))")
                                 .tag(subCategory)
                         }
@@ -252,7 +252,13 @@ struct AddNewLog_Previews: PreviewProvider {
     static var previews: some View {
 //        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 //        return AddBook().environment(\.managedObjectContext, context)
-        AddNewLog(category: Category(name: "Book"))
+        AddNewLog(category: Category(name: "Book", icon: "📚", unit: "page", subCategories: [
+                                        SubCategory(name: "Not Selected"),
+                                        SubCategory(name: "Picture Book"),
+                                        SubCategory(name: "Fiction"),
+                                        SubCategory(name: "Non-Fiction"),
+                                        SubCategory(name: "Textbook"),
+                                        SubCategory(name: "Others")]))
             .environmentObject(ModelData())
     }
 }
