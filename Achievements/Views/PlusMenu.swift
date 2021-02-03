@@ -17,53 +17,59 @@ struct PlusMenu: View {
     
     var body: some View {
         let gridItems = Array(repeating: GridItem(.fixed(widthAndHeight), spacing: spacing, alignment: .center), count: cols)
-        LazyVGrid(columns: gridItems, alignment: .center, spacing: spacing) {
-            ForEach(modelData.userSettings.categories, id: \.self) { category in
-                ZStack {
-                    Circle()
-                        .foregroundColor(.accentColor)
-                        .frame(width: widthAndHeight, height: widthAndHeight)
-                        .shadow(radius: 4)
-                    VStack {
-                        Text(category.icon ?? "")
-                            .font(.title)
-                        Text(category.name)
-                            .font(.footnote)
-                            .padding(.bottom, widthAndHeight/20)
+//        GeometryReader { geo in
+            LazyVGrid(columns: gridItems, alignment: .center, spacing: spacing) {
+                ForEach(modelData.userSettings.categories, id: \.self) { category in
+                    ZStack {
+                        Circle()
+                            .foregroundColor(.accentColor)
+                            .frame(width: widthAndHeight, height: widthAndHeight)
+                            .shadow(radius: 4)
+                        VStack {
+                            Text(category.icon ?? "")
+                                .font(.title)
+                            Text(category.name)
+                                .font(.footnote)
+                                .padding(.bottom, widthAndHeight/20)
+                        }
+                            .foregroundColor(.white)
+                            .frame(width: widthAndHeight, height: widthAndHeight)
                     }
-                        .foregroundColor(.white)
-                        .frame(width: widthAndHeight, height: widthAndHeight)
+                    .onTapGesture {
+                        viewRouter.showPopup = false
+                        viewRouter.category = category
+                        viewRouter.showAddSheet = true
+                    }
                 }
-                .onTapGesture {
-                    viewRouter.showPopup = false
-                    viewRouter.category = category
-                    viewRouter.showAddSheet = true
-                }
-            }
-//            ZStack {
-//                Circle()
-//                    .foregroundColor(.accentColor)
-//                    .frame(width: widthAndHeight, height: widthAndHeight)
-//                    .shadow(radius: 4)
-//                VStack {
-//                    Image(systemName: "text.badge.checkmark")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .padding(.top, widthAndHeight/6)
-//                    Text("Log")
-//                        .font(.footnote)
-//                        .padding(.bottom, widthAndHeight/10)
-//                }
-//                    .foregroundColor(.white)
-//                    .frame(width: widthAndHeight, height: widthAndHeight)
-//            }
-//            .onTapGesture {
-//                viewRouter.showPopup = false
-//                viewRouter.activeSheet = .second
-//                viewRouter.showAddSheet = true
+                
+    //            ZStack {
+    //                Circle()
+    //                    .foregroundColor(.accentColor)
+    //                    .frame(width: widthAndHeight, height: widthAndHeight)
+    //                    .shadow(radius: 4)
+    //                VStack {
+    //                    Image(systemName: "text.badge.checkmark")
+    //                        .resizable()
+    //                        .aspectRatio(contentMode: .fit)
+    //                        .padding(.top, widthAndHeight/6)
+    //                    Text("Log")
+    //                        .font(.footnote)
+    //                        .padding(.bottom, widthAndHeight/10)
+    //                }
+    //                    .foregroundColor(.white)
+    //                    .frame(width: widthAndHeight, height: widthAndHeight)
+    //            }
+    //            .onTapGesture {
+    //                viewRouter.showPopup = false
+    //                viewRouter.activeSheet = .second
+    //                viewRouter.showAddSheet = true
+    //            }
+
+//
 //            }
         }
-            .transition(.scale)
+            .offset(x: 0, y: -200)
+            
     }
 }
 

@@ -28,8 +28,12 @@ struct ContentView: View {
    
                 ZStack(alignment: .bottom) {
                     if viewRouter.showPopup {
-                        PlusMenu(viewRouter: viewRouter, widthAndHeight: 70)
-                            .offset(y: -100)
+                        HStack(alignment: .bottom) {
+                            PlusMenu(viewRouter: viewRouter, widthAndHeight: 70)
+                        }
+                        .frame(width: geometry.size.width, height: 10)
+                        .transition(.scale)
+//                        .offset(x: 0, y: -500)
                     }
                     HStack() {
                             TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: 15, systemIconName: "star", tabName: "Achievement")
