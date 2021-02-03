@@ -28,7 +28,7 @@ struct CategoryRow: View {
                 HStack(alignment: .top, spacing: 0) {
                     ForEach(fetchRequest.wrappedValue, id: \.self) { log in
                         NavigationLink(destination: ActivityDetail(log: log)) {
-                            CategoryItem(log: log)
+                            CategoryItemView(log: log)
                         }
                     }
                 }
@@ -47,6 +47,6 @@ struct CategoryRow: View {
 
 struct CategoryRow_Previews: PreviewProvider {    
     static var previews: some View {
-        CategoryRow(filter: Category(name: "Book", icon: "📚"))
+        CategoryRow(filter: Category(name: "Book", icon: "📚", subCategories: [SubCategory(name: "Not Selected")]))
     }
 }

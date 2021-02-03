@@ -24,6 +24,10 @@ struct PictureView: View {
     @State private var activeSheet: ActiveSheetPictureView?
     let imageHelper = ImageHelper()
     
+    @FetchRequest(entity: Log.entity(), sortDescriptors: [
+        NSSortDescriptor(keyPath: \Log.category, ascending: false)
+    ]) var logs: FetchedResults<Log>
+    
     var body: some View {
         NavigationView {
             GeometryReader { geometry1 in
@@ -38,9 +42,10 @@ struct PictureView: View {
                         }
                         .frame(height: 200)
                         .listRowInsets(EdgeInsets())
-                
-                    ForEach(modelData.userSettings.categories) { category in
-                        CategoryRow(filter: category)
+                    ForEach(group(logs), id: \.self) { category in
+                        CategoryRow(filter: modelData.userSettings.getCategory(name: category) ?? Category(name: "None", subCategories: []))
+//                    ForEach((group(logs)), id: \.self) { (category: [Log]) in
+//                        CategoryRow(filter: modelData.userSettings.getCategory(name: category[0].wrappedCategory) ?? Category(name: "None", subCategories: []))
                     }
                     .listRowInsets(EdgeInsets())
                 }
@@ -68,15 +73,28 @@ struct PictureView: View {
                 .sheet(item: $activeSheet) {item in
                     switch item {
                     case .settings:
-                        SettingHost()
+                        CategorySettings()
+//                            .environmentObject(modelData)
                     case .profile:
-                        ProfileSummary()
+                        ProfileHost()
+//                            .environmentObject(modelData)
                     }
                 }
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
+    func group(_ result : FetchedResults<Log>)-> [String] {
+            return Dictionary(grouping: result) { $0.category! }
+                .map {$0.key}
+    }
+//    func group(_ result : FetchedResults<Log>)-> [[Log]] {
+//
+//            return Dictionary(grouping: result) { $0.category! }
+//                .sorted(by: {$0.key < $1.key})
+//                .map {$0.value}
+//    }
+
 }
 
 struct PictureView_Previews: PreviewProvider {

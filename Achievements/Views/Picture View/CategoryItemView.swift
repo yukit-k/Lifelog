@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CategoryItem: View {
+struct CategoryItemView: View {
     var log: Log
     static let updatedDateFormat: DateFormatter = {
         let formatter = DateFormatter()
@@ -42,7 +42,7 @@ struct CategoryItem: View {
     }
 }
 
-struct CategoryItem_Previews: PreviewProvider {
+struct CategoryItemView_Previews: PreviewProvider {
 //    static let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
     
     static var previews: some View {
@@ -51,7 +51,7 @@ struct CategoryItem_Previews: PreviewProvider {
         log1.name = "Test book"
         log1.category = "Book"
         log1.updatedDate = Date()
-        return CategoryItem(log: log1)
+        return CategoryItemView(log: log1)
             //.environment(\.managedObjectContext, context)
         
     }
