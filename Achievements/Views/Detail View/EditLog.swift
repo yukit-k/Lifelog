@@ -85,7 +85,7 @@ struct EditLog: View {
 //                        self.updateForCategory(category: value)
 //                    }
                     Picker(selection: $editableLog.subCategory.bounds, label: Text("Sub Category")) {
-                        ForEach(modelData.userSettings.getSubCategories(categoryName: editableLog.category ?? "")) { subCategory in
+                        ForEach(modelData.userSettings.categories.first(where: {$0.name == editableLog.category})?.subCategories ?? []) { subCategory in
                             Text("\(subCategory.icon ?? "") \(subCategory.name)")
                                 .tag(subCategory.name)
                         }
