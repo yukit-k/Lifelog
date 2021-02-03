@@ -20,14 +20,7 @@ struct ProfileSummary: View {
     let fileController = FileIOController()
     
     @State private var image: Image?
-    @State private var inputImage: UIImage?
-    @State private var showingImagePicker = false
-    @State private var showingImageActionSheet = false
-    @State private var useCamera = false
-    
     @State private var backImage: Image?
-    @State private var inputBackImage: UIImage?
-    @State private var activeSheet: ActiveSheetProfileView = .profile
     
     init () {
         _image = State(initialValue: fileController.loadImage(name: "profile.png") ?? Image("snowman_nana"))
@@ -43,10 +36,6 @@ struct ProfileSummary: View {
                         .scaledToFill()
                         .frame(height: 250)
                         .clipped()
-                        .onTapGesture {
-                            activeSheet = .background
-                            showingImagePicker = true
-                        }
                         
                     HStack {
                         Spacer()
@@ -59,10 +48,6 @@ struct ProfileSummary: View {
                             .shadow(radius: 10)
                             .offset(x: 0, y: -100)
                             .padding(.bottom, -100)
-                            .onTapGesture {
-                                activeSheet = .profile
-                                showingImageActionSheet = true
-                            }
                         Spacer()
                     }
                 }
@@ -73,9 +58,17 @@ struct ProfileSummary: View {
                     Text(modelData.userSettings.username)
                         .bold()
                         .font(.title)
-                        .padding()
+                        .padding(.top, 10)
+                        .padding(.bottom, 4)
                     Spacer()
                 }
+                HStack {
+                    Text("Notification: ")
+                    Text(modelData.userSettings.notification ? "On (coming soon)" : "Off (coming soon)")
+                        .foregroundColor(.secondary)
+                }
+                EditButton()
+                    .padding()
                 
                 Divider()
                 
@@ -92,57 +85,9 @@ struct ProfileSummary: View {
                 }
                 .padding()
             }
-            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                switch activeSheet {
-                case .profile:
-                    ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage)
-                case .background:
-                    ImagePicker(sourceType: .photoLibrary, image: self.$inputBackImage)
-                }
-            }
-            .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
-                ActionSheet(title: Text("Choose Mode"), message: Text("Please choose the photo source"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
-                    useCamera = true
-                    activeSheet = .profile
-                    showingImagePicker.toggle()
-                }), ActionSheet.Button.default(Text("Photo Library"), action: {
-                    self.useCamera = false
-                    activeSheet = .profile
-                    showingImagePicker.toggle()
-                }), ActionSheet.Button.cancel()])
-            }
-
         }
         .edgesIgnoringSafeArea(.top)
 
-    }
-    
-    
-    func loadImage() {
-        switch activeSheet {
-        case .profile:
-            guard let inputImage = inputImage else { return }
-            image = Image(uiImage: inputImage)
-        
-            if useCamera {
-                let imageSaver = ImageSaver()
-                imageSaver.writeToPhotoAlbum(image: inputImage)
-            }
-            do {
-                try self.fileController.write(inputImage.pngData()!, toDocumentNamed: "profile.png")
-            } catch {
-                print(error)
-            }
-        default:
-            guard let inputBackImage = inputBackImage else { return }
-            backImage = Image(uiImage: inputBackImage)
-            do {
-                try self.fileController.write(inputBackImage.pngData()!, toDocumentNamed: "background.png")
-            } catch {
-                print(error)
-            }
-        }
-        
     }
 }
 
