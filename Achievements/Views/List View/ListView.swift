@@ -86,9 +86,9 @@ struct  ListView: View {
             .sheet(item: $activeSheet) {item in
                 switch item {
                 case .settings:
-                    SettingHost()
+                    CategorySettings()
                 case .profile:
-                    ProfileSummary()
+                    ProfileHost()
                 }
             }
 
