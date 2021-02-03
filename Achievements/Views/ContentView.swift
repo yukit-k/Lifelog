@@ -29,7 +29,7 @@ struct ContentView: View {
                 ZStack(alignment: .bottom) {
                     if viewRouter.showPopup {
                         PlusMenu(viewRouter: viewRouter, widthAndHeight: 70)
-                            .offset(y: -150)
+                            .offset(y: -100)
                     }
                     HStack() {
                             TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: 15, systemIconName: "star", tabName: "Achievement")
@@ -64,6 +64,7 @@ struct ContentView: View {
             
             .sheet(isPresented: $viewRouter.showAddSheet) {
                 AddNewLog(category: viewRouter.category)
+                    .environmentObject(modelData)
             
         }
     }
