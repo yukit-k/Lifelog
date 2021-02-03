@@ -9,7 +9,17 @@ import SwiftUI
 
 struct CalendarView: View {
     var body: some View {
-        Text("Coming soon!")
+        NavigationView {
+            VStack {
+                Text("Sorry! I'm working hard....")
+                Image("snowman_nana")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 300)
+                    .navigationTitle("Calendar (WIP)")
+            }
+        }
+
     }
 }
 
