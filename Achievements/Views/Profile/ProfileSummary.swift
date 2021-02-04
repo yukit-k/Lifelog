@@ -55,7 +55,7 @@ struct ProfileSummary: View {
                 
                 HStack {
                     Spacer()
-                    Text(modelData.userSettings.username)
+                    Text(modelData.userProfile.username)
                         .bold()
                         .font(.title)
                         .padding(.top, 10)
@@ -64,7 +64,7 @@ struct ProfileSummary: View {
                 }
                 HStack {
                     Text("Notification: ")
-                    Text(modelData.userSettings.notification ? "On (coming soon)" : "Off (coming soon)")
+                    Text(modelData.userProfile.notification ? "On (coming soon)" : "Off (coming soon)")
                         .foregroundColor(.secondary)
                 }
                 EditButton()

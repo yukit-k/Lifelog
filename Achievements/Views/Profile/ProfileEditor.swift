@@ -75,13 +75,13 @@ struct ProfileEditor: View {
                         Spacer()
                         Text("Username")
                             .font(.headline)
-                        TextField("Enter Your Name", text: $modelData.userSettings.username)
+                        TextField("Enter Your Name", text: $modelData.userProfile.username)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                         Spacer()
                     }
                     HStack {
                         Spacer()
-                        Toggle(isOn: $modelData.userSettings.notification) {
+                        Toggle(isOn: $modelData.userProfile.notification) {
                             Text("Notification (coming soon)")
                                 .font(.headline)
                         }
