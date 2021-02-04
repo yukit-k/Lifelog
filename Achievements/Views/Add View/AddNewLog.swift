@@ -71,7 +71,7 @@ struct AddNewLog: View {
 //                        self.updateForCategory(category: value)
 //                    }
                     DatePicker(dateFieldName, selection: $activityDate, displayedComponents: .date)
-                    Picker("\(category.name) Category", selection: $subCategory) {
+                    Picker("Sub Category", selection: $subCategory) {
                         ForEach(category.subCategories, id: \.self) { subCategory in
                             Text("\(subCategory.icon ?? "")\((subCategory.name))")
                                 .tag(subCategory)

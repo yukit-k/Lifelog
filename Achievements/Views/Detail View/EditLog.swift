@@ -76,7 +76,7 @@ struct EditLog: View {
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                     }
                     Picker(selection: $editableLog.category.bounds, label: Text("Category")) {
-                        ForEach(modelData.userSettings.categories, id: \.self) { category in
+                        ForEach(modelData.userCategory.categories, id: \.self) { category in
                             Text("\(category.icon ?? "") \(category.name)")
                                 .tag(category.name)
                         }
@@ -85,7 +85,7 @@ struct EditLog: View {
 //                        self.updateForCategory(category: value)
 //                    }
                     Picker(selection: $editableLog.subCategory.bounds, label: Text("Sub Category")) {
-                        ForEach(modelData.userSettings.categories.first(where: {$0.name == editableLog.category})?.subCategories ?? []) { subCategory in
+                        ForEach(modelData.userCategory.categories.first(where: {$0.name == editableLog.category})?.subCategories ?? []) { subCategory in
                             Text("\(subCategory.icon ?? "") \(subCategory.name)")
                                 .tag(subCategory.name)
                         }
