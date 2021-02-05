@@ -17,13 +17,13 @@ struct SubCategoryConfigRow: View {
     
     var body: some View {
         HStack {
-            if editMode?.wrappedValue == .active {
-                Text("Edit")
-                    .foregroundColor(.accentColor)
-                    .onTapGesture {
-                        self.showingSheet.toggle()
-                    }
-            }
+//            if editMode?.wrappedValue == .active {
+//                Text("Edit")
+//                    .foregroundColor(.accentColor)
+//                    .onTapGesture {
+//                        self.showingSheet.toggle()
+//                    }
+//            }
             Text(categoryItem.subCategory.icon ?? "")
             Text(categoryItem.subCategory.name)
             Spacer()

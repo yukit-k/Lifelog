@@ -55,6 +55,7 @@ struct SubCategoryConfig: View {
                 }
                 .listStyle(InsetGroupedListStyle())
                 .navigationBarTitle("Sub Category Settings")
+                .navigationBarTitleDisplayMode(.inline)
 
             }
             .onAppear {

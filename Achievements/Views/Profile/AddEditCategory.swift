@@ -17,7 +17,6 @@ struct AddEditCategory: View {
     @State private var showingError = false
     @State private var errorTitle: String = ""
     @State private var errorMessage: String = ""
-    @State private var showingOverrideAlert = false
     
     var body: some View {
         NavigationView {
@@ -26,18 +25,22 @@ struct AddEditCategory: View {
                     Text("Cateogry Name")
                         .frame(width: 150)
 
+//                    CustomTextField(text: $categoryItem.category.name, isFirstResponder: true)
+
                     TextField("", text: $categoryItem.category.name)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
                 }
                 HStack {
                     Text("Icon (Optional)")
                         .frame(width: 150)
 
-                    TextFieldWrapperView(text: $categoryItem.category.icon.bounds)
-                        .padding(6)
-                        .frame(width: 60)
-                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.1))
-                        //.textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("", text: $categoryItem.category.icon.bounds)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+//                    TextFieldWrapperView(text: $categoryItem.category.icon.bounds)
+//                        .padding(6)
+//                        .frame(width: 60)
+//                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.1))
                 }
                 HStack {
                     Text("Unit (Optional)")

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategoryConfigRow: View {
     @Environment(\.editMode) var editMode
+    @EnvironmentObject var modelData: ModelData
     
     @ObservedObject var categoryItem: CategoryItem
     @ObservedObject var draftCategory: UserCategory
@@ -30,14 +31,15 @@ struct CategoryConfigRow: View {
                 Spacer()
                 if categoryItem.category.unit != nil {
                     Text("(Unit: \(categoryItem.category.unit!))")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.trailing)
+                       .font(.caption)
+                       .foregroundColor(.secondary)
+                       .padding(.trailing)
                 }
             }
             .sheet(isPresented: $showingSheet) {
                 AddEditCategory(categoryItem: categoryItem, draftCategory: draftCategory)
             }
+
         }
     }
 }

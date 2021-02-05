@@ -12,6 +12,7 @@ struct CategorySettings: View {
     @EnvironmentObject var modelData: ModelData
     
     @StateObject var draftCategory: UserCategory = UserCategory()
+    //@StateObject var categoryItem: CategoryItem = CategoryItem(category: Category(name: "", subCategories: []))
     @State private var showingSheet = false
 //    @State private var flags: [Bool] = []
 //
@@ -35,24 +36,30 @@ struct CategorySettings: View {
                 }
                 .padding()
                 List {
-                    ForEach(Array(draftCategory.categories.enumerated()), id: \.1.id) { i, category in
-                        CategoryConfigRow(categoryItem: CategoryItem(category: category, categoryIndex: i), draftCategory: draftCategory)
-    //                        DisclosureGroup(isExpanded: $flags[i]) {
-    //                            ForEach(category.subCategories, id: \.self) { subCategory in
-    //                                SubCategoryConfigRow(category: subCategory)
-    //                                    .padding(.leading, 20)
-    //                            }
-    //                        } label: {
-    //                            CategoryConfigRow(category: category)
-    //                                .listRowBackground(Color("listHeader"))
-    //                        }
-    //                    }
+                    ForEach(Array(draftCategory.categories.enumerated()), id: \.1.id) { i, category -> CategoryConfigRow in
+                        let categoryItem = CategoryItem(category: category, categoryIndex: i)
+                        CategoryConfigRow(categoryItem: categoryItem, draftCategory: draftCategory)
+//                            .onDisappear {
+//                                modelData.userCategory = draftCategory
+//                            }
+
+        //                        DisclosureGroup(isExpanded: $flags[i]) {
+        //                            ForEach(category.subCategories, id: \.self) { subCategory in
+        //                                SubCategoryConfigRow(category: subCategory)
+        //                                    .padding(.leading, 20)
+        //                            }
+        //                        } label: {
+        //                            CategoryConfigRow(category: category)
+        //                                .listRowBackground(Color("listHeader"))
+        //                        }
+        //                    }
+
                     }
                     .onDelete(perform: deleteCategory)
-
                 }
                 .listStyle(InsetGroupedListStyle())
                 .navigationBarTitle("Category Settings")
+                .navigationBarTitleDisplayMode(.inline)
 //                .navigationBarHidden(true)
 //                .toolbar {
     //                ToolbarItem(placement: .navigationBarTrailing) {
