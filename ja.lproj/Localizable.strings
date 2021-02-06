@@ -1,0 +1,74 @@
+/* 
+  Localizable.strings
+  Achievements
+
+  Created by Yuki Takahashi on 04/02/2021.
+  
+*/
+"Achievement" = "ピクチャ";
+"Activity" = "リスト";
+"Chart" = "グラフ";
+"Calendar" = "カレンダ";
+"Activity Log" = "記録";
+"All" = "全て";
+"To Do" = "これからやること";
+"Done" = "やったこと";
+" To Do " = "これからやること";
+" Done " = "やったこと";
+"Category" = "カテゴリ";
+"Sub Category" = "サブカテゴリ";
+"Category Settings" = "カテゴリ設定";
+"Sub Category Settings" = "サブカテゴリ設定";
+"Edit" = "編集";
+"Done" = "完了";
+"Notification" =  "通知";
+"Username" = "ユーザー名";
+"Chart View" = "達成度";
+"Sorry! I'm working hard...🚀" = "ゴメンなさい！がんばって今作ってます🚀";
+"Calendar (WIP)" = "カレンダー（作成中）";
+"Overview" = "基本情報";
+"Detail Info" = "詳細情報";
+"Enter name" = "記録のタイトルを入力";
+"Enter amount" = "数量を入力";
+"Add a comment..." = "コメントを入力";
+"Add Details" = "詳細情報を追加";
+"Created By" = "作った人";
+"Description" = "情報";
+"Add %@%@ Log" = "新しい%@%@の記録";
+"Choose Mode" = "モード選択";
+"Please choose the photo source" = "写真の取得元を選択してください";
+"Camera" = "カメラ";
+"Photo Library" = "写真ライブラリ";
+"Log Type" = "記録の種類";
+"Comment" = "コメント";
+"No comment" = "コメント未入力";
+"Undefined" = "未入力";
+"No description" = "情報未入力";
+"%@%@ Detail" = "%@%@の詳細";
+"Delete %@" = "%@の削除";
+"Are you sure?" = "本当に削除していいですか？";
+"Activity Log" = "記録";
+"Task Completed!" = "このアクティビティは完了！";
+"Record Date" = "やった日";
+"Planned Date" = "やる予定の日";
+"Name" = "名前";
+"Amount" = "数量";
+"Add creator..." = "作った人を追加";
+"Add description..." = "情報を追加";
+"Edit %@%@ Log" = "%@%@の記録を編集";
+"New %@ (%@)" = "新しい%@(%@)";
+"Save" = "保存";
+"Save & Continue" = "保存（連続入力）";
+"Date" = "日付";
+"Image" = "写真";
+"Rating" = "レーティング";
+"Add Category" = "カテゴリを追加";
+"Add Sub Category" = "サブカテゴリを追加";
+"Category Name" = "カテゴリ名";
+"Icon (Optional)" = "アイコン";
+"Unit (Optional)" = "数量のユニット";
+"Notification" = "通知";
+"Notification (coming soon)" = "通知 (Coming Soon)";
+"Tap to change image" = "タップして写真を変更";
+"" = "";
+
