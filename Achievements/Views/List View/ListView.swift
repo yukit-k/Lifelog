@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct  ListView: View {
-    //@EnvironmentObject var modelData: ModelData
+    @EnvironmentObject var modelData: ModelData
     @State private var viewMode: String = "all"
-    @ObservedObject var searchBar: SearchBar = SearchBar()
+    @StateObject var searchBar: SearchBar = SearchBar()
     @State private var showingOptionView: Bool = false
     @State private var activeSheet: ActiveSheetPictureView?
 
@@ -19,12 +19,15 @@ struct  ListView: View {
         NSSortDescriptor(keyPath: \Log.activityDate, ascending: false)
     ]) var logs: FetchedResults<Log>
     
-    var outstandingLog: [Log] {
+    var filteredLog: [Log] {
         logs.filter { log in
             ((viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
                 (searchBar.text.isEmpty ||
                     log.wrappedName.localizedCaseInsensitiveContains(searchBar.text) ||
-                    log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text))
+                    log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text) ||
+                    log.wrappedCategory.localizedCaseInsensitiveContains(searchBar.text) ||
+                    log.wrappedSubCategory.localizedCaseInsensitiveContains(searchBar.text)
+                )
             )
         }
     }
@@ -33,10 +36,10 @@ struct  ListView: View {
         formatter.dateStyle = .short
         return formatter
     }
-    func update(_ result : [Log])-> [[Log]]{
-          return  Dictionary(grouping: result){ (element : Log)  in
-                dateFormatter.string(from: element.activityDate!)
-          }.values.map{$0}
+    func groupByDate(_ result : [Log])-> [[Log]]{
+        return  Dictionary(grouping: result){ (element : Log)  in
+            dateFormatter.string(from: element.activityDate!)
+        }.values.sorted() { $0[0].activityDate! > $1[0].activityDate! }
     }
 
     var body: some View {
@@ -48,24 +51,24 @@ struct  ListView: View {
                     Text("Done").tag("done")
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                ForEach(outstandingLog, id: \.self) { log in
-                    ActivityRow(log: log, nextView: ActivityDetail(log: log))
-                }
-                    .onDelete(perform: deleteLogs)
-//                ForEach(update(outstandingLog), id: \.self) { (section: [Log]) in
-//                    Section(header: Text(self.dateFormatter.string(from: section[0].recordDate!))) {
-//                        ForEach(section, id: \.self) { log in
-//                            ActivityRow(log: log, nextView: ActivityDetailBook(log: log))
-//                        }
-//                        .onDelete(perform: deleteLogs)
-//                    }
+//                ForEach(filteredLog, id: \.self) { log in
+//                    ActivityRow(log: log, nextView: ActivityDetail(log: log))
 //                }
-//                    .id(outstandingLog.count)
+                ForEach(groupByDate(filteredLog), id:\.self) { (section: [Log]) in
+                    Section(header: Text( self.dateFormatter.string(from: section[0].activityDate!))) {
+                        ForEach(section, id: \.self) { log in
+                            HStack {
+                                ActivityRow(log: log, nextView: ActivityDetail(log: log))
+                            }
+                        }
+                        .onDelete(perform: deleteLogs)
+                    }
+                }
+                //.id(filteredLog.count)
+
             }
-                .navigationBarTitle("Acitivty Log")
-                .navigationBarTitleDisplayMode(.inline)
-                .add(self.searchBar)
-//                .navigationBarItems(trailing: EditButton())
+            .navigationBarTitle("Activity Log")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
@@ -87,11 +90,13 @@ struct  ListView: View {
                 switch item {
                 case .settings:
                     CategorySettings()
+                        .environmentObject(modelData)
                 case .profile:
                     ProfileHost()
+                        .environmentObject(modelData)
                 }
             }
-
+            .add(self.searchBar)
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
