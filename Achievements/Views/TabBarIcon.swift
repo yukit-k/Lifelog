@@ -12,7 +12,8 @@ struct TabBarIcon: View {
     @StateObject var viewRouter: ViewRouter
     let assignedTab: Tab
     let width, height: CGFloat
-    let systemIconName, tabName: String
+    let systemIconName: String
+    let tabName: LocalizedStringKey
      
     var body: some View {
         VStack {

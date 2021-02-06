@@ -13,13 +13,13 @@ struct PlusMenu: View {
     
     let widthAndHeight: CGFloat
     let cols: Int = 4
-    let spacing: CGFloat = 30
+    let spacing: CGFloat = 10
     
     var body: some View {
         let gridItems = Array(repeating: GridItem(.fixed(widthAndHeight), spacing: spacing, alignment: .center), count: cols)
 //        GeometryReader { geo in
             LazyVGrid(columns: gridItems, alignment: .center, spacing: spacing) {
-                ForEach(modelData.userSettings.categories, id: \.self) { category in
+                ForEach(modelData.userCategory.categories, id: \.self) { category in
                     ZStack {
                         Circle()
                             .foregroundColor(.accentColor)
@@ -75,6 +75,7 @@ struct PlusMenu: View {
 
 struct PlusMenu_Previews: PreviewProvider {
     static var previews: some View {
-        PlusMenu(viewRouter: ViewRouter(), widthAndHeight: 80)
+        PlusMenu(viewRouter: ViewRouter(), widthAndHeight: 70)
+            .environmentObject(ModelData())
     }
 }
