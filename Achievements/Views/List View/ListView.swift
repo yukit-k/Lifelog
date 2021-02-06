@@ -12,7 +12,7 @@ struct  ListView: View {
     @State private var viewMode: String = "all"
     @StateObject var searchBar: SearchBar = SearchBar()
     @State private var showingOptionView: Bool = false
-    @State private var activeSheet: ActiveSheetPictureView?
+    @State private var activeSheet: ActiveSheetNavBar?
 
     @Environment(\.managedObjectContext) var moc
     @FetchRequest(entity: Log.entity(), sortDescriptors: [

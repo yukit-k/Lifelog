@@ -7,21 +7,12 @@
 
 import SwiftUI
 
-
-enum ActiveSheetPictureView: Identifiable {
-    case settings, profile
-    
-    var id: Int {
-        hashValue
-    }
-}
-
 struct PictureView: View {
     @EnvironmentObject var modelData: ModelData
     @Environment(\.managedObjectContext) var moc
 
     @State private var showingProfile = false
-    @State private var activeSheet: ActiveSheetPictureView?
+    @State private var activeSheet: ActiveSheetNavBar?
     let imageHelper = ImageHelper()
     
     @FetchRequest(entity: Log.entity(), sortDescriptors: [
