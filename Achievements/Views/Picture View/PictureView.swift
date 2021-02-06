@@ -43,7 +43,7 @@ struct PictureView: View {
                         .frame(height: 200)
                         .listRowInsets(EdgeInsets())
                     ForEach(group(logs).sorted(), id: \.self) { category in
-                        CategoryRow(filter: modelData.userSettings.getCategory(name: category) ?? Category(name: "None", subCategories: []))
+                        CategoryRow(filter: modelData.userCategory.getCategory(name: category) ?? Category(name: "None", subCategories: []))
 //                    ForEach((group(logs)), id: \.self) { (category: [Log]) in
 //                        CategoryRow(filter: modelData.userSettings.getCategory(name: category[0].wrappedCategory) ?? Category(name: "None", subCategories: []))
                     }
@@ -74,10 +74,11 @@ struct PictureView: View {
                     switch item {
                     case .settings:
                         CategorySettings()
-//                            .environmentObject(modelData)
+                            .environmentObject(modelData)
+                    
                     case .profile:
                         ProfileHost()
-//                            .environmentObject(modelData)
+                            .environmentObject(modelData)
                     }
                 }
             }
