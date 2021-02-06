@@ -93,7 +93,7 @@ struct EditLog: View {
                     HStack {
                         Text("Amount")
                             .padding(.trailing)
-                        TextField("Add amount...", text: $amountString)
+                        TextField("Enter ampount", text: $amountString)
                             .keyboardType(.numberPad)
                             .onReceive(Just(amountString)) { newValue in
                                 let filtered = newValue.filter { "0123456789.".contains($0) }
@@ -128,7 +128,7 @@ struct EditLog: View {
                     HStack {
                         Text("Created by")
                             .padding(.trailing)
-                        TextField("Add creator..", text: $editableLog.creator.bounds)
+                        TextField("Add creator...", text: $editableLog.creator.bounds)
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                     }
                     HStack {

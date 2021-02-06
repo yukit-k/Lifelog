@@ -131,7 +131,7 @@ struct ActivityDetail: View {
         }
         .navigationBarTitle(Text("\(log.wrappedCategoryIcon)\(log.wrappedCategory) Detail"), displayMode: .inline)
         .alert(isPresented: $showingDeleteAlert) {
-            Alert(title: Text("Delete book"), message: Text("Are you sure?"), primaryButton: .destructive(Text("Delete")){
+            Alert(title: Text("Delete \(log.wrappedCategory)"), message: Text("Are you sure?"), primaryButton: .destructive(Text("Delete")){
                     self.deleteLog()
                 }, secondaryButton: .cancel()
             )
