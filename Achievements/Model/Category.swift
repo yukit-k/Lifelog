@@ -59,15 +59,15 @@ class CategoryItem: ObservableObject {
 //        self.subCategoryIndex = 0
     }
     
-//    func setCategory(category: Category, index: Int? = nil) -> CategoryItem {
-//        self.category = category
-//        self.categoryIndex = index
-//        return self
-//    }
-//
-//    func addSubCategory(subCategory: SubCategory, index: Int? = nil) -> CategoryItem {
-//        self.subCategory = subCategory
-//        self.subCategoryIndex = index
-//        return self
-//    }
+    func setCategory(category: Category, index: Int? = nil)  -> CategoryItem {
+        self.category = category
+        self.categoryIndex = index
+        return self
+    }
+
+    func setSubCategory(subCategory: SubCategory, index: Int? = nil) -> CategoryItem {
+        self.subCategory = subCategory
+        self.subCategoryIndex = index
+        return self
+    }
 }
