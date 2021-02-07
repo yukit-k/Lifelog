@@ -10,7 +10,7 @@ import SwiftUI
 struct RatingView: View {
     @Binding var rating: Int
     
-    var label = "Rating"
+    var label = LocalizedStringKey("Rating")
     var maximumRating = 5
     
     var offImage: Image?
@@ -21,9 +21,7 @@ struct RatingView: View {
     
     var body: some View {
         HStack {
-            if label.isEmpty == false {
-                Text(label)
-            }
+            Text(label)
             Spacer()
             
             ForEach(1 ..< maximumRating + 1) { number in
