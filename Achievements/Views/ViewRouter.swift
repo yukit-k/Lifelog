@@ -19,7 +19,7 @@ enum Tab {
     case highlight
     case list
     case chart
-    case calendar
+    case today
 }
 
 enum ActiveSheet {

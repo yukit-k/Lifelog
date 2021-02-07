@@ -17,13 +17,12 @@ struct ContentView: View {
                 switch viewRouter.currentTab {
                 case .highlight:
                     PictureView()
-//                        .frame(width: geometry.size.width, height: geometry.size.height - 50)
                 case .list:
                     ListView()
                 case .chart:
                     ChartView()
-                case .calendar:
-                    CalendarView()
+                case .today:
+                    TodayView()
                 }
    
                 ZStack(alignment: .bottom) {
@@ -36,40 +35,40 @@ struct ContentView: View {
 //                        .offset(x: 0, y: -500)
                     }
                     HStack() {
-                            TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: 15, systemIconName: "star", tabName: "Achievement")
-                            TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: 15, systemIconName: "list.bullet", tabName: "Activity")
-                            ZStack {
-                                Circle()
-                                    .foregroundColor(.white)
-                                    .frame(width: 50, height: 50)
-                                    .shadow(radius: 4)
-                                Image(systemName: "plus.circle.fill")
-                                    .resizable()
-                                    .frame(width: 50-6, height: 50-6)
-                                    .foregroundColor(.accentColor)
-                                    .rotationEffect(Angle(degrees: viewRouter.showPopup ? 90 : 0))
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: 15, systemIconName: "star", tabName: "Picture")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .today, width: geometry.size.width/5, height: 15, systemIconName: "checkmark.square", tabName: "Today")
+                        ZStack {
+                            Circle()
+                                .foregroundColor(.white)
+                                .frame(width: 50, height: 50)
+                                .shadow(radius: 4)
+                            Image(systemName: "plus.circle.fill")
+                                .resizable()
+                                .frame(width: 50-6, height: 50-6)
+                                .foregroundColor(.accentColor)
+                                .rotationEffect(Angle(degrees: viewRouter.showPopup ? 90 : 0))
+                        }
+                            .offset(y: -25)
+                        .onTapGesture {
+                            withAnimation {
+                                viewRouter.showPopup.toggle()
                             }
-                                .offset(y: -25)
-                            .onTapGesture {
-                                withAnimation {
-                                    viewRouter.showPopup.toggle()
-                                }
-                            }
-                            TabBarIcon(viewRouter: viewRouter, assignedTab: .chart, width: geometry.size.width/5, height: 15, systemIconName: "chart.bar", tabName: "Chart")
-                            TabBarIcon(viewRouter: viewRouter, assignedTab: .calendar, width: geometry.size.width/5, height: 15, systemIconName: "calendar", tabName: "Calendar")
-                         }
-                        .frame(width: geometry.size.width, height: 50)
+                        }
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: 15, systemIconName: "list.bullet", tabName: "List")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .chart, width: geometry.size.width/5, height: 15, systemIconName: "chart.bar", tabName: "Chart")
+                     }
+                    .frame(width: geometry.size.width, height: 50)
 //                        .position(y:geometry.size.height - 50)
-                        .background(Color(.secondarySystemBackground).shadow(radius: 2))
-                    }
+                    .background(Color(.secondarySystemBackground).shadow(radius: 2))
+                    
                 }
-                .edgesIgnoringSafeArea(.all)
             }
-            
-            .sheet(isPresented: $viewRouter.showAddSheet) {
-                AddNewLog(category: viewRouter.category)
-                    .environmentObject(modelData)
-            
+            .edgesIgnoringSafeArea(.all)
+        }
+        .sheet(isPresented: $viewRouter.showAddSheet) {
+            AddNewLog(category: viewRouter.category)
+                .environmentObject(modelData)
+        
         }
     }
 }        
