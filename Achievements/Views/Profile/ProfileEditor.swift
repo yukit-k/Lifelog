@@ -10,6 +10,7 @@ import SwiftUI
 struct ProfileEditor: View {
     @EnvironmentObject var modelData: ModelData
     let fileController = FileIOController()
+    let iconList: [String] = ["😺", "🐶", "🐱", "🐭", "🐹", "🐰", "🦊", "🐻", "🐼", "🐻‍❄️", "🐨", "🐯", "🦁", "🐮", "🐷", "🐸", "🐵", "🐔", "🐧", "🐤", "🦉", "🦄", "🐬", "⛄️"]
     
     @State private var image: Image?
     @State private var inputImage: UIImage?
@@ -70,23 +71,31 @@ struct ProfileEditor: View {
                         Spacer()
                     }
                 }
-                VStack {
-                    HStack {
-                        Spacer()
+                HStack {
+                    VStack(alignment: .leading) {
                         Text("Username")
                             .font(.headline)
                         TextField("Enter Your Name", text: $modelData.userProfile.username)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                        Spacer()
-                    }
-                    HStack {
-                        Spacer()
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Divider()
+                            .padding()
+
                         Toggle(isOn: $modelData.userProfile.notification) {
-                            Text("Notification (coming soon)")
+                            Text("Notification\n(coming soon)")
                                 .font(.headline)
                         }
-                        Spacer()
                     }
+                    Divider()
+                        .padding()
+                    Picker("Icom", selection: $modelData.userProfile.usericon) {
+                        ForEach(iconList, id: \.self) { icon in
+                            Text(icon).tag(icon)
+                                .frame(width: 40)
+                        }
+                    }
+                    .pickerStyle(InlinePickerStyle())
+                    .frame(width: 40)
+                    .clipped()
                 }
                 .padding(30)
                 EditButton()
@@ -150,5 +159,6 @@ struct ProfileEditor: View {
 struct ProfileEditor_Previews: PreviewProvider {
     static var previews: some View {
         ProfileEditor()
+            .environmentObject(ModelData())
     }
 }

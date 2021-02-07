@@ -14,8 +14,10 @@ struct ProfileHost: View {
     var body: some View {
         if editMode?.wrappedValue == .inactive {
             ProfileSummary()
+                .environmentObject(modelData)
         } else {
             ProfileEditor()
+                .environmentObject(modelData)
         }
     }
 }

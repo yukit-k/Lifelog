@@ -60,6 +60,10 @@ struct ProfileSummary: View {
                         .font(.title)
                         .padding(.top, 10)
                         .padding(.bottom, 4)
+                    Text(modelData.userProfile.usericon)
+                        .font(.title)
+                        .padding(.top, 10)
+                        .padding(.bottom, 4)
                     Spacer()
                 }
                 HStack {
@@ -94,5 +98,6 @@ struct ProfileSummary: View {
 struct ProfileSummary_Previews: PreviewProvider {
     static var previews: some View {
         ProfileSummary()
+            .environmentObject(ModelData())
     }
 }
