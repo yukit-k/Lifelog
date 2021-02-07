@@ -19,7 +19,7 @@ class UserProfile: ObservableObject {
             UserDefaults.standard.set(notification, forKey: "notification")
         }
     }
-    @Published var usericon: Bool {
+    @Published var usericon: String {
         didSet {
             UserDefaults.standard.set(usericon, forKey: "usericon")
         }
@@ -28,6 +28,6 @@ class UserProfile: ObservableObject {
     init() {
         self.username = UserDefaults.standard.string(forKey: "username") ?? "Your Name"
         self.notification = UserDefaults.standard.bool(forKey: "notification")
-        self.username = UserDefaults.standard.string(forKey: "usericon") ?? "😃"
+        self.usericon = UserDefaults.standard.string(forKey: "usericon") ?? "😺"
     }
 }
