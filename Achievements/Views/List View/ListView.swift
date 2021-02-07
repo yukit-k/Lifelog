@@ -21,7 +21,21 @@ struct  ListView: View {
     
     var filteredLog: [Log] {
         logs.filter { log in
-            ((viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
+            ((!log.isRoutine) &&
+                (viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
+                (searchBar.text.isEmpty ||
+                    log.wrappedName.localizedCaseInsensitiveContains(searchBar.text) ||
+                    log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text) ||
+                    log.wrappedCategory.localizedCaseInsensitiveContains(searchBar.text) ||
+                    log.wrappedSubCategory.localizedCaseInsensitiveContains(searchBar.text)
+                )
+            )
+        }
+    }
+    var routineLog: [Log] {
+        logs.filter { log in
+            ((log.isRoutine) &&
+                (viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
                 (searchBar.text.isEmpty ||
                     log.wrappedName.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text) ||
@@ -54,6 +68,13 @@ struct  ListView: View {
 //                ForEach(filteredLog, id: \.self) { log in
 //                    ActivityRow(log: log, nextView: ActivityDetail(log: log))
 //                }
+                if routineLog.count > 0 {
+                    Section(header: Text("Daily Routine")) {
+                        ForEach(routineLog, id: \.self) { log in
+                            ActivityRow(log: log, nextView: ActivityDetail(log: log))
+                        }
+                    }
+                }
                 ForEach(groupByDate(filteredLog), id:\.self) { (section: [Log]) in
                     Section(header: Text( self.dateFormatter.string(from: section[0].activityDate!))) {
                         ForEach(section, id: \.self) { log in

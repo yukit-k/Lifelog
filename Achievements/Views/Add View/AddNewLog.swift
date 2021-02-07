@@ -15,10 +15,9 @@ struct AddNewLog: View {
     @EnvironmentObject var modelData: ModelData
     var category: Category
 
-    @State private var dateFieldName: String = "Date"
-    @State private var nameFieldName: String = "Name"
-
     @State private var isToDo: Bool = false
+    @State private var isRoutine: Bool = false
+
     @State private var subCategory = SubCategory(name: "Not Selected")
     @State private var name = ""
     @State private var activityDate = Date()
@@ -59,18 +58,12 @@ struct AddNewLog: View {
                         Text("Done").tag(false)
                     }
                     .pickerStyle(SegmentedPickerStyle())
-//                    Picker("Category", selection: $selectedCategory) {
-//                        ForEach(modelData.userSettings.categories, id: \.self) { category in
-//                                Text("\(category.icon ?? "")\((category.name))")
-//                                    .tag(category)
-//                        }
-//                    }
-//                    .pickerStyle(SegmentedPickerStyle())
-//                    .labelsHidden()
-//                    .onReceive(Just(selectedCategory)) { value in
-//                        self.updateForCategory(category: value)
-//                    }
-                    DatePicker(dateFieldName, selection: $activityDate, displayedComponents: .date)
+                    if isToDo {
+                        Toggle(isOn: $isRoutine) {
+                            Text("Daily Routine")
+                        }
+                    }
+                    DatePicker(isToDo ? isRoutine ? "From Date" : "Planned Date" : "Record Date", selection: $activityDate, displayedComponents: .date)
                     Picker("Sub Category", selection: $subCategory) {
                         ForEach(category.subCategories, id: \.self) { subCategory in
                             Text("\(subCategory.icon ?? "")\((subCategory.name))")
@@ -126,7 +119,7 @@ struct AddNewLog: View {
                     }
                 }
             }
-            .navigationTitle("Add \(category.icon ?? "")\(category.name) Log")
+            .navigationTitle("Add \(category.icon ?? "")\(category.name)")
             .navigationBarItems(
                 leading: Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
@@ -188,6 +181,7 @@ struct AddNewLog: View {
         let newLog = Log(context: self.moc)
         newLog.id = UUID()
         newLog.isToDo = isToDo
+        newLog.isRoutine = isRoutine
         newLog.category = category.name
         newLog.categoryIcon = category.icon
         newLog.name = name

@@ -25,6 +25,8 @@ extension Log {
     @NSManaged public var id: UUID
     @NSManaged public var image: Data?
     @NSManaged public var isToDo: Bool
+    @NSManaged public var isRoutine: Bool
+    @NSManaged public var routineLogId: UUID?
     @NSManaged public var name: String?
     @NSManaged public var rating: Int16
     @NSManaged public var status: String?
