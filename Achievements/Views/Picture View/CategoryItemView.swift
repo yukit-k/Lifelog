@@ -17,16 +17,25 @@ struct CategoryItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            self.log.image.map({
-                UIImage(data: $0)
-                    .map({
-                            Image(uiImage: $0)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 155, height:155)
-                                .cornerRadius(5)
-                    })
-            })
+            ZStack(alignment: .bottomTrailing) {
+                self.log.image.map({
+                    UIImage(data: $0)
+                        .map({
+                                Image(uiImage: $0)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 155, height:155)
+                                    .cornerRadius(5)
+                        })
+                })
+                Text("\(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory.uppercased())")
+                    .font(.system(size: 8))
+                    .padding(6)
+                    .foregroundColor(.white)
+                    .background(Color.black.opacity(0.75))
+                    .clipShape(Capsule())
+                    .offset(x: -5, y: -5)
+            }
             
             HStack {
                 Text(log.wrappedName)
