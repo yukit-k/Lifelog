@@ -32,14 +32,19 @@ struct ActivityRow<TargetView: View>: View {
                 })
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(log.wrappedCategoryIcon)
-                            .font(.caption)
                         Text(log.wrappedName)
                             .font(.headline)
+                        if log.isRoutine && log.isToDo {
+                            Spacer()
+                            Text("Since \(log.wrappedActivityDate, formatter: self.logDateFormat)")
+                                .font(.footnote)
+                        }
                     }
 
                     HStack {
-                        Text("\(log.wrappedActivityDate, formatter: self.logDateFormat)" )
+                        Text("\(log.wrappedCategoryIcon)\(log.wrappedCategory) / \(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory)")
+                            .font(.caption)
+
                         if log.amount > 0 {
                             Text("\(log.amount, specifier: "%.0f") \(log.wrappedUnit)")
                         }

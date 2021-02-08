@@ -13,6 +13,9 @@ struct  ListView: View {
     @StateObject var searchBar: SearchBar = SearchBar()
     @State private var showingOptionView: Bool = false
     @State private var activeSheet: ActiveSheetNavBar?
+    
+    @State private var isFiltered: Bool = false
+    @StateObject var filterCategory = CategoryItem()
 
     @Environment(\.managedObjectContext) var moc
     @FetchRequest(entity: Log.entity(), sortDescriptors: [
@@ -21,26 +24,32 @@ struct  ListView: View {
     
     var filteredLog: [Log] {
         logs.filter { log in
-            ((!log.isRoutine) &&
+            (!(log.isRoutine && log.isToDo) &&
                 (viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
                 (searchBar.text.isEmpty ||
                     log.wrappedName.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedCategory.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedSubCategory.localizedCaseInsensitiveContains(searchBar.text)
+                ) &&
+                ((isFiltered == false) ||
+                    (isFiltered == true && log.wrappedCategory == filterCategory.category.name)
                 )
             )
         }
     }
     var routineLog: [Log] {
         logs.filter { log in
-            ((log.isRoutine) &&
+            ((log.isRoutine && log.isToDo) &&
                 (viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
                 (searchBar.text.isEmpty ||
                     log.wrappedName.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedCategory.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedSubCategory.localizedCaseInsensitiveContains(searchBar.text)
+                ) &&
+                ((isFiltered == false) ||
+                    (isFiltered == true && log.wrappedCategory == filterCategory.category.name)
                 )
             )
         }
@@ -58,64 +67,73 @@ struct  ListView: View {
 
     var body: some View {
         NavigationView {
-            List {
-                Picker("Filter", selection: $viewMode) {
-                    Text("All").tag("all")
-                    Text("To Do").tag("todo")
-                    Text("Done").tag("done")
-                }
-                .pickerStyle(SegmentedPickerStyle())
-//                ForEach(filteredLog, id: \.self) { log in
-//                    ActivityRow(log: log, nextView: ActivityDetail(log: log))
-//                }
-                if routineLog.count > 0 {
-                    Section(header: Text("Daily Routine")) {
-                        ForEach(routineLog, id: \.self) { log in
-                            ActivityRow(log: log, nextView: ActivityDetail(log: log))
+
+                List {
+                    if isFiltered {
+                        Text("Applied Fileter: \(filterCategory.category.icon ?? "")\(filterCategory.category.name)")
+                            .padding(5)
+                    }
+                    Picker("Filter", selection: $viewMode) {
+                        Text("All").tag("all")
+                        Text("To Do").tag("todo")
+                        Text("Done").tag("done")
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+    //                ForEach(filteredLog, id: \.self) { log in
+    //                    ActivityRow(log: log, nextView: ActivityDetail(log: log))
+    //                }
+                    ForEach(groupByDate(filteredLog), id:\.self) { (section: [Log]) in
+                        Section(header: Text( self.dateFormatter.string(from: section[0].activityDate!))) {
+                            ForEach(section, id: \.self) { log in
+                                HStack {
+                                    ActivityRow(log: log, nextView: ActivityDetail(log: log))
+                                }
+                            }
+                            .onDelete(perform: deleteLogs)
                         }
                     }
-                }
-                ForEach(groupByDate(filteredLog), id:\.self) { (section: [Log]) in
-                    Section(header: Text( self.dateFormatter.string(from: section[0].activityDate!))) {
-                        ForEach(section, id: \.self) { log in
-                            HStack {
+                    //.id(filteredLog.count)
+                    if routineLog.count > 0 {
+                        Section(header: Text("Daily Routine")) {
+                            ForEach(routineLog, id: \.self) { log in
                                 ActivityRow(log: log, nextView: ActivityDetail(log: log))
                             }
+                            .onDelete(perform: deleteLogs)
                         }
-                        .onDelete(perform: deleteLogs)
                     }
                 }
-                //.id(filteredLog.count)
-
-            }
-            .navigationBarTitle("Activity Log")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        activeSheet = .profile
-                    }) {
-                        Image(systemName: "person.crop.circle")
-                            .accessibilityLabel("User Profile")
+                .navigationBarTitle("Activity Log")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            activeSheet = .profile
+                        }) {
+                            Image(systemName: "person.crop.circle")
+                                .accessibilityLabel("User Profile")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            activeSheet = .settings
+                        }) {
+                            if isFiltered == false {
+                                Image(systemName: "line.horizontal.3.decrease.circle")
+                            } else {
+                                Image(systemName: "line.horizontal.3.decrease.circle.fill")
+                            }
+                        }
                     }
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        activeSheet = .settings
-                    }) {
-                        Image(systemName: "gearshape")
-                    }
+                .sheet(item: $activeSheet) {item in
+                    switch item {
+                    case .settings:
+                        CategoryFilterSheet(isFiltered: $isFiltered, filterCategory: filterCategory, userCategory: modelData.userCategory)
+                    case .profile:
+                        ProfileHost()
+                            .environmentObject(modelData)
                 }
-            }
-            .sheet(item: $activeSheet) {item in
-                switch item {
-                case .settings:
-                    CategorySettings()
-                        .environmentObject(modelData)
-                case .profile:
-                    ProfileHost()
-                        .environmentObject(modelData)
-                }
+                
             }
             .add(self.searchBar)
         }
