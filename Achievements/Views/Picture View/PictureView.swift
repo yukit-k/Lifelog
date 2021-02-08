@@ -16,8 +16,16 @@ struct PictureView: View {
     let imageHelper = ImageHelper()
     
     @FetchRequest(entity: Log.entity(), sortDescriptors: [
-        NSSortDescriptor(keyPath: \Log.category, ascending: false)
-    ]) var logs: FetchedResults<Log>
+            NSSortDescriptor(keyPath: \Log.category, ascending: false)
+        ],
+        predicate: NSPredicate(format: "isToDo == false")
+    ) var logs: FetchedResults<Log>
+    
+    var filteredLog: [Log] {
+        logs.filter { log in
+            !log.isToDo
+        }
+    }
     
     var body: some View {
         NavigationView {
@@ -31,9 +39,9 @@ struct PictureView: View {
                             .clipped()
                             .offset(x: 0, y: imageHelper.getOffsetForHeaderImage(geometry2))
                         }
-                        .frame(height: 200)
+                        .frame(height: geometry1.size.height/3)
                         .listRowInsets(EdgeInsets())
-                    ForEach(group(logs).sorted(), id: \.self) { category in
+                    ForEach(group(filteredLog).sorted(), id: \.self) { category in
                         CategoryRow(filter: modelData.userCategory.getCategory(name: category) ?? Category(name: "None", subCategories: []))
 //                    ForEach((group(logs)), id: \.self) { (category: [Log]) in
 //                        CategoryRow(filter: modelData.userSettings.getCategory(name: category[0].wrappedCategory) ?? Category(name: "None", subCategories: []))
@@ -76,7 +84,7 @@ struct PictureView: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
-    func group(_ result : FetchedResults<Log>)-> [String] {
+    func group(_ result : [Log])-> [String] {
             return Dictionary(grouping: result) { $0.category! }
                 .map {$0.key}
     }
