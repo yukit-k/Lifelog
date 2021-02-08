@@ -34,7 +34,6 @@ struct SubCategory: Identifiable, Codable, Hashable {
     var wrappedUnit: String {
         unit ?? ""
     }
-
 }
 
 class CategoryItem: ObservableObject {
