@@ -22,15 +22,15 @@ struct AddEditSubCategory: View {
         NavigationView {
             Form {
                 HStack {
-                    Text("Cateogry Name")
-                        .frame(width: 150)
+                    Text("Sub Category Name")
+                        .frame(width: 170)
 
                     TextField("", text: $categoryItem.subCategory.name)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
                 HStack {
                     Text("Icon (Optional)")
-                        .frame(width: 150)
+                        .frame(width: 170)
                     TextField("", text: $categoryItem.subCategory.icon.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 //                    TextFieldWrapperView(text: $categoryItem.subCategory.icon.bounds)
@@ -41,7 +41,7 @@ struct AddEditSubCategory: View {
                 }
                 HStack {
                     Text("Unit (Optional)")
-                        .frame(width: 150)
+                        .frame(width: 170)
 
                     TextField("", text: $categoryItem.subCategory.unit.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -68,6 +68,7 @@ struct AddEditSubCategory: View {
             }
             .navigationBarTitle(categoryItem.subCategoryIndex != nil ? Text("Edit Sub Category") : Text("Add Sub Category"))
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         
     }
     

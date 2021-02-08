@@ -64,7 +64,8 @@ struct SubCategoryConfig: View {
             .sheet(isPresented: $showingSheet) {
                 AddEditSubCategory(categoryItem: categoryItem, draftCategory: draftCategory)
                     .onDisappear {
-                        // Do something
+                        categoryItem.subCategory = SubCategory(name: "")
+                        categoryItem.subCategoryIndex = nil
                     }
 
             }

@@ -22,7 +22,7 @@ struct AddEditCategory: View {
         NavigationView {
             Form {
                 HStack {
-                    Text("Cateogry Name")
+                    Text("Category Name")
                         .frame(width: 150)
 
 //                    CustomTextField(text: $categoryItem.category.name, isFirstResponder: true)
@@ -74,6 +74,7 @@ struct AddEditCategory: View {
                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         
     }
     
