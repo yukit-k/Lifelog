@@ -41,7 +41,7 @@ struct ActivityDetail: View {
                                 })
                         })
                         
-                        Text(log.wrappedSubCategory.uppercased())
+                        Text("\(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory.uppercased())")
                             .font(.caption)
                             .fontWeight(.black)
                             .padding(8)
@@ -81,9 +81,6 @@ struct ActivityDetail: View {
 
                             }
                     }
-                    if (log.amount > 0) {
-                        Text("\(log.amount, specifier: "%.0f") \(log.wrappedUnit)")
-                    }
 
                     if !log.isToDo {
                         RatingView(rating: .constant(Int(log.rating)))
@@ -102,6 +99,19 @@ struct ActivityDetail: View {
                     }
                     Divider()
                         .padding(.top)
+                    HStack {
+                        Text("Measurement")
+                            .font(.headline)
+                            .padding(.trailing, 10)
+                        if (log.amount > 0) {
+                            Text("\(log.amount, specifier: "%.0f") \(log.wrappedUnit)")
+                        } else {
+                            Text("Undefined")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    
+
                     HStack{
                         Text("Created by")
                             .font(.headline)

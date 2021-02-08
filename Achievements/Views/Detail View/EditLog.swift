@@ -65,6 +65,10 @@ struct EditLog: View {
                             TextField("Add a comment...", text: $editableLog.comment.bounds)
                                 .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                         }
+                    } else {
+                        Toggle(isOn: $editableLog.isRoutine) {
+                            Text("Routine Work")
+                        }
                     }
                 }
                 Section(header: Text("Overview")) {
@@ -81,28 +85,17 @@ struct EditLog: View {
                                 .tag(category.name)
                         }
                     }
-//                    .onReceive(Just(editableLog.category.bounds)) { value in
-//                        self.updateForCategory(category: value)
-//                    }
+                    .onReceive(Just(editableLog.category.bounds)) { value in
+                        editableLog.categoryIcon = modelData.userCategory.getCategoryIcon(name: value)
+                    }
                     Picker(selection: $editableLog.subCategory.bounds, label: Text("Sub Category")) {
                         ForEach(modelData.userCategory.categories.first(where: {$0.name == editableLog.category})?.subCategories ?? []) { subCategory in
                             Text("\(subCategory.icon ?? "") \(subCategory.name)")
                                 .tag(subCategory.name)
                         }
                     }
-                    HStack {
-                        Text("Amount")
-                            .padding(.trailing)
-                        TextField("Enter ampount", text: $amountString)
-                            .keyboardType(.numberPad)
-                            .onReceive(Just(amountString)) { newValue in
-                                let filtered = newValue.filter { "0123456789.".contains($0) }
-                                if filtered != newValue {
-                                    amountString = filtered
-                                }
-                            }
-                        Text(editableLog.unit.bounds)
-                            .foregroundColor(.secondary)
+                    .onReceive(Just(editableLog.subCategory.bounds)) { value in
+                        editableLog.subCategoryIcon = modelData.userCategory.getSubCategoryIcon(name: value, categoryName: editableLog.category.bounds)
                     }
                     HStack {
                         Text("Image")
@@ -125,6 +118,20 @@ struct EditLog: View {
                     }
                 }
                 Section(header: Text("Detail")) {
+                    HStack {
+                        Text("Amount")
+                            .padding(.trailing)
+                        TextField("Enter ampount", text: $amountString)
+                            .keyboardType(.numberPad)
+                            .onReceive(Just(amountString)) { newValue in
+                                let filtered = newValue.filter { "0123456789.".contains($0) }
+                                if filtered != newValue {
+                                    amountString = filtered
+                                }
+                            }
+                        Text(editableLog.unit.bounds)
+                            .foregroundColor(.secondary)
+                    }
                     HStack {
                         Text("Created by")
                             .padding(.trailing)

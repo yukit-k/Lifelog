@@ -14,10 +14,12 @@ struct EditableLogData {
     var category: String?
     var categoryIcon: String?
     var subCategory: String?
+    var subCategoryIcon: String?
     var comment: String?
     var desc: String?
     var image: Data?
     var isToDo: Bool
+    var isRoutine: Bool
     var name: String?
     var rating: Int16
     var status: String?
@@ -33,10 +35,12 @@ struct EditableLogData {
         category = log.category
         categoryIcon = log.categoryIcon
         subCategory = log.subCategory
+        subCategoryIcon = log.subCategoryIcon
         comment = log.comment
         desc = log.desc
         image = log.image
         isToDo = log.isToDo
+        isRoutine = log.isRoutine
         name = log.name
         rating = log.rating
         status = log.status
@@ -55,10 +59,12 @@ extension Log {
         category = editableLogData.category
         categoryIcon = editableLogData.categoryIcon
         subCategory = editableLogData.subCategory
+        subCategoryIcon = editableLogData.subCategoryIcon
         comment = editableLogData.comment
         desc = editableLogData.desc
         image = editableLogData.image
         isToDo = editableLogData.isToDo
+        isRoutine = editableLogData.isRoutine
         name = editableLogData.name
         rating = editableLogData.rating
         status = editableLogData.status

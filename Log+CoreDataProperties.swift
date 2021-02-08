@@ -22,6 +22,7 @@ extension Log {
     @NSManaged public var comment: String?
     @NSManaged public var desc: String?
     @NSManaged public var subCategory: String?
+    @NSManaged public var subCategoryIcon: String?
     @NSManaged public var id: UUID
     @NSManaged public var image: Data?
     @NSManaged public var isToDo: Bool
@@ -42,7 +43,7 @@ extension Log {
         creator ?? ""
     }
     public var wrappedCategory: String {
-        category ?? "Others"
+        category ?? "-"
     }
     public var wrappedCategoryIcon: String {
         categoryIcon ?? ""
@@ -54,7 +55,10 @@ extension Log {
         desc ?? ""
     }
     public var wrappedSubCategory: String {
-        subCategory ?? ""
+        subCategory ?? "-"
+    }
+    public var wrappedSubCategoryIcon: String {
+        subCategoryIcon ?? ""
     }
     public var wrappedName: String {
         name ?? "Undefined"

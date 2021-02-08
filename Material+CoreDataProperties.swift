@@ -21,6 +21,7 @@ extension Material {
     @NSManaged public var categoryIcon: String?
     @NSManaged public var desc: String?
     @NSManaged public var subCategory: String?
+    @NSManaged public var subCategoryIcon: String?
     @NSManaged public var image: Data?
     @NSManaged public var isRoutine: Bool
     @NSManaged public var name: String?
@@ -47,6 +48,9 @@ extension Material {
     }
     public var wrappedSubCategory: String {
         subCategory ?? "Others"
+    }
+    public var wrappedSubCategoryIcon: String {
+        subCategoryIcon ?? ""
     }
     public var wrappedVersion: String {
         version ?? ""

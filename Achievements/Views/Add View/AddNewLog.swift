@@ -18,7 +18,7 @@ struct AddNewLog: View {
     @State private var isToDo: Bool = false
     @State private var isRoutine: Bool = false
 
-    @State private var subCategory = SubCategory(name: "Not Selected")
+    @State private var subCategory = SubCategory(name: "")
     @State private var name = ""
     @State private var activityDate = Date()
     @State private var amount = ""
@@ -193,6 +193,7 @@ struct AddNewLog: View {
         }
         newLog.comment = comment
         newLog.subCategory = subCategory.name
+        newLog.subCategoryIcon = subCategory.icon
         newLog.creator = creator
         newLog.desc = description
         newLog.amount = Double(amount) ?? 0
@@ -247,7 +248,7 @@ struct AddNewLog_Previews: PreviewProvider {
 //        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 //        return AddBook().environment(\.managedObjectContext, context)
         AddNewLog(category: Category(name: "Book", icon: "📚", unit: "page", subCategories: [
-                                        SubCategory(name: "Not Selected"),
+                                        SubCategory(name: "-"),
                                         SubCategory(name: "Picture Book"),
                                         SubCategory(name: "Fiction"),
                                         SubCategory(name: "Non-Fiction"),
