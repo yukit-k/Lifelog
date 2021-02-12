@@ -116,6 +116,15 @@ struct EditLog: View {
                         })
                         Spacer()
                     }
+                    .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
+                        ActionSheet(title: Text("Choose Mode"), message: Text("Please choose the photo source"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
+                            self.useCamera = true
+                            self.showingImagePicker = true
+                        }), ActionSheet.Button.default(Text("Photo Library"), action: {
+                            self.useCamera = false
+                            self.showingImagePicker = true
+                        }), ActionSheet.Button.cancel()])
+                    }
                 }
                 Section(header: Text("Detail")) {
                     HStack {
@@ -159,20 +168,12 @@ struct EditLog: View {
             .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                 ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage)
             }
-            .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
-                ActionSheet(title: Text("Choose Mode"), message: Text("Please choose the photo source"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
-                    self.useCamera = true
-                    self.showingImagePicker = true
-                }), ActionSheet.Button.default(Text("Photo Library"), action: {
-                    self.useCamera = false
-                    self.showingImagePicker = true
-                }), ActionSheet.Button.cancel()])
-            }
             .alert(isPresented: $showingError) {
                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
             }
 
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     func loadImage() {
