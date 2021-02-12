@@ -24,10 +24,16 @@ class UserProfile: ObservableObject {
             UserDefaults.standard.set(usericon, forKey: "usericon")
         }
     }
+    @Published var dailyTarget: Int {
+        didSet {
+            UserDefaults.standard.set(dailyTarget, forKey: "dailyTarget")
+        }
+    }
         
     init() {
         self.username = UserDefaults.standard.string(forKey: "username") ?? "Your Name"
         self.notification = UserDefaults.standard.bool(forKey: "notification")
         self.usericon = UserDefaults.standard.string(forKey: "usericon") ?? "😺"
+        self.dailyTarget = UserDefaults.standard.integer(forKey: "dailyTarget")
     }
 }
