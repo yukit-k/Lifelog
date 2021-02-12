@@ -13,7 +13,7 @@ struct PlusMenu: View {
     
     let widthAndHeight: CGFloat
     let cols: Int = 4
-    let spacing: CGFloat = 10
+    let spacing: CGFloat = 15
     
     var body: some View {
         let gridItems = Array(repeating: GridItem(.fixed(widthAndHeight), spacing: spacing, alignment: .center), count: cols)
@@ -27,9 +27,9 @@ struct PlusMenu: View {
                             .shadow(radius: 4)
                         VStack {
                             Text(category.icon ?? "")
-                                .font(.title)
+                                .font(.system(size: widthAndHeight/2))
                             Text(category.name)
-                                .font(.footnote)
+                                .font(.system(size: widthAndHeight/7))
                                 .padding(.bottom, widthAndHeight/20)
                         }
                             .foregroundColor(.white)
@@ -68,7 +68,7 @@ struct PlusMenu: View {
 //
 //            }
         }
-            .offset(x: 0, y: -200)
+//            .offset(x: 0, y: -200)
             
     }
 }

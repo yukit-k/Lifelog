@@ -28,7 +28,8 @@ struct ContentView: View {
                 ZStack(alignment: .bottom) {
                     if viewRouter.showPopup {
                         HStack(alignment: .bottom) {
-                            PlusMenu(viewRouter: viewRouter, widthAndHeight: geometry.size.width/5)
+                            PlusMenu(viewRouter: viewRouter, widthAndHeight: geometry.size.width/6)
+                                .offset(x: 0, y: -geometry.size.height/3)
                         }
                         .frame(width: geometry.size.width, height: 10)
                         .transition(.scale)
