@@ -5,22 +5,21 @@
   Created by Yuki Takahashi on 04/02/2021.
   
 */
-"Achievement" = "ピクチャ";
-"Activity" = "リスト";
+"Picture" = "ピクチャ";
+"List" = "リスト";
 "Chart" = "グラフ";
 "Calendar" = "カレンダ";
 "Activity Log" = "記録";
 "All" = "全て";
-"To Do" = "これからやること";
-"Done" = "やったこと";
-" To Do " = "これからやること";
-" Done " = "やったこと";
+"To Do" = "これから";
+"Done" = "完了";
+" To Do " = "　これから　";
+" Done " = "　完了　";
 "Category" = "カテゴリ";
 "Sub Category" = "サブカテゴリ";
 "Category Settings" = "カテゴリ設定";
 "Sub Category Settings" = "サブカテゴリ設定";
 "Edit" = "編集";
-"Done" = "完了";
 "Notification" =  "通知";
 "Username" = "ユーザー名";
 "Chart View" = "達成度";
@@ -34,7 +33,7 @@
 "Add Details" = "詳細情報を追加";
 "Created By" = "作った人";
 "Description" = "情報";
-"Add %@%@ Log" = "新しい%@%@の記録";
+"Add %@%@" = "新しい%@%@の記録";
 "Choose Mode" = "モード選択";
 "Please choose the photo source" = "写真の取得元を選択してください";
 "Camera" = "カメラ";
@@ -51,6 +50,7 @@
 "Task Completed!" = "このアクティビティは完了！";
 "Record Date" = "やった日";
 "Planned Date" = "やる予定の日";
+"From Date" = "この日から始める";
 "Name" = "名前";
 "Amount" = "数量";
 "Add creator..." = "作った人を追加";
@@ -65,10 +65,69 @@
 "Add Category" = "カテゴリを追加";
 "Add Sub Category" = "サブカテゴリを追加";
 "Category Name" = "カテゴリ名";
+"Sub Category Name" = "サブカテゴリ名";
 "Icon (Optional)" = "アイコン";
 "Unit (Optional)" = "数量のユニット";
 "Notification" = "通知";
 "Notification (coming soon)" = "通知 (Coming Soon)";
 "Tap to change image" = "タップして写真を変更";
-"" = "";
 
+
+//"chartMessage1" = "腹ペコ😢何か食べさせて！";
+//"chartMessage2" = "お腹すいてきたな🤤今日も何かくれる?";
+//"chartMessage3" = "昨日は最高だったよ😃今日も何かくれると嬉しいな！";
+//"chartMessage4" = "ありがとう😃元気になってきた。";
+//"chartMessage5" = "イエィ🥳毎日食べさせてくれて幸せだよ！";
+//"chartMessage6" = "最高！こんなに食べさせてくれて超ハッピー🤩";
+
+"chartMessageA0" = "I'm starving😢 Please please feed me something!";
+"chartMessageA1" = "I'm still hungry🥺 Please feed me something more...";
+"chartMessageA2" = "I'm getting better but can you feed me something more?🤤";
+"chartMessageA3" = "Thanks😃 I'm getting better.";
+"chartMessageA4" = "Thanks😃 I'm happy today.";
+"chartMessageA5" = "Nice😃 Wow, I'm feeling much better than yesterday!";
+"chartMessageA6" = "Great🥳 I'm so happy today!";
+"chartMessageA7" = "Wonderful🥳 This really is a lovely treat😍 I want the same tomorrow, too!";
+"chartMessageA8" = "Amazing! I'm so happy🤩 Please please give me the same tomorrow, too.";
+"chartMessageA9" = "Fantastic! I'm sooooooo happy🤩 I will be happier you could give me the same tomorrow!";
+
+"chartMessageB0" = "I'm hungry🥺 Please feed me something!";
+"chartMessageB1" = "I want some more today😃";
+"chartMessageB2" = "I'll be happier to have the same or more than yesterday😃";
+"chartMessageB3" = "I'm getting more happier than yesterday! Thanks😃 ";
+"chartMessageB4" = "Wow, I'm so happy to be full today😃";
+"chartMessageB5" = "Oh, are you giving me more? I'll be happier😃";
+"chartMessageB6" = "Nice🥳 I'm so happy to be full!";
+"chartMessageB7" = "I can't eat more😍";
+"chartMessageB8" = "Wonderful! I'm so happy to have so much🤩";
+"chartMessageB9" = "Fantastic! I'm sooooooo happy to have so much🤩";
+
+"chartMessageC0" = "I'm getting hungry🤤 Can you feed me something today?";
+"chartMessageC1" = "Yesterday was great😃 I want some more today, too.";
+"chartMessageC2" = "Yesterday was great😃 I'll be happier to have the same!";
+"chartMessageC3" = "It was great yesterday😃 I'm getting the same happiness today!";
+"chartMessageC4" = "Wow, I'm so happy to be full everyday😃";
+"chartMessageC5" = "Oh, are you giving me more? I'll be happier😃";
+"chartMessageC6" = "Great🥳 I'm so happy to be full everyday!";
+"chartMessageC7" = "I can't eat more😍";
+"chartMessageC8" = "Fantastic! I'm sooooooo happy to have so much🤩";
+"chartMessageC9" = "I love you! I LOVE YOU🤩";
+
+"Today" = "今日";
+"Yesterday" = "昨日";
+"Weekly Achievement" = "今週の成果";
+"Monthly Achievement" = "今月の成果";
+"This week" = "今週";
+"Last week" = "先週";
+"This month" = "今月";
+"Last month" = "先月";
+
+"Completed Badges" = "獲得したバッジ";
+
+"Daily Routine" = "毎日の繰り返しタスク";
+"Specific for Today" = "今日だけのタスク・やったこと";
+"Today's To Do (%@)" = "今日やること (%@)";
+
+"Applied Fileter: %@%@" = "適用中のフィルタ：%@%@";
+"Since %@" = "開始日：%@";
+"Measurement" = "数量";

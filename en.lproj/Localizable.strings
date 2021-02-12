@@ -5,3 +5,37 @@
   Created by Yuki Takahashi on 04/02/2021.
   
 */
+
+"chartMessageA0" = "I'm starving😢 Please please feed me something!";
+"chartMessageA1" = "I'm still hungry🥺 Please feed me something more...";
+"chartMessageA2" = "I'm getting better but can you feed me something more?🤤";
+"chartMessageA3" = "Thanks😃 I'm getting better.";
+"chartMessageA4" = "Thanks😃 I'm happy today.";
+"chartMessageA5" = "Nice😃 Wow, I'm feeling much better than yesterday!";
+"chartMessageA6" = "Great🥳 I'm so happy today!";
+"chartMessageA7" = "Wonderful🥳 This really is a lovely treat😍 I want the same tomorrow, too!";
+"chartMessageA8" = "Amazing! I'm so happy🤩 Please please give me the same tomorrow, too.";
+"chartMessageA9" = "Fantastic! I'm sooooooo happy🤩 I will be happier you could give me the same tomorrow!";
+
+"chartMessageB0" = "I'm hungry🥺 Please feed me something!";
+"chartMessageB1" = "I want some more today😃";
+"chartMessageB2" = "I'll be happier to have the same or more than yesterday😃";
+"chartMessageB3" = "I'm getting more happier than yesterday! Thanks😃 ";
+"chartMessageB4" = "Wow, I'm so happy to be full today😃";
+"chartMessageB5" = "Oh, are you giving me more? I'll be happier😃";
+"chartMessageB6" = "Nice🥳 I'm so happy to be full!";
+"chartMessageB7" = "I can't eat more😍";
+"chartMessageB8" = "Wonderful! I'm so happy to have so much🤩";
+"chartMessageB9" = "Fantastic! I'm sooooooo happy to have so much🤩";
+
+"chartMessageC0" = "I'm getting hungry🤤 Can you feed me something today?";
+"chartMessageC1" = "Yesterday was great😃 I want some more today, too.";
+"chartMessageC2" = "Yesterday was great😃 I'll be happier to have the same!";
+"chartMessageC3" = "It was great yesterday😃 I'm getting the same happiness today!";
+"chartMessageC4" = "Wow, I'm so happy to be full everyday😃";
+"chartMessageC5" = "Oh, are you giving me more? I'll be happier😃";
+"chartMessageC6" = "Great🥳 I'm so happy to be full everyday!";
+"chartMessageC7" = "I can't eat more😍";
+"chartMessageC8" = "Fantastic! I'm sooooooo happy to have so much🤩";
+"chartMessageC9" = "I love you! I LOVE YOU🤩";
+
