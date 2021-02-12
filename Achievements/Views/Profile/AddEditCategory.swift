@@ -32,7 +32,7 @@ struct AddEditCategory: View {
                     
                 }
                 HStack {
-                    Text("Icon (Optional)")
+                    Text("Icon (Emoji)")
                         .frame(width: 150)
 
                     TextField("", text: $categoryItem.category.icon.bounds)
@@ -87,11 +87,17 @@ struct AddEditCategory: View {
                 if draftCategory.categories.firstIndex(where: { $0.name == categoryItem.category.name }) != nil {
                     self.showingError = true
                     self.errorTitle = "Invalid Name"
-                    self.errorMessage = "The same category already exists"
+                    self.errorMessage = "The same category already exists. Please change the name."
                     return
                 } else {
                     draftCategory.categories.append(categoryItem.category)
                 }
+            }
+            if categoryItem.category.icon == "" || categoryItem.category.icon == nil {
+                self.showingError = true
+                self.errorTitle = "Invalid Icon"
+                self.errorMessage = "Please enter something for the icon. To be used in the add button."
+                return
             }
             modelData.userCategory = draftCategory
             modelData.userCategory.save()
@@ -99,7 +105,7 @@ struct AddEditCategory: View {
         } else {
             self.showingError = true
             self.errorTitle = "Invalid Name"
-            self.errorMessage = "Make sure to enter something for \nthe new item."
+            self.errorMessage = "Please enter something for the name."
             return
         }
 
