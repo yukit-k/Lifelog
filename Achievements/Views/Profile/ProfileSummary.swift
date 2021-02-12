@@ -67,6 +67,11 @@ struct ProfileSummary: View {
                     Spacer()
                 }
                 HStack {
+                    Text("Daily Target: ")
+                    Text("\(modelData.userProfile.dailyTarget)")
+                        .foregroundColor(.secondary)
+                }
+                HStack {
                     Text("Notification: ")
                     Text(modelData.userProfile.notification ? "On (coming soon)" : "Off (coming soon)")
                         .foregroundColor(.secondary)

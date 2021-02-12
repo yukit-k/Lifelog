@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ProfileEditor: View {
     @EnvironmentObject var modelData: ModelData
@@ -21,7 +22,7 @@ struct ProfileEditor: View {
     @State private var backImage: Image?
     @State private var inputBackImage: UIImage?
     @State private var activeSheet: ActiveSheetProfileView = .profile
-    
+        
     init () {
         _image = State(initialValue: fileController.loadImage(name: "profile.png") ?? Image("snowman_nana"))
         _backImage = State(initialValue: fileController.loadImage(name: "background.png") ?? Image("sunset-1757593"))
@@ -70,62 +71,70 @@ struct ProfileEditor: View {
                         }
                         Spacer()
                     }
+                    .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
+                        ActionSheet(title: Text("Choose Mode"), message: Text("Please choose the photo source"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
+                            useCamera = true
+                            activeSheet = .profile
+                            showingImagePicker.toggle()
+                        }), ActionSheet.Button.default(Text("Photo Library"), action: {
+                            self.useCamera = false
+                            activeSheet = .profile
+                            showingImagePicker.toggle()
+                        }), ActionSheet.Button.cancel()])
+                    }
                 }
-                HStack {
-                    VStack(alignment: .leading) {
+                VStack {
+                    HStack {
                         Text("Username")
                             .font(.headline)
                         TextField("Enter Your Name", text: $modelData.userProfile.username)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
+                    Toggle(isOn: $modelData.userProfile.notification) {
+                        Text("Notification\n(coming soon)")
+                            .font(.headline)
+                    }
+                    HStack {
+                        Text("Your Pet")
+                            .font(.headline)
+                        Picker("Icom", selection: $modelData.userProfile.usericon) {
+                            ForEach(iconList, id: \.self) { icon in
+                                Text(icon).tag(icon)
+                            }
+                        }
+                        .pickerStyle(InlinePickerStyle())
+                        .frame(width: 40)
+                        .clipped()
                         Divider()
                             .padding()
-
-                        Toggle(isOn: $modelData.userProfile.notification) {
-                            Text("Notification\n(coming soon)")
-                                .font(.headline)
+                        Text("Daily Target")
+                            .font(.headline)
+                        Picker("", selection: $modelData.userProfile.dailyTarget) {
+                            ForEach(0..<100) {
+                                Text("\($0)").tag($0)
+                            }
                         }
+                        .frame(width: 30)
+                        .clipped()
+                        .pickerStyle(DefaultPickerStyle())
                     }
-                    Divider()
+                    EditButton()
                         .padding()
-                    Picker("Icom", selection: $modelData.userProfile.usericon) {
-                        ForEach(iconList, id: \.self) { icon in
-                            Text(icon).tag(icon)
-                                .frame(width: 40)
-                        }
+                    
+                }
+                .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                    switch activeSheet {
+                    case .profile:
+                        ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage)
+                    case .background:
+                        ImagePicker(sourceType: .photoLibrary, image: self.$inputBackImage)
                     }
-                    .pickerStyle(InlinePickerStyle())
-                    .frame(width: 40)
-                    .clipped()
                 }
-                .padding(30)
-                EditButton()
-                    .padding()
-                
+                .padding()
             }
-            .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-                switch activeSheet {
-                case .profile:
-                    ImagePicker(sourceType: self.useCamera ? .camera : .photoLibrary, image: self.$inputImage)
-                case .background:
-                    ImagePicker(sourceType: .photoLibrary, image: self.$inputBackImage)
-                }
-            }
-            .actionSheet(isPresented: $showingImageActionSheet) { () -> ActionSheet in
-                ActionSheet(title: Text("Choose Mode"), message: Text("Please choose the photo source"), buttons: [ActionSheet.Button.default(Text("Camera"), action: {
-                    useCamera = true
-                    activeSheet = .profile
-                    showingImagePicker.toggle()
-                }), ActionSheet.Button.default(Text("Photo Library"), action: {
-                    self.useCamera = false
-                    activeSheet = .profile
-                    showingImagePicker.toggle()
-                }), ActionSheet.Button.cancel()])
-            }
-
         }
         .edgesIgnoringSafeArea(.top)
-
-    }
+     }
     
     
     func loadImage() {
