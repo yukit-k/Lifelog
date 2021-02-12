@@ -11,7 +11,9 @@ struct CategoryItemView: View {
     var log: Log
     static let updatedDateFormat: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
+        //formatter.dateStyle = .short
+        formatter.locale = Locale(identifier: "en_GB")
+        formatter.dateFormat = "dd-MMM"
         return formatter
     }()
     

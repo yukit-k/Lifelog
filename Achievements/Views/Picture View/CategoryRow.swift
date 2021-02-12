@@ -33,13 +33,21 @@ struct CategoryRow: View {
                     }
                 }
             }
-            .frame(height: 185)
+            .frame(height: 190)
         }
     }
     
     init(filter: Category) {
-        fetchRequest = FetchRequest<Log>(entity: Log.entity(), sortDescriptors: [ NSSortDescriptor(keyPath: \Log.updatedDate, ascending: false)
-        ], predicate: NSPredicate(format: "category == %@", filter.name))
+        fetchRequest = FetchRequest<Log>(
+            entity: Log.entity(),
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \Log.updatedDate, ascending: false)
+            ],
+            predicate: NSCompoundPredicate(type: .and, subpredicates: [
+                                            NSPredicate(format: "category == %@", filter.name),
+                                            NSPredicate(format: "isToDo == false")
+            ])
+        )
         categoryName = filter.name
         categoryIcon = filter.icon ?? ""
     }
