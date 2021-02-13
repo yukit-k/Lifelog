@@ -42,6 +42,9 @@ struct ChartView: View {
             )
         }
     }
+    
+    let calendar = Calendar.current
+    
     /* Today and Yesterday Part*/
     @FetchRequest(entity: Log.entity(),
                   sortDescriptors: [],
@@ -57,8 +60,8 @@ struct ChartView: View {
     ) var allRoutineLogs: FetchedResults<Log>
     
     var logsTodayDone: [Log] {
-        let todayStart = Calendar.current.startOfDay(for: Date())
-        let tomorrowStart = Calendar.current.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
+        let todayStart = calendar.startOfDay(for: Date())
+        let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
         return filter(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= todayStart) &&
                 (log.wrappedActivityDate < tomorrowStart) &&
@@ -66,8 +69,8 @@ struct ChartView: View {
         }
     }
     var logsYesterdayDone: [Log] {
-        let todayStart = Calendar.current.startOfDay(for: Date())
-        let yesterdayStart = Calendar.current.date(byAdding: .day, value: -1, to: todayStart) ?? Date()
+        let todayStart = calendar.startOfDay(for: Date())
+        let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart) ?? Date()
         return filter(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= yesterdayStart) &&
                 (log.wrappedActivityDate < todayStart) &&
@@ -75,8 +78,8 @@ struct ChartView: View {
         }
     }
     var adhocLogsTodayToDo: [Log] {
-        let todayStart = Calendar.current.startOfDay(for: Date())
-        let tomorrowStart = Calendar.current.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
+        let todayStart = calendar.startOfDay(for: Date())
+        let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
         return filter(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= todayStart) &&
                 (log.wrappedActivityDate < tomorrowStart) &&
@@ -84,8 +87,8 @@ struct ChartView: View {
         }
     }
     var adhocLogsYesterdayToDo: [Log] {
-        let todayStart = Calendar.current.startOfDay(for: Date())
-        let yesterdayStart = Calendar.current.date(byAdding: .day, value: -1, to: todayStart) ?? Date()
+        let todayStart = calendar.startOfDay(for: Date())
+        let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart) ?? Date()
         return filter(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= yesterdayStart) &&
                 (log.wrappedActivityDate < todayStart) &&
@@ -93,8 +96,8 @@ struct ChartView: View {
         }
     }
     var routineLogsToday: [Log] {
-        let todayStart = Calendar.current.startOfDay(for: Date())
-        let tomorrowStart = Calendar.current.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
+        let todayStart = calendar.startOfDay(for: Date())
+        let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
         return filter(allRoutineLogs).filter { log in
             (log.wrappedActivityDate < tomorrowStart) &&
                 (logsTodayDone.firstIndex(where: { $0.routineLogId == log.id }) == nil) &&
@@ -104,7 +107,7 @@ struct ChartView: View {
         }
     }
     var routineLogsYesterday: [Log] {
-        let todayStart = Calendar.current.startOfDay(for: Date())
+        let todayStart = calendar.startOfDay(for: Date())
         return filter(allRoutineLogs).filter { log in
             (log.wrappedActivityDate < todayStart) &&
                 (logsYesterdayDone.firstIndex(where: { $0.routineLogId == log.id }) == nil) &&
@@ -131,36 +134,36 @@ struct ChartView: View {
     
     var logsByWeek: Dictionary<String, [Log]> {
         Dictionary(grouping: filter(historicalLogs)) { (log) -> String in
-            let components = Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: log.date)
+            let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: log.date)
             return String(components.yearForWeekOfYear ?? 0) + "-" + String(format: "%02d", components.weekOfYear ?? 0)
         }
     }
     var logsByMonth: Dictionary<String, [Log]> {
         Dictionary(grouping: filter(historicalLogs)) { (log) -> String in
-            let components = Calendar.current.dateComponents([.year, .month], from: log.date)
+            let components = calendar.dateComponents([.year, .month], from: log.date)
             return String(components.year ?? 0) + "-" + String(format: "%02d", components.month ?? 0)
         }
     }
     var thisWeek: String {
-        let components = Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())
+        let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())
         return String(components.yearForWeekOfYear ?? 0) + "-" + String(format: "%02d", components.weekOfYear ?? 0)
     }
     var prevWeek: String {
         var dateComponent = DateComponents()
         dateComponent.weekOfYear = -1
-        let prevDate = Calendar.current.date(byAdding: dateComponent, to: Date())
-        let components = Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: prevDate!)
+        let prevDate = calendar.date(byAdding: dateComponent, to: Date())
+        let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: prevDate!)
         return String(components.yearForWeekOfYear ?? 0) + "-" + String(format: "%02d", components.weekOfYear ?? 0)
     }
     var thisMonth: String {
-        let components = Calendar.current.dateComponents([.year, .month], from: Date())
+        let components = calendar.dateComponents([.year, .month], from: Date())
         return String(components.year ?? 0) + "-" + String(format: "%02d", components.month ?? 0)
     }
     var prevMonth: String {
         var dateComponent = DateComponents()
         dateComponent.month = -1
-        let prevDate = Calendar.current.date(byAdding: dateComponent, to: Date())
-        let components = Calendar.current.dateComponents([.year, .month], from: prevDate!)
+        let prevDate = calendar.date(byAdding: dateComponent, to: Date())
+        let components = calendar.dateComponents([.year, .month], from: prevDate!)
         return String(components.year ?? 0) + "-" + String(format: "%02d", components.month ?? 0)
     }
     
@@ -169,6 +172,7 @@ struct ChartView: View {
             formatter.dateStyle = .short
             return formatter
     }
+    
 //    var todayToDo: String {
 //        return dateFormatter.string(from: Date()) + "-ToDo"
 //    }
@@ -242,6 +246,7 @@ struct ChartView: View {
                             .padding(.bottom, 0)
                     }
                     HStack {
+                        Spacer()
                         Text(modelData.userProfile.usericon)
                             .font(.system(size: 100))
                             .padding([.leading, .top], 20)
@@ -251,53 +256,74 @@ struct ChartView: View {
                                 .foregroundColor(Color.white)
                                 .background(Color.blue)
                         }
+                        Spacer()
                     }
                     HStack {
+                        Spacer()
                         VStack {
                             Text("Today")
-                                .font(.title3)
+                                .font(.headline)
                             HStack {
+                                Spacer()
                                 CircleCount(title: "Done", count: logsTodayDone.count, width: 80,  color: .accentColor)
+                                Spacer()
                                 CircleCount(title: "To Do", count: logsTodayToDo.count, width: 80,  color: .gray)
+                                Spacer()
                             }
                         }
+                        //Spacer()
                         VStack {
                             Text("Yesterday")
-                                .font(.title3)
+                                .font(.headline)
                             HStack {
+                                Spacer()
                                 CircleCount(title: "Done", count: logsYesterdayDone.count, width: 80,  color: .green)
+                                Spacer()
                                 CircleCount(title: "To Do", count: logsYesterdayToDo.count, width: 80,  color: .gray)
+                                Spacer()
                             }
                         }
+                        Spacer()
                     }
                     Divider()
                         .padding(.top, 20)
-                    Text("Weekly Achievement")
-                        .font(.title)
-
-                    HStack {
-                        CircleCount(title: "This week", count: logsByWeek[thisWeek]?.count ?? 0, width: 140, color: .accentColor)
-                            .padding(20)
-                        CircleCount(title: "Last week", count: logsByWeek[prevWeek]?.count ?? 0, width: 140, color: .green)
-                            .padding(20)
-                    }
-
-                    Divider()
-                    
-                    Text("Monthly Achievement")
-                        .font(.title)
-
-                    HStack {
-                        CircleCount(title: "This month", count: logsByMonth[thisMonth]?.count ?? 0, width: 140,  color: .accentColor)
-                            .padding(20)
-                        CircleCount(title: "Last month", count: logsByMonth[prevMonth]?.count ?? 0, width: 140, color: .green)
-                            .padding(20)
-                    }
-                    if logsByMonth[thisMonth] != nil {
-                        if groupByCategory(logsByMonth[thisMonth]!)["Book"] != nil {
-                            Text("Book: \(groupByCategory(logsByMonth[thisMonth]!)["Book"]!.count)")
+                    VStack {
+                        Text("Weekly Achievement")
+                            .font(.title)
+                        HStack {
+                            Spacer()
+                            CircleCount(title: "This week", count: logsByWeek[thisWeek]?.count ?? 0, width: 140, color: .accentColor)
+                                .padding(20)
+                            Spacer()
+                            CircleCount(title: "Last week", count: logsByWeek[prevWeek]?.count ?? 0, width: 140, color: .green)
+                                .padding(20)
+                            Spacer()
                         }
+                        WeeklyChart(prevWeekLogs: logsByWeek[prevWeek] ?? [], thisWeekLogs: logsByWeek[thisWeek] ?? [])
+                            .padding(.horizontal, 20)
                     }
+                    Divider()
+                    VStack {
+                        Text("Monthly Achievement")
+                            .font(.title)
+                        HStack {
+                            Spacer()
+                            CircleCount(title: "This month", count: logsByMonth[thisMonth]?.count ?? 0, width: 140,  color: .accentColor)
+                                .padding(20)
+                            Spacer()
+                            CircleCount(title: "Last month", count: logsByMonth[prevMonth]?.count ?? 0, width: 140, color: .green)
+                                .padding(20)
+                            Spacer()
+                        }
+                        MonthlyChart(prevMonthLogs: logsByMonth[prevMonth] ?? [], thisMonthLogs: logsByMonth[thisMonth] ?? [])
+                            .padding(.horizontal, 20)
+                    }
+
+//                    if logsByMonth[thisMonth] != nil {
+//                        if groupByCategory(logsByMonth[thisMonth]!)["Book"] != nil {
+//                            Text("Book: \(groupByCategory(logsByMonth[thisMonth]!)["Book"]!.count)")
+//                        }
+//                    }
 
                 }
                 .navigationBarTitleDisplayMode(.inline)
