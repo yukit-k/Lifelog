@@ -17,7 +17,7 @@ struct EmojiRating: View {
         case 2:
             return Text("🙁")
         case 3:
-            return Text("😐")
+            return Text("🙂")
         case 4:
             return Text("😀")
         case 5:
