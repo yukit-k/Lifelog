@@ -19,7 +19,7 @@ struct CategoryFilterSheet: View {
                 ForEach(Array(userCategory.categories.enumerated()), id: \.1.id) { i, category in
                     DisclosureGroup {
                         ForEach(category.subCategories, id: \.self) { subCategory in
-                            SubCategoryFilterRow(categoryItem: CategoryItem(category: category, subCategory: subCategory))
+                            SubCategoryFilterRow(categoryItem: CategoryItem(category: category, subCategory: subCategory), filterCategory: filterCategory)
                                 .padding(.leading, 20)
                                 .onTapGesture {
                                     filterCategory.category = category
@@ -35,6 +35,7 @@ struct CategoryFilterSheet: View {
                             .onTapGesture {
                                 filterCategory.category = category
                                 filterCategory.categoryIndex = i
+                                filterCategory.subCategory = SubCategory(name: "")
                                 isFiltered = true
                                 presentationMode.wrappedValue.dismiss()
                             }
@@ -66,13 +67,14 @@ struct CategoryFilterRow: View {
     
     var body: some View {
         HStack {
-            if filterCategory.category.name == categoryItem.category.name {
+            if (filterCategory.category.name == categoryItem.category.name && filterCategory.subCategory.name == "") {
                 Image(systemName: "checkmark")
                     .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                     .font(.headline)
             }
             Text(categoryItem.category.icon ?? "")
             Text(categoryItem.category.name)
+                .foregroundColor(filterCategory.category.name == categoryItem.category.name ? .blue : .primary)
             Spacer()
             if categoryItem.category.unit != nil {
                 Text("(Unit: \(categoryItem.category.unit!))")
@@ -86,11 +88,18 @@ struct CategoryFilterRow: View {
 
 struct SubCategoryFilterRow: View {
     @ObservedObject var categoryItem: CategoryItem
+    @ObservedObject var filterCategory: CategoryItem
     
     var body: some View {
         HStack {
+            if (filterCategory.subCategory.name == categoryItem.subCategory.name) {
+                Image(systemName: "checkmark")
+                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    .font(.headline)
+            }
             Text(categoryItem.subCategory.icon ?? "")
             Text(categoryItem.subCategory.name)
+                .foregroundColor(filterCategory.subCategory.name == categoryItem.subCategory.name ? .blue : .primary)
             Spacer()
             if categoryItem.subCategory.unit != nil {
                 Text("(Unit: \(categoryItem.subCategory.unit!))")

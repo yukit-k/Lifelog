@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct AddEditSubCategory: View {
+struct AddSubCategory: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var modelData: ModelData
 
     @ObservedObject var categoryItem: CategoryItem
-    @ObservedObject var draftCategory: UserCategory
+    //@ObservedObject var draftCategory: UserCategory
     
     @State private var showingError = false
     @State private var errorTitle: String = ""
@@ -74,21 +74,16 @@ struct AddEditSubCategory: View {
     
     func save()  {
         // do something
-        if categoryItem.subCategory.name != "" {
-            if categoryItem.subCategoryIndex != nil {
-                categoryItem.category.subCategories[categoryItem.subCategoryIndex!] = categoryItem.subCategory
-            } else {
-                categoryItem.category.subCategories.append(categoryItem.subCategory)
-            }
-            draftCategory.categories[categoryItem.categoryIndex!] = categoryItem.category
-            modelData.userCategory = draftCategory
-            modelData.userCategory.save()
-            self.presentationMode.wrappedValue.dismiss()
-        } else {
+        if categoryItem.subCategory.name == "" {
             self.showingError = true
             self.errorTitle = "Invalid Name"
             self.errorMessage = "Make sure to enter something for \nthe new item."
             return
+        } else {
+            categoryItem.category.subCategories.append(categoryItem.subCategory)
+            modelData.userCategory.categories[categoryItem.categoryIndex!] = categoryItem.category
+            modelData.userCategory.save()
+            self.presentationMode.wrappedValue.dismiss()
         }
     }
 }
