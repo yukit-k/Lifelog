@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-struct AddEditCategory: View {
+struct AddCategory: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var modelData: ModelData
     
-    @ObservedObject var categoryItem: CategoryItem
-    @ObservedObject var draftCategory: UserCategory
+    @State var category: Category = Category(name: "", subCategories: [])
     
     @State private var showingError = false
     @State private var errorTitle: String = ""
@@ -27,7 +26,7 @@ struct AddEditCategory: View {
 
 //                    CustomTextField(text: $categoryItem.category.name, isFirstResponder: true)
 
-                    TextField("", text: $categoryItem.category.name)
+                    TextField("", text: $category.name)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                     
                 }
@@ -35,7 +34,7 @@ struct AddEditCategory: View {
                     Text("Icon (Emoji)")
                         .frame(width: 150)
 
-                    TextField("", text: $categoryItem.category.icon.bounds)
+                    TextField("", text: $category.icon.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 //                    TextFieldWrapperView(text: $categoryItem.category.icon.bounds)
 //                        .padding(6)
@@ -46,7 +45,7 @@ struct AddEditCategory: View {
                     Text("Unit (Optional)")
                         .frame(width: 150)
 
-                    TextField("", text: $categoryItem.category.unit.bounds)
+                    TextField("", text: $category.unit.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
@@ -69,7 +68,7 @@ struct AddEditCategory: View {
                     }
                 }
             }
-            .navigationBarTitle(categoryItem.categoryIndex != nil ? Text("Edit Category") : Text("Add Category"))
+            .navigationBarTitle(Text("Add New Category"))
             .alert(isPresented: $showingError) {
                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("OK")))
             }
@@ -80,34 +79,25 @@ struct AddEditCategory: View {
     
     
     func save()  {
-        if categoryItem.category.name != "" {
-            if categoryItem.categoryIndex != nil {
-                draftCategory.categories[categoryItem.categoryIndex!] = categoryItem.category
-            } else {
-                if draftCategory.categories.firstIndex(where: { $0.name == categoryItem.category.name }) != nil {
-                    self.showingError = true
-                    self.errorTitle = "Invalid Name"
-                    self.errorMessage = "The same category already exists. Please change the name."
-                    return
-                } else {
-                    draftCategory.categories.append(categoryItem.category)
-                }
-            }
-            if categoryItem.category.icon == "" || categoryItem.category.icon == nil {
-                self.showingError = true
-                self.errorTitle = "Invalid Icon"
-                self.errorMessage = "Please enter something for the icon. To be used in the add button."
-                return
-            }
-            modelData.userCategory = draftCategory
-            modelData.userCategory.save()
-            self.presentationMode.wrappedValue.dismiss()
-        } else {
+        if category.name == "" {
             self.showingError = true
             self.errorTitle = "Invalid Name"
             self.errorMessage = "Please enter something for the name."
             return
+        } else if category.icon == "" || category.icon == nil {
+            self.showingError = true
+            self.errorTitle = "Invalid Icon"
+            self.errorMessage = "Please enter something for the icon. To be used in the add button."
+            return
+        } else if modelData.userCategory.categories.firstIndex(where: { $0.name == category.name }) != nil {
+            self.showingError = true
+            self.errorTitle = "Invalid Name"
+            self.errorMessage = "The same category already exists. Please change the name."
+            return
+        } else {
+            modelData.userCategory.categories.append(category)
+            modelData.userCategory.save()
+            self.presentationMode.wrappedValue.dismiss()
         }
-
     }
 }
