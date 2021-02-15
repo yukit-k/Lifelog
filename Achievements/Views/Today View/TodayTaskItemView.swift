@@ -13,8 +13,8 @@ struct TodayTaskItemView: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 5)
-                .stroke(isCompleted ? Color.blue : Color.primary, lineWidth: 1)
-                .background(isCompleted ? Color.blue : Color.white)
+                .stroke(isCompleted ? Color.blue : Color.gray, lineWidth: 1)
+                .background(RoundedRectangle(cornerRadius: 5).fill(isCompleted ? Color.blue : Color.white))
                 .frame(height: 60)
             HStack {
                 log.image.map({
