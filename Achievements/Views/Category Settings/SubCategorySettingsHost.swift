@@ -51,7 +51,10 @@ struct SubCategorySettingsHost: View {
                     }
                 }
                 .sheet(isPresented: $showingSheet) {
-                    AddCategory()
+                    AddSubCategory(categoryItem: categoryItem)
+                        .onDisappear {
+                            categoryItem.subCategory = SubCategory(name: "")
+                        }
                 }
             }
         }
