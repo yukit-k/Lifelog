@@ -68,7 +68,7 @@ struct PictureView: View {
                 .sheet(item: $activeSheet) {item in
                     switch item {
                     case .settings:
-                        CategorySettings()
+                        CategorySettingsHost()
                             .environmentObject(modelData)
                     
                     case .profile:
