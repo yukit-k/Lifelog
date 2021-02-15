@@ -23,7 +23,7 @@ struct ProfileSummary: View {
     @State private var backImage: Image?
     
     init () {
-        _image = State(initialValue: fileController.loadImage(name: "profile.png") ?? Image("snowman_nana"))
+        _image = State(initialValue: fileController.loadImage(name: "profile.png") ?? Image("defaultProfile"))
         _backImage = State(initialValue: fileController.loadImage(name: "background.png") ?? Image("sunset-1757593"))
     }
     
