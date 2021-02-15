@@ -52,7 +52,7 @@ struct ActivityDetail: View {
                         }
                     }
                 }
-                .frame(height: 300)
+                .frame(height: 400)
 
                 VStack(alignment: .leading, spacing: 20) {
                     HStack {
@@ -83,7 +83,14 @@ struct ActivityDetail: View {
                             }
                     }
 
-                    if !log.isToDo {
+                    if log.isToDo {
+                        HStack {
+                            Text("Daily Routine")
+                                .font(.headline)
+                                .padding(.trailing, 10)
+                            Text("\(log.isRoutine ? "Yes" : "No")")
+                        }
+                    } else {
                         RatingView(rating: .constant(Int(log.rating)))
                             .font(.headline)
                         HStack {
