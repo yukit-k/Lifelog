@@ -40,15 +40,16 @@ struct ActivityDetail: View {
                                             .offset(x: 0, y: imageHelper.getOffsetForHeaderImage(geometry))
                                 })
                         })
-                        
-                        Text("\(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory.uppercased())")
-                            .font(.caption)
-                            .fontWeight(.black)
-                            .padding(8)
-                            .foregroundColor(.white)
-                            .background(Color.black.opacity(0.75))
-                            .clipShape(Capsule())
-                            .offset(x: -5, y: imageHelper.getOffsetForHeaderImage(geometry)-5)
+                        if log.wrappedSubCategory != "" {
+                            Text("\(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory.uppercased())")
+                                .font(.caption)
+                                .fontWeight(.black)
+                                .padding(8)
+                                .foregroundColor(.white)
+                                .background(Color.black.opacity(0.75))
+                                .clipShape(Capsule())
+                                .offset(x: -5, y: imageHelper.getOffsetForHeaderImage(geometry)-5)
+                        }
                     }
                 }
                 .frame(height: 300)

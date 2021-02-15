@@ -64,6 +64,7 @@ struct EditLog: View {
                                 .padding(.trailing)
                             TextField("Add a comment...", text: $editableLog.comment.bounds)
                                 .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
                         }
                     } else {
                         Toggle(isOn: $editableLog.isRoutine) {
@@ -78,6 +79,7 @@ struct EditLog: View {
                             .padding(.trailing)
                         TextField("Name", text: $editableLog.name.bounds)
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
                     Picker(selection: $editableLog.category.bounds, label: Text("Category")) {
                         ForEach(modelData.userCategory.categories, id: \.self) { category in
@@ -132,6 +134,7 @@ struct EditLog: View {
                             .padding(.trailing)
                         TextField("Enter ampount", text: $amountString)
                             .keyboardType(.numberPad)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                             .onReceive(Just(amountString)) { newValue in
                                 let filtered = newValue.filter { "0123456789.".contains($0) }
                                 if filtered != newValue {
@@ -146,12 +149,14 @@ struct EditLog: View {
                             .padding(.trailing)
                         TextField("Add creator...", text: $editableLog.creator.bounds)
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
                     HStack {
                         Text("Description")
                             .padding(.trailing)
                         TextField("Add description...", text: $editableLog.desc.bounds)
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
                 }
             }
@@ -188,7 +193,7 @@ struct EditLog: View {
 
     func saveLog() {
         if editableLog.name == "" {
-            editableLog.name = "New \(editableLog.category ?? "Item") (\(editableLog.subCategory ?? ""))"
+            editableLog.name = "\(editableLog.category ?? "New Item")"
         }
         editableLog.amount = (amountString as NSString).doubleValue
         editableLog.rating = Int16(ratingInt)
