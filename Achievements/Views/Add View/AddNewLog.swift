@@ -96,17 +96,6 @@ struct AddNewLog: View {
                     }
                     TextField("Enter name", text: $name)
                         .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
-                    HStack {
-                        TextField("Enter amount", text: $amount)
-                            .keyboardType(.numberPad)
-                            .onReceive(Just(amount)) { newValue in
-                                let filtered = newValue.filter { "0123456789.".contains($0) }
-                                if filtered != newValue {
-                                    self.amount = filtered
-                                }
-                            }
-                        Text(subCategory.unit ?? category.unit ?? "")
-                    }
                     
                     if !isToDo {
                         RatingView(rating: $rating)
@@ -120,7 +109,17 @@ struct AddNewLog: View {
                         Text("Add Details")
                     }
                     if showDetailSection {
-
+                        HStack {
+                            TextField("Enter amount", text: $amount)
+                                .keyboardType(.numberPad)
+                                .onReceive(Just(amount)) { newValue in
+                                    let filtered = newValue.filter { "0123456789.".contains($0) }
+                                    if filtered != newValue {
+                                        self.amount = filtered
+                                    }
+                                }
+                            Text(subCategory.unit ?? category.unit ?? "")
+                        }
                         TextField("Created By", text: $creator)
                             .keyboardType(/*@START_MENU_TOKEN@*/.default/*@END_MENU_TOKEN@*/)
                         TextField("Description", text: $description)
@@ -176,7 +175,7 @@ struct AddNewLog: View {
     
     func saveLog(isDismiss: Bool) {
         if name == "" {
-            name = "New \(category.name) (\(subCategory.name))"
+            name = "\(category.name)"
         }
         
         let newLog = Log(context: self.moc)
