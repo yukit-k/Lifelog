@@ -12,8 +12,9 @@ struct CategoryItemView: View {
     static let updatedDateFormat: DateFormatter = {
         let formatter = DateFormatter()
         //formatter.dateStyle = .short
-        formatter.locale = Locale(identifier: "en_GB")
-        formatter.dateFormat = "dd-MMM"
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.setLocalizedDateFormatFromTemplate("MMMd")
+        //formatter.dateFormat = "dd-MMM"
         return formatter
     }()
     
@@ -30,13 +31,15 @@ struct CategoryItemView: View {
                                     .cornerRadius(5)
                         })
                 })
-                Text("\(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory.uppercased())")
-                    .font(.system(size: 8))
-                    .padding(6)
-                    .foregroundColor(.white)
-                    .background(Color.black.opacity(0.75))
-                    .clipShape(Capsule())
-                    .offset(x: -5, y: -5)
+                if log.wrappedSubCategory != "" {
+                    Text("\(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory.uppercased())")
+                        .font(.system(size: 8))
+                        .padding(6)
+                        .foregroundColor(.white)
+                        .background(Color.black.opacity(0.75))
+                        .clipShape(Capsule())
+                        .offset(x: -5, y: -5)
+                }
             }
             
             HStack {
@@ -48,6 +51,7 @@ struct CategoryItemView: View {
                     .foregroundColor(.secondary)
                     .font(.caption)
             }
+            .frame(width: 155)
         }
         .padding(.leading, 15)
     }
