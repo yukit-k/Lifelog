@@ -30,19 +30,9 @@ import CoreData
 struct ChartView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var modelData: ModelData
+    @EnvironmentObject var categoryFilter: CategoryFilter
     @State private var activeSheet: ActiveSheetNavBar?
-    
-    @State private var isFiltered: Bool = false
-    @StateObject var filterCategory = CategoryItem()
-    
-    func filter(_ logs: FetchedResults<Log>) -> [Log] {
-        logs.filter { log in
-            (isFiltered == false ||
-                isFiltered == true && log.wrappedCategory == filterCategory.category.name
-            )
-        }
-    }
-    
+
     let calendar = Calendar.current
     
     /* Today and Yesterday Part*/
@@ -62,7 +52,7 @@ struct ChartView: View {
     var logsTodayDone: [Log] {
         let todayStart = calendar.startOfDay(for: Date())
         let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
-        return filter(currentAdhocLogs).filter { log in
+        return categoryFilter.filterLogs(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= todayStart) &&
                 (log.wrappedActivityDate < tomorrowStart) &&
                 (log.isToDo == false)
@@ -71,7 +61,7 @@ struct ChartView: View {
     var logsYesterdayDone: [Log] {
         let todayStart = calendar.startOfDay(for: Date())
         let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart) ?? Date()
-        return filter(currentAdhocLogs).filter { log in
+        return categoryFilter.filterLogs(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= yesterdayStart) &&
                 (log.wrappedActivityDate < todayStart) &&
                 (log.isToDo == false)
@@ -80,7 +70,7 @@ struct ChartView: View {
     var adhocLogsTodayToDo: [Log] {
         let todayStart = calendar.startOfDay(for: Date())
         let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
-        return filter(currentAdhocLogs).filter { log in
+        return categoryFilter.filterLogs(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= todayStart) &&
                 (log.wrappedActivityDate < tomorrowStart) &&
                 (log.isToDo == true)
@@ -89,7 +79,7 @@ struct ChartView: View {
     var adhocLogsYesterdayToDo: [Log] {
         let todayStart = calendar.startOfDay(for: Date())
         let yesterdayStart = calendar.date(byAdding: .day, value: -1, to: todayStart) ?? Date()
-        return filter(currentAdhocLogs).filter { log in
+        return categoryFilter.filterLogs(currentAdhocLogs).filter { log in
             (log.wrappedActivityDate >= yesterdayStart) &&
                 (log.wrappedActivityDate < todayStart) &&
                 (log.isToDo == true)
@@ -98,22 +88,16 @@ struct ChartView: View {
     var routineLogsToday: [Log] {
         let todayStart = calendar.startOfDay(for: Date())
         let tomorrowStart = calendar.date(byAdding: .day, value: 1, to: todayStart) ?? Date()
-        return filter(allRoutineLogs).filter { log in
+        return categoryFilter.filterLogs(allRoutineLogs).filter { log in
             (log.wrappedActivityDate < tomorrowStart) &&
-                (logsTodayDone.firstIndex(where: { $0.routineLogId == log.id }) == nil) &&
-                (isFiltered == false ||
-                    isFiltered == true && log.wrappedCategory == filterCategory.category.name
-            )
+                (logsTodayDone.firstIndex(where: { $0.routineLogId == log.id }) == nil)
         }
     }
     var routineLogsYesterday: [Log] {
         let todayStart = calendar.startOfDay(for: Date())
-        return filter(allRoutineLogs).filter { log in
+        return categoryFilter.filterLogs(allRoutineLogs).filter { log in
             (log.wrappedActivityDate < todayStart) &&
-                (logsYesterdayDone.firstIndex(where: { $0.routineLogId == log.id }) == nil) &&
-                (isFiltered == false ||
-                    isFiltered == true && log.wrappedCategory == filterCategory.category.name
-            )
+                (logsYesterdayDone.firstIndex(where: { $0.routineLogId == log.id }) == nil)
         }
     }
     var logsTodayToDo: [Log] {
@@ -133,13 +117,13 @@ struct ChartView: View {
     ) var historicalLogs: FetchedResults<Log>
     
     var logsByWeek: Dictionary<String, [Log]> {
-        Dictionary(grouping: filter(historicalLogs)) { (log) -> String in
+        Dictionary(grouping: categoryFilter.filterLogs(historicalLogs)) { (log) -> String in
             let components = calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: log.date)
             return String(components.yearForWeekOfYear ?? 0) + "-" + String(format: "%02d", components.weekOfYear ?? 0)
         }
     }
     var logsByMonth: Dictionary<String, [Log]> {
-        Dictionary(grouping: filter(historicalLogs)) { (log) -> String in
+        Dictionary(grouping: categoryFilter.filterLogs(historicalLogs)) { (log) -> String in
             let components = calendar.dateComponents([.year, .month], from: log.date)
             return String(components.year ?? 0) + "-" + String(format: "%02d", components.month ?? 0)
         }
@@ -173,27 +157,6 @@ struct ChartView: View {
             return formatter
     }
     
-//    var todayToDo: String {
-//        return dateFormatter.string(from: Date()) + "-ToDo"
-//    }
-//    var todayDone: String {
-//        return dateFormatter.string(from: Date()) + "-Done"
-//    }
-//    var yesterdayToDo: String {
-//        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
-//        return dateFormatter.string(from: yesterday!) + "-ToDo"
-//    }
-//    var yesterdayDone: String {
-//        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
-//        return dateFormatter.string(from: yesterday!) + "-Done"
-//    }
-//    var logsForCurrent: Dictionary<String, [Log]> {
-//        Dictionary(grouping: filteredCurLogs) { (log) -> String in
-//            let activityDate = dateFormatter.string(from: log.wrappedActivityDate)
-//            let toDoString = log.isToDo ? "ToDo" : "Done"
-//            return activityDate + "-" + toDoString
-//        }
-//    }
     var chartMessageA: [LocalizedStringKey] {
         var messages: [LocalizedStringKey] = []
         for i in 0...9 {
@@ -240,10 +203,16 @@ struct ChartView: View {
         NavigationView {
             ScrollView {
                 VStack {
-                    if isFiltered {
-                        Text("Applied Fileter: \(filterCategory.category.icon ?? "")\(filterCategory.category.name)")
-                            .padding(.top, 20)
-                            .padding(.bottom, 0)
+                    if categoryFilter.isFiltered {
+                        HStack {
+                            Text("Applied Fileter: \(categoryFilter.category.icon ?? "")\(categoryFilter.category.name)")
+                            if categoryFilter.subCategory.name != "" {
+                                Divider()
+                                Text("\(categoryFilter.subCategory.icon ?? "")\(categoryFilter.subCategory.name)")
+                            }
+                        }
+                        .padding(.top, 20)
+                        .padding(.bottom, 0)
                     }
                     HStack {
                         Spacer()
@@ -308,10 +277,10 @@ struct ChartView: View {
                             .font(.title)
                         HStack {
                             Spacer()
-                            CircleCount(title: "This month", count: logsByMonth[thisMonth]?.count ?? 0, width: 140,  color: .accentColor)
+                            CircleCount(title: "This month (\(monthAbbrFromInt(Int(thisMonth.suffix(2)) ?? 1)))", count: logsByMonth[thisMonth]?.count ?? 0, width: 140,  color: .accentColor)
                                 .padding(20)
                             Spacer()
-                            CircleCount(title: "Last month", count: logsByMonth[prevMonth]?.count ?? 0, width: 140, color: .green)
+                            CircleCount(title: "Last month (\(monthAbbrFromInt(Int(prevMonth.suffix(2)) ?? 1)))", count: logsByMonth[prevMonth]?.count ?? 0, width: 140, color: .green)
                                 .padding(20)
                             Spacer()
                         }
@@ -341,7 +310,7 @@ struct ChartView: View {
                         Button(action: {
                             activeSheet = .settings
                         }) {
-                            if isFiltered == false {
+                            if categoryFilter.isFiltered == false {
                                 Image(systemName: "line.horizontal.3.decrease.circle")
                             } else {
                                 Image(systemName: "line.horizontal.3.decrease.circle.fill")
@@ -352,7 +321,7 @@ struct ChartView: View {
                 .sheet(item: $activeSheet) {item in
                     switch item {
                     case .settings:
-                        CategoryFilterSheet(isFiltered: $isFiltered, filterCategory: filterCategory, userCategory: modelData.userCategory)
+                        CategoryFilterSheet()
                     
                     case .profile:
                         ProfileHost()
@@ -368,6 +337,10 @@ struct ChartView: View {
         return  Dictionary(grouping: logs) { (log) -> String in
             log.category ?? ""
         }
+    }
+    func monthAbbrFromInt(_ month: Int) -> String {
+        let mon = calendar.shortMonthSymbols
+        return mon[month - 1]
     }
 }
 

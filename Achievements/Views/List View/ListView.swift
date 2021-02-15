@@ -9,21 +9,19 @@ import SwiftUI
 
 struct  ListView: View {
     @EnvironmentObject var modelData: ModelData
+    @EnvironmentObject var categoryFilter: CategoryFilter
     @State private var viewMode: String = "all"
     @StateObject var searchBar: SearchBar = SearchBar()
     @State private var showingOptionView: Bool = false
     @State private var activeSheet: ActiveSheetNavBar?
     
-    @State private var isFiltered: Bool = false
-    @StateObject var filterCategory = CategoryItem()
-
     @Environment(\.managedObjectContext) var moc
     @FetchRequest(entity: Log.entity(), sortDescriptors: [
         NSSortDescriptor(keyPath: \Log.activityDate, ascending: false)
     ]) var logs: FetchedResults<Log>
     
     var filteredLog: [Log] {
-        logs.filter { log in
+        categoryFilter.filterLogs(logs).filter { log in
             (!(log.isRoutine && log.isToDo) &&
                 (viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
                 (searchBar.text.isEmpty ||
@@ -31,15 +29,12 @@ struct  ListView: View {
                     log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedCategory.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedSubCategory.localizedCaseInsensitiveContains(searchBar.text)
-                ) &&
-                ((isFiltered == false) ||
-                    (isFiltered == true && log.wrappedCategory == filterCategory.category.name)
                 )
             )
         }
     }
     var routineLog: [Log] {
-        logs.filter { log in
+        categoryFilter.filterLogs(logs).filter { log in
             ((log.isRoutine && log.isToDo) &&
                 (viewMode == "all" || viewMode == "todo" && log.isToDo || viewMode == "done" && !log.isToDo) &&
                 (searchBar.text.isEmpty ||
@@ -47,9 +42,6 @@ struct  ListView: View {
                     log.wrappedDesc.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedCategory.localizedCaseInsensitiveContains(searchBar.text) ||
                     log.wrappedSubCategory.localizedCaseInsensitiveContains(searchBar.text)
-                ) &&
-                ((isFiltered == false) ||
-                    (isFiltered == true && log.wrappedCategory == filterCategory.category.name)
                 )
             )
         }
@@ -67,11 +59,16 @@ struct  ListView: View {
 
     var body: some View {
         NavigationView {
-
                 List {
-                    if isFiltered {
-                        Text("Applied Fileter: \(filterCategory.category.icon ?? "")\(filterCategory.category.name)")
-                            .padding(5)
+                    if categoryFilter.isFiltered {
+                        HStack {
+                            Text("Applied Fileter: \(categoryFilter.category.icon ?? "")\(categoryFilter.category.name)")
+                            if categoryFilter.subCategory.name != "" {
+                                Divider()
+                                Text("\(categoryFilter.subCategory.icon ?? "")\(categoryFilter.subCategory.name)")
+                            }
+                        }
+                        .padding(5)
                     }
                     Picker("Filter", selection: $viewMode) {
                         Text("All").tag("all")
@@ -117,10 +114,11 @@ struct  ListView: View {
                         Button(action: {
                             activeSheet = .settings
                         }) {
-                            if isFiltered == false {
+                            if categoryFilter.isFiltered == false {
                                 Image(systemName: "line.horizontal.3.decrease.circle")
                             } else {
                                 Image(systemName: "line.horizontal.3.decrease.circle.fill")
+                                    .foregroundColor(.orange)
                             }
                         }
                     }
@@ -128,7 +126,7 @@ struct  ListView: View {
                 .sheet(item: $activeSheet) {item in
                     switch item {
                     case .settings:
-                        CategoryFilterSheet(isFiltered: $isFiltered, filterCategory: filterCategory, userCategory: modelData.userCategory)
+                        CategoryFilterSheet()
                     case .profile:
                         ProfileHost()
                             .environmentObject(modelData)

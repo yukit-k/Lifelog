@@ -10,9 +10,8 @@ import SwiftUI
 struct TodayView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var modelData: ModelData
+    @EnvironmentObject var categoryFilter: CategoryFilter
     @State private var activeSheet: ActiveSheetNavBar?
-    @State private var isFiltered: Bool = false
-    @StateObject var filterCategory = CategoryItem()
     
     var dateFormatter: DateFormatter {
             let formatter = DateFormatter()
@@ -49,19 +48,13 @@ struct TodayView: View {
 //    var routineLogs: FetchedResults<Log> { fetchRequestRoutine.wrappedValue }
 
     var filteredRoutineTodo: [Log] {
-        routineLogs.filter { log in
-            (log.isToDo) &&
-            ((isFiltered == false) ||
-                (isFiltered == true && log.wrappedCategory == filterCategory.category.name)
-            )
+        categoryFilter.filterLogs(routineLogs).filter { log in
+            (log.isToDo)
         }
     }
     var filteredRoutineDone: [Log] {
-        routineLogs.filter { log in
-            (!log.isToDo && dateFormatter.string(from: log.wrappedActivityDate) == dateFormatter.string(from: Date())) &&
-            ((isFiltered == false) ||
-                (isFiltered == true && log.wrappedCategory == filterCategory.category.name)
-            )
+        categoryFilter.filterLogs(routineLogs).filter { log in
+            (!log.isToDo && dateFormatter.string(from: log.wrappedActivityDate) == dateFormatter.string(from: Date()))
         }
     }
 
@@ -75,13 +68,10 @@ struct TodayView: View {
                   ])) var adhocLogs: FetchedResults<Log>
 
     var filteredAdhocLogs: [Log] {
-        adhocLogs.filter { log in
+        categoryFilter.filterLogs(adhocLogs).filter { log in
             let activityDate = dateFormatter.string(from: log.wrappedActivityDate)
             let today = dateFormatter.string(from: Date())
-            return (activityDate == today) &&
-                (isFiltered == false ||
-                    isFiltered == true && log.wrappedCategory == filterCategory.category.name
-                )
+            return (activityDate == today)
         }
     }
     
@@ -93,10 +83,16 @@ struct TodayView: View {
         GeometryReader { geometry in
             NavigationView {
                 ScrollView {
-                    if isFiltered {
-                        Text("Applied Fileter: \(filterCategory.category.icon ?? "")\(filterCategory.category.name)")
-                            .padding(.top, 20)
-                            .padding(.bottom, 0)
+                    if categoryFilter.isFiltered {
+                        HStack {
+                            Text("Applied Fileter: \(categoryFilter.category.icon ?? "")\(categoryFilter.category.name)")
+                            if categoryFilter.subCategory.name != "" {
+                                Divider()
+                                Text("\(categoryFilter.subCategory.icon ?? "")\(categoryFilter.subCategory.name)")
+                            }
+                        }
+                        .padding(.top, 20)
+                        .padding(.bottom, 0)
                     }
                     let gridItems = Array(repeating: GridItem(.fixed(geometry.size.width/2), spacing: 0, alignment: .center), count: 2)
                     Section(header: Text("Daily Routine").font(.title2).fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).padding(.top, 10)) {
@@ -146,7 +142,7 @@ struct TodayView: View {
                         Button(action: {
                             activeSheet = .settings
                         }) {
-                            if isFiltered == false {
+                            if categoryFilter.isFiltered == false {
                                 Image(systemName: "line.horizontal.3.decrease.circle")
                             } else {
                                 Image(systemName: "line.horizontal.3.decrease.circle.fill")
@@ -157,7 +153,7 @@ struct TodayView: View {
                 .sheet(item: $activeSheet) {item in
                     switch item {
                     case .settings:
-                        CategoryFilterSheet(isFiltered: $isFiltered, filterCategory: filterCategory, userCategory: modelData.userCategory)
+                        CategoryFilterSheet()
                             .onDisappear {
                                 self.stateRoutineTodo = filteredRoutineTodo
                                 self.stateRoutineDone = filteredRoutineDone
