@@ -26,7 +26,7 @@ struct SubCategorySettingsSummary: View {
             .foregroundColor(.secondary)
         }
         Section(header: Text("Sub Cateogyry")) {
-            ForEach(Array(categoryItem.category.subCategories.enumerated()), id: \.1.id) { i, subCategory in
+            ForEach(categoryItem.category.subCategories, id: \.self) { subCategory in
                 HStack {
                     Text(subCategory.icon ?? "")
                     Text(subCategory.name)

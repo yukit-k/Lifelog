@@ -31,7 +31,7 @@ struct SubCategorySettingsEditor: View {
             .foregroundColor(.secondary)
         }
         Section(header: Text("Sub Cateogyry")) {
-            ForEach(Array(subCategories.enumerated()), id: \.1.id) { i, subCategory in
+            ForEach(subCategories.indices, id: \.self) { i in
                 HStack {
                     TextField("", text: $categoryItem.category.subCategories[i].icon.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
