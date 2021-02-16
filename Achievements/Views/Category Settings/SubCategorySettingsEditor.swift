@@ -10,7 +10,9 @@ import SwiftUI
 struct SubCategorySettingsEditor: View {
     @EnvironmentObject var modelData: ModelData
     @ObservedObject var categoryItem: CategoryItem
-    //@ObservedObject var draftCategory: UserCategory
+    var subCategories: [SubCategory] {
+        categoryItem.category.subCategories
+    }
 
     var body: some View {
 
@@ -26,9 +28,10 @@ struct SubCategorySettingsEditor: View {
                         .padding(.trailing)
                 }
             }
+            .foregroundColor(.secondary)
         }
         Section(header: Text("Sub Cateogyry")) {
-            ForEach(Array(categoryItem.category.subCategories.enumerated()), id: \.1.id) { i, subCategory in
+            ForEach(Array(subCategories.enumerated()), id: \.1.id) { i, subCategory in
                 HStack {
                     TextField("", text: $categoryItem.category.subCategories[i].icon.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -46,6 +49,9 @@ struct SubCategorySettingsEditor: View {
     }
     
     func deleteSubCategory(at offsets: IndexSet) {
+//        subCategories.remove(atOffsets: offsets)
+//        categoryItem.category.subCategories = subCategories
         categoryItem.category.subCategories.remove(atOffsets: offsets)
+
     }
 }

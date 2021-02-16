@@ -23,6 +23,7 @@ struct SubCategorySettingsSummary: View {
                         .padding(.trailing)
                 }
             }
+            .foregroundColor(.secondary)
         }
         Section(header: Text("Sub Cateogyry")) {
             ForEach(Array(categoryItem.category.subCategories.enumerated()), id: \.1.id) { i, subCategory in

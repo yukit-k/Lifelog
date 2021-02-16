@@ -22,28 +22,24 @@ struct AddSubCategory: View {
         NavigationView {
             Form {
                 HStack {
-                    Text("Sub Category Name")
-                        .frame(width: 170)
+                    Text("Icon")
+                        .frame(width: 100)
+                    EmojiTextFieldWrapperView(text: $categoryItem.subCategory.icon.bounds)
+                        .padding(6)
+                        .frame(width: 60)
+                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.1))
+                }
+                HStack {
+                    Text("Name")
+                        .frame(width: 100)
 
                     TextField("", text: $categoryItem.subCategory.name)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
                 HStack {
-                    Text("Icon (Optional)")
-                        .frame(width: 170)
-                    TextField("", text: $categoryItem.subCategory.icon.bounds)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-//                    TextFieldWrapperView(text: $categoryItem.subCategory.icon.bounds)
-//                        .padding(6)
-//                        .frame(width: 60)
-//                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.1))
-
-                }
-                HStack {
-                    Text("Unit (Optional)")
-                        .frame(width: 170)
-
-                    TextField("", text: $categoryItem.subCategory.unit.bounds)
+                    Text("Unit")
+                        .frame(width: 100)
+                    TextField("(optional)", text: $categoryItem.subCategory.unit.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
