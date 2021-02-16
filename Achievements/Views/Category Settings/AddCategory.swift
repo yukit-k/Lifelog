@@ -16,44 +16,34 @@ struct AddCategory: View {
     @State private var showingError = false
     @State private var errorTitle: String = ""
     @State private var errorMessage: String = ""
-    
+        
     var body: some View {
         NavigationView {
             Form {
                 HStack {
-                    Text("Category Name")
-                        .frame(width: 150)
-
-//                    CustomTextField(text: $categoryItem.category.name, isFirstResponder: true)
-
+                    Text("Icon")
+                        .frame(width: 100)
+                    EmojiTextFieldWrapperView(text: $category.icon.bounds)
+                        .padding(6)
+                        .frame(width: 60)
+                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.1))
+                }
+                HStack {
+                    Text("Name")
+                        .frame(width: 100)
                     TextField("", text: $category.name)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
                 }
                 HStack {
-                    Text("Icon (Emoji)")
-                        .frame(width: 150)
+                    Text("Unit")
+                        .frame(width: 100)
 
-                    TextField("", text: $category.icon.bounds)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-//                    TextFieldWrapperView(text: $categoryItem.category.icon.bounds)
-//                        .padding(6)
-//                        .frame(width: 60)
-//                        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary, lineWidth: 0.1))
-                }
-                HStack {
-                    Text("Unit (Optional)")
-                        .frame(width: 150)
-
-                    TextField("", text: $category.unit.bounds)
+                    TextField("(optional)", text: $category.unit.bounds)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-
-                
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-//                    SaveButton(function: { self.save() })
                     Button(action: {
                         self.save()
                     }) {

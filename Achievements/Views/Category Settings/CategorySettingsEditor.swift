@@ -12,20 +12,22 @@ struct CategorySettingsEditor: View {
     @ObservedObject var draftCategory: UserCategory
     
     var body: some View {
-        ForEach(draftCategory.categories.indices, id: \.self) { index in
-            HStack {
-                TextField("", text: $draftCategory.categories[index].icon.bounds)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 40)
-                TextField("", text: $draftCategory.categories[index].name)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Spacer()
-                TextField("", text: $draftCategory.categories[index].unit.bounds)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(width: 60)
+        Section(header: Text("Cateogyry")) {
+            ForEach(draftCategory.categories.indices, id: \.self) { index in
+                HStack {
+                    TextField("", text: $draftCategory.categories[index].icon.bounds)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width: 40)
+                    TextField("", text: $draftCategory.categories[index].name)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    Spacer()
+                    TextField("", text: $draftCategory.categories[index].unit.bounds)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width: 60)
+                }
             }
+            .onDelete(perform: deleteCategory)
         }
-        .onDelete(perform: deleteCategory)
     }
     
     func deleteCategory(at offsets: IndexSet) {
