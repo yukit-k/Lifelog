@@ -239,6 +239,10 @@ struct AddNewLog: View {
 //        }
         if isDismiss {
             self.presentationMode.wrappedValue.dismiss()
+        } else {
+            self.errorTitle = "Save"
+            self.errorMessage = "Item saved successfully."
+            self.showingError.toggle()
         }
     }
 }
