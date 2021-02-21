@@ -194,24 +194,24 @@ struct ChartView: View {
         }
     }
     
-    func getGreeting() -> String {
+    func getGreeting() -> LocalizedStringKey {
         let hour = calendar.component(.hour, from: Date())
         let name = modelData.userProfile.username
-        var greeting = ""
+        var greeting = LocalizedStringKey("")
         if hour < 4 {
-            greeting = "Good night, \(name)."
+            greeting = LocalizedStringKey("Good night, \(name).")
         } else if hour < 11 {
-            greeting = "Good morning, \(name)."
+            greeting = LocalizedStringKey("Good morning, \(name).")
         } else if hour < 14 {
-            greeting = "Hi, \(name)."
+            greeting = LocalizedStringKey("Hi, \(name).")
         } else if hour < 16 {
-            greeting = "Good afternoon, \(name)."
+            greeting = LocalizedStringKey("Good afternoon, \(name).")
         } else if hour < 20 {
-            greeting = "Good evening, \(name)."
+            greeting = LocalizedStringKey("Good evening, \(name).")
         } else if hour <= 24 {
-            greeting = "Good night, \(name)."
+            greeting = LocalizedStringKey("Good night, \(name).")
         } else {
-            greeting = "Hi, \(name)."
+            greeting = LocalizedStringKey("Hi, \(name).")
         }
         return greeting
     }
@@ -244,6 +244,7 @@ struct ChartView: View {
                         ChatBubble(direction: .left) {
                             VStack(alignment: .leading) {
                                 Text(getGreeting())
+                                    .padding(.bottom, 1)
                                 Text(getMessage(logsTodayDone.count, logsTodayToDo.count, logsYesterdayDone.count, logsYesterdayToDo.count))
                             }
                                 .padding(.all, 15)
