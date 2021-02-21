@@ -359,7 +359,7 @@ struct ChartView: View {
 
                 }
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationBarTitle("Chart View")
+                .navigationBarTitle("Status")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {

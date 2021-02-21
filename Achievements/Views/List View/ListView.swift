@@ -99,7 +99,7 @@ struct  ListView: View {
                         }
                     }
                 }
-                .navigationBarTitle("Activity Log")
+                .navigationBarTitle("Activity List")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {

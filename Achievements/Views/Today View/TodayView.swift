@@ -128,7 +128,7 @@ struct TodayView: View {
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationBarTitle("Today's To Do (\(Date(), formatter: self.dateFormatter))")
+                .navigationBarTitle("Today's Task (\(Date(), formatter: self.dateFormatter))")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
