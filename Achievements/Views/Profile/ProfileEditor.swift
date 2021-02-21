@@ -90,10 +90,10 @@ struct ProfileEditor: View {
                         TextField("Enter Your Name", text: $modelData.userProfile.username)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                     }
-                    Toggle(isOn: $modelData.userProfile.notification) {
-                        Text("Notification\n(coming soon)")
-                            .font(.headline)
-                    }
+//                    Toggle(isOn: $modelData.userProfile.notification) {
+//                        Text("Notification\n(coming soon)")
+//                            .font(.headline)
+//                    }
                     HStack {
                         Text("Your Pet")
                             .font(.headline)

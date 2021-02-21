@@ -71,11 +71,11 @@ struct ProfileSummary: View {
                     Text("\(modelData.userProfile.dailyTarget)")
                         .foregroundColor(.secondary)
                 }
-                HStack {
-                    Text("Notification: ")
-                    Text(modelData.userProfile.notification ? "On (coming soon)" : "Off (coming soon)")
-                        .foregroundColor(.secondary)
-                }
+//                HStack {
+//                    Text("Notification: ")
+//                    Text(modelData.userProfile.notification ? "On (coming soon)" : "Off (coming soon)")
+//                        .foregroundColor(.secondary)
+//                }
                 EditButton()
                     .padding()
                 
@@ -85,12 +85,12 @@ struct ProfileSummary: View {
                     Text("Completed Badges")
                         .font(.headline)
                     
-                    ScrollView(.horizontal) {
-                        HStack {
-                            Text("Coming Soon!")
-                                .foregroundColor(.secondary)
-                        }
-                    }
+//                    ScrollView(.horizontal) {
+//                        HStack {
+//                            Text("Coming Soon!")
+//                                .foregroundColor(.secondary)
+//                        }
+//                    }
                 }
                 .padding()
             }
