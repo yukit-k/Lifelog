@@ -8,30 +8,24 @@
 import SwiftUI
 import CoreData
 
-//struct FilteredList<T: NSManagedObject, Content: View>: View {
-//    var fetchRequest: FetchRequest<T>
-//    var items: FetchedResults<T> { fetchRequest.wrappedValue }
-//
-//    // this is our content closure; we'll call this once for each item in the list
-//    let content: (T) -> Content
-//
-//    var body: some View {
-//        List(fetchRequest.wrappedValue, id: \.self) { item in
-//            self.content(item)
-//        }
-//    }
-//
-//    init(filterKey: String, filterValue: String, @ViewBuilder content: @escaping (T) -> Content) {
-//        fetchRequest = FetchRequest<T>(entity: T.entity(), sortDescriptors: [], predicate: NSPredicate(format: "%K BEGINSWITH %@", filterKey, filterValue))
-//        self.content = content
-//    }
-//}
+extension AnyTransition {
+    static var moveAndFade: AnyTransition {
+            let insertion = AnyTransition.move(edge: .trailing)
+                .combined(with: .opacity)
+            let removal = AnyTransition.scale
+                .combined(with: .opacity)
+            return .asymmetric(insertion: insertion, removal: removal)
+        }
+}
 
 struct ChartView: View {
     @Environment(\.managedObjectContext) var moc
     @EnvironmentObject var modelData: ModelData
     @EnvironmentObject var categoryFilter: CategoryFilter
     @State private var activeSheet: ActiveSheetNavBar?
+    
+    @State private var showWeeklyDetail = true
+    @State private var showMonthlyDetail = true
 
     let calendar = Calendar.current
     
@@ -284,36 +278,78 @@ struct ChartView: View {
                     Divider()
                         .padding(.top, 20)
                     VStack {
-                        Text("Weekly Achievement")
-                            .font(.title)
                         HStack {
                             Spacer()
-                            CircleCount(title: "This week", count: logsByWeek[thisWeek]?.count ?? 0, width: 140, color: .accentColor)
-                                .padding(20)
-                            Spacer()
-                            CircleCount(title: "Last week", count: logsByWeek[prevWeek]?.count ?? 0, width: 140, color: .green)
-                                .padding(20)
+                            Text("Weekly Achievement")
+                                .font(.title)
+                            Button(action: {
+                                withAnimation {
+                                    self.showWeeklyDetail.toggle()
+                                }
+                            }) {
+                                Image(systemName: "chevron.right.circle")
+                                    .imageScale(.large)
+                                    .rotationEffect(.degrees(showWeeklyDetail ? 90 : 0))
+                                    .scaleEffect(showWeeklyDetail ? 1.5 : 1)
+                                    .padding()
+                            }
                             Spacer()
                         }
-                        WeeklyChart(prevWeekLogs: logsByWeek[prevWeek] ?? [], thisWeekLogs: logsByWeek[thisWeek] ?? [])
-                            .padding(.horizontal, 20)
+                        if showWeeklyDetail {
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    CircleCount(title: "This week", count: logsByWeek[thisWeek]?.count ?? 0, width: 140, color: .accentColor)
+                                        .padding(20)
+                                    Spacer()
+                                    CircleCount(title: "Last week", count: logsByWeek[prevWeek]?.count ?? 0, width: 140, color: .green)
+                                        .padding(20)
+                                    Spacer()
+                                }
+                                WeeklyChart(prevWeekLogs: logsByWeek[prevWeek] ?? [], thisWeekLogs: logsByWeek[thisWeek] ?? [])
+                                    .padding(.horizontal, 20)
+                            }
+                            .transition(.moveAndFade)
+                            .padding(.bottom, 10)
+                        }
                     }
                     Divider()
                     VStack {
-                        Text("Monthly Achievement")
-                            .font(.title)
                         HStack {
                             Spacer()
-                            CircleCount(title: "This month (\(monthAbbrFromInt(Int(thisMonth.suffix(2)) ?? 1)))", count: logsByMonth[thisMonth]?.count ?? 0, width: 140,  color: .accentColor)
-                                .padding(20)
-                            Spacer()
-                            CircleCount(title: "Last month (\(monthAbbrFromInt(Int(prevMonth.suffix(2)) ?? 1)))", count: logsByMonth[prevMonth]?.count ?? 0, width: 140, color: .green)
-                                .padding(20)
+                            Text("Monthly Achievement")
+                                .font(.title)
+                            Button(action: {
+                                withAnimation {
+                                    self.showMonthlyDetail.toggle()
+                                }
+                            }) {
+                                Image(systemName: "chevron.right.circle")
+                                    .imageScale(.large)
+                                    .rotationEffect(.degrees(showMonthlyDetail ? 90 : 0))
+                                    .scaleEffect(showMonthlyDetail ? 1.5 : 1)
+                                    .padding()
+                            }
                             Spacer()
                         }
-                        MonthlyChart(prevMonthLogs: logsByMonth[prevMonth] ?? [], thisMonthLogs: logsByMonth[thisMonth] ?? [])
-                            .padding(.horizontal, 20)
+                        if showMonthlyDetail {
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    CircleCount(title: "This month (\(monthAbbrFromInt(Int(thisMonth.suffix(2)) ?? 1)))", count: logsByMonth[thisMonth]?.count ?? 0, width: 140,  color: .accentColor)
+                                        .padding(20)
+                                    Spacer()
+                                    CircleCount(title: "Last month (\(monthAbbrFromInt(Int(prevMonth.suffix(2)) ?? 1)))", count: logsByMonth[prevMonth]?.count ?? 0, width: 140, color: .green)
+                                        .padding(20)
+                                    Spacer()
+                                }
+                                MonthlyChart(prevMonthLogs: logsByMonth[prevMonth] ?? [], thisMonthLogs: logsByMonth[thisMonth] ?? [])
+                                    .padding(.horizontal, 20)
+                            }
+                            .transition(.moveAndFade)
+                        }
                     }
+                    .padding(.bottom, 20)
 
 //                    if logsByMonth[thisMonth] != nil {
 //                        if groupByCategory(logsByMonth[thisMonth]!)["Book"] != nil {
