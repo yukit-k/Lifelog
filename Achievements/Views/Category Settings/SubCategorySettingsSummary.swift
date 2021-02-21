@@ -11,7 +11,7 @@ struct SubCategorySettingsSummary: View {
     @EnvironmentObject var modelData: ModelData
     @ObservedObject var categoryItem: CategoryItem
     var body: some View {
-        Section(header: Text("Cateogyry")) {
+        Section(header: Text("Category")) {
             HStack {
                 Text(categoryItem.category.icon ?? "")
                 Text(categoryItem.category.name)
@@ -25,7 +25,7 @@ struct SubCategorySettingsSummary: View {
             }
             .foregroundColor(.secondary)
         }
-        Section(header: Text("Sub Cateogyry")) {
+        Section(header: Text("Sub Category")) {
             ForEach(categoryItem.category.subCategories, id: \.self) { subCategory in
                 HStack {
                     Text(subCategory.icon ?? "")

@@ -10,7 +10,7 @@ import SwiftUI
 struct CategorySettingsSummary: View {
     @ObservedObject var userCategory: UserCategory
     var body: some View {
-        Section(header: Text("Cateogyry")) {
+        Section(header: Text("Category")) {
             ForEach(Array(userCategory.categories.enumerated()), id: \.1.id) { i, category in
                 NavigationLink(destination: SubCategorySettingsHost(categoryItem: CategoryItem(category: category, categoryIndex: i))) {
                     HStack {
