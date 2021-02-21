@@ -80,38 +80,39 @@
 //"chartMessage5" = "イエィ🥳毎日食べさせてくれて幸せだよ！";
 //"chartMessage6" = "最高！こんなに食べさせてくれて超ハッピー🤩";
 
-"chartMessageA0" = "I'm starving😢 Please please feed me something!";
-"chartMessageA1" = "I'm still hungry🥺 Please feed me something more...";
-"chartMessageA2" = "I'm getting better but can you feed me something more?🤤";
-"chartMessageA3" = "Thanks😃 I'm getting better.";
-"chartMessageA4" = "Thanks😃 I'm happy today.";
-"chartMessageA5" = "Nice😃 Wow, I'm feeling much better than yesterday!";
-"chartMessageA6" = "Great🥳 I'm so happy today!";
-"chartMessageA7" = "Wonderful🥳 This really is a lovely treat😍 I want the same tomorrow, too!";
-"chartMessageA8" = "Amazing! I'm so happy🤩 Please please give me the same tomorrow, too.";
-"chartMessageA9" = "Fantastic! I'm sooooooo happy🤩 I will be happier you could give me the same tomorrow!";
 
-"chartMessageB0" = "I'm hungry🥺 Please feed me something!";
-"chartMessageB1" = "I want some more today😃";
-"chartMessageB2" = "I'll be happier to have the same or more than yesterday😃";
-"chartMessageB3" = "I'm getting more happier than yesterday! Thanks😃 ";
-"chartMessageB4" = "Wow, I'm so happy to be full today😃";
-"chartMessageB5" = "Oh, are you giving me more? I'll be happier😃";
-"chartMessageB6" = "Nice🥳 I'm so happy to be full!";
-"chartMessageB7" = "I can't eat more😍";
-"chartMessageB8" = "Wonderful! I'm so happy to have so much🤩";
-"chartMessageB9" = "Fantastic! I'm sooooooo happy to have so much🤩";
+"chartMessageA0" = "はらぺこだよ😢何かちょうだい！";
+"chartMessageA1" = "まだおなかすいてる🥺もう少し何かほしいな。";
+"chartMessageA2" = "だんだん元気になってきたよ。まだほしいな。🤤";
+"chartMessageA3" = "ありがとう😃元気になってきた。";
+"chartMessageA4" = "ありがとう😃今日はいい日だなぁ";
+"chartMessageA5" = "やった😃きのうよりずーっと気分がいいよ！";
+"chartMessageA6" = "わお🥳今日はさいこうの日だ〜";
+"chartMessageA7" = "すごい🥳ほんとにありがとう😍明日もおなじだといいな〜";
+"chartMessageA8" = "今日はさいこう🤩明日もちょうだいね〜";
+"chartMessageA9" = "すっっっごーくしあわせだよ🤩明日もよろしくね！！";
 
-"chartMessageC0" = "I'm getting hungry🤤 Can you feed me something today?";
-"chartMessageC1" = "Yesterday was great😃 I want some more today, too.";
-"chartMessageC2" = "Yesterday was great😃 I'll be happier to have the same!";
-"chartMessageC3" = "It was great yesterday😃 I'm getting the same happiness today!";
-"chartMessageC4" = "Wow, I'm so happy to be full everyday😃";
-"chartMessageC5" = "Oh, are you giving me more? I'll be happier😃";
-"chartMessageC6" = "Great🥳 I'm so happy to be full everyday!";
-"chartMessageC7" = "I can't eat more😍";
-"chartMessageC8" = "Fantastic! I'm sooooooo happy to have so much🤩";
-"chartMessageC9" = "I love you! I LOVE YOU🤩";
+"chartMessageB0" = "おなかすいてきたな🥺何かちょうだい！";
+"chartMessageB1" = "今日ももう少し何かほしいな😃";
+"chartMessageB2" = "昨日と同じくらいくれるとうれしいよ😃";
+"chartMessageB3" = "ありがとう、昨日よりうれしいよ😃 ";
+"chartMessageB4" = "やったね、今日はおなかいっぱいだ😃";
+"chartMessageB5" = "お、もっとくれるの？ありがとう😃";
+"chartMessageB6" = "やった🥳こんなおなかいっぱいにしてくれてうれしい！";
+"chartMessageB7" = "もうこれ以上食べれないよ〜😍";
+"chartMessageB8" = "今日はさいこう🤩明日もちょうだいね〜";
+"chartMessageB9" = "すっっっごーくしあわせだよ🤩明日もよろしくね！！";
+
+"chartMessageC0" = "ちょっとおなかすいてきたな🤤今日も何かくれるかな？";
+"chartMessageC1" = "昨日はさいこうだったよ😃今日ももうちょっとくれるとうれしいな";
+"chartMessageC2" = "昨日はさいこうだったよ😃今日も同じくらいくれるとうれしいな";
+"chartMessageC3" = "昨日はありがとうね😃今日もたくさんくれてしあわせだよ！";
+"chartMessageC4" = "毎日こんなにありがとう😃しあわせだよ！";
+"chartMessageC5" = "わお、もっとくれるの？ありがとう😃";
+"chartMessageC6" = "すごい🥳こんなにいつもくれてすっごくハッピー";
+"chartMessageC7" = "もうこれ以上食べれないよ〜😍";
+"chartMessageC8" = "さいこう！こんなにくれてすごくハッピー🤩";
+"chartMessageC9" = "あなたのことがだいすきです。大好き🤩";
 
 "Today" = "今日";
 "Yesterday" = "昨日";
@@ -137,8 +138,8 @@
 "%@rd" = "%@日";
 "%@th" = "%@日";
 
-"Good morning, %@." = "おはよう、%@。"
-"Good afternoon, %@." = "こんにちわ、%@。"
-"Good evening, %@." = "こんばんわ、%@。"
-"Good night, %@." = "おやすみ、%@。"
-"Hi, %@." = "やぁ、%@。"
+"Good morning, %@." = "おはよう、%@。";
+"Good afternoon, %@." = "こんにちわ、%@。";
+"Good evening, %@." = "こんばんわ、%@。";
+"Good night, %@." = "おやすみ、%@。";
+"Hi, %@." = "やぁ、%@。";
