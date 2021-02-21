@@ -12,15 +12,16 @@ struct ImagePicker: UIViewControllerRepresentable {
     class Coordicator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         var parent: ImagePicker
         
-//        @Binding var image: Image?
+        @Binding var image: UIImage?
 //        @Binding var isPresented: Bool
         
     //    init(image: Binding<Image?>, isPresented: Binding<Bool>) {
     //        self._image = image
     //        self._isPresented = isPresented
     //    }
-        init(_ parent: ImagePicker) {
+        init(_ parent: ImagePicker, image: Binding<UIImage?>) {
             self.parent = parent
+            self._image = image
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -45,7 +46,7 @@ struct ImagePicker: UIViewControllerRepresentable {
     
     func makeCoordinator() -> Coordicator {
         //return BookImagePickerCoordicator(image: $image, isPresented: $isPresented)
-        Coordicator(self)
+        Coordicator(self, image: $image)
     }
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) ->  UIImagePickerController {
