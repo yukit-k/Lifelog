@@ -56,7 +56,7 @@ struct ContentView: View {
                             }
                         }
                         TabBarIcon(viewRouter: viewRouter, assignedTab: .today, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "checkmark.square", tabName: "Today")
-                        TabBarIcon(viewRouter: viewRouter, assignedTab: .chart, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "chart.bar", tabName: "Chart")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .chart, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "chart.bar", tabName: "Status")
                      }
                     .frame(width: geometry.size.width, height: geometry.size.height/12)
 //                        .position(y:geometry.size.height - 50)
