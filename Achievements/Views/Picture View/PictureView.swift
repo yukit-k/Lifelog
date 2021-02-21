@@ -38,9 +38,9 @@ struct PictureView: View {
                         .frame(height: geometry1.size.height/3)
                         .listRowInsets(EdgeInsets())
                     ForEach(group(logs).sorted(), id: \.self) { category in
-                        CategoryRow(filter: modelData.userCategory.getCategory(name: category) ?? Category(name: "None", subCategories: []))
-//                    ForEach((group(logs)), id: \.self) { (category: [Log]) in
-//                        CategoryRow(filter: modelData.userSettings.getCategory(name: category[0].wrappedCategory) ?? Category(name: "None", subCategories: []))
+                        if category != "" {
+                            CategoryRow(categoryName: category, categoryIcon: modelData.userCategory.getCategoryIcon(name: category))
+                        }
                     }
                     .listRowInsets(EdgeInsets())
                 }
@@ -81,7 +81,7 @@ struct PictureView: View {
         .navigationViewStyle(StackNavigationViewStyle())
     }
     func group(_ result : FetchedResults<Log>)-> [String] {
-            return Dictionary(grouping: result) { $0.category! }
+            return Dictionary(grouping: result) { $0.category ?? "" }
                 .map {$0.key}
     }
 //    func group(_ result : FetchedResults<Log>)-> [[Log]] {
