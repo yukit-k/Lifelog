@@ -37,7 +37,7 @@ struct ContentView: View {
                     }
                     HStack() {
                         TabBarIcon(viewRouter: viewRouter, assignedTab: .highlight, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "star", tabName: "Picture")
-                        TabBarIcon(viewRouter: viewRouter, assignedTab: .today, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "checkmark.square", tabName: "Today")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "list.bullet", tabName: "List")
                         ZStack {
                             Circle()
                                 .foregroundColor(.white)
@@ -55,7 +55,7 @@ struct ContentView: View {
                                 viewRouter.showPopup.toggle()
                             }
                         }
-                        TabBarIcon(viewRouter: viewRouter, assignedTab: .list, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "list.bullet", tabName: "List")
+                        TabBarIcon(viewRouter: viewRouter, assignedTab: .today, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "checkmark.square", tabName: "Today")
                         TabBarIcon(viewRouter: viewRouter, assignedTab: .chart, width: geometry.size.width/5, height: geometry.size.height/40, systemIconName: "chart.bar", tabName: "Chart")
                      }
                     .frame(width: geometry.size.width, height: geometry.size.height/12)
