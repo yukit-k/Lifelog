@@ -193,6 +193,28 @@ struct ChartView: View {
             return chartMessageC[selectedIndex]
         }
     }
+    
+    func getGreeting() -> String {
+        let hour = calendar.component(.hour, from: Date())
+        let name = modelData.userProfile.username
+        var greeting = ""
+        if hour < 4 {
+            greeting = "Good night, \(name)."
+        } else if hour < 11 {
+            greeting = "Good morning, \(name)."
+        } else if hour < 14 {
+            greeting = "Hi, \(name)."
+        } else if hour < 16 {
+            greeting = "Good afternoon, \(name)."
+        } else if hour < 20 {
+            greeting = "Good evening, \(name)."
+        } else if hour <= 24 {
+            greeting = "Good night, \(name)."
+        } else {
+            greeting = "Hi, \(name)."
+        }
+        return greeting
+    }
             
     var body: some View {
 //        let logsTodayToDo = logsForCurrent[todayToDo] ?? []
@@ -218,15 +240,19 @@ struct ChartView: View {
                         Spacer()
                         Text(modelData.userProfile.usericon)
                             .font(.system(size: 100))
-                            .padding([.leading, .top], 20)
+                            .padding(.top, 20)
                         ChatBubble(direction: .left) {
-                            Text(getMessage(logsTodayDone.count, logsTodayToDo.count, logsYesterdayDone.count, logsYesterdayToDo.count))
+                            VStack(alignment: .leading) {
+                                Text(getGreeting())
+                                Text(getMessage(logsTodayDone.count, logsTodayToDo.count, logsYesterdayDone.count, logsYesterdayToDo.count))
+                            }
                                 .padding(.all, 15)
                                 .foregroundColor(Color.white)
                                 .background(Color.blue)
                         }
                         Spacer()
                     }
+                    .padding(.top, 3)
                     HStack {
                         Spacer()
                         VStack {
