@@ -104,6 +104,6 @@ struct ChatBubble<Content>: View where Content: View {
                 Spacer()
             }
         }.padding([(direction == .left) ? .leading : .trailing, .top, .bottom], 0)
-        .padding((direction == .right) ? .leading : .trailing, 30)
+        .padding((direction == .right) ? .leading : .trailing, 0)
     }
 }
