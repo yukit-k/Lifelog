@@ -58,5 +58,6 @@ struct SubCategorySettingsHost: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }

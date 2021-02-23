@@ -57,6 +57,7 @@ struct CategorySettingsHost: View {
                 draftCategory.categories = modelData.userCategory.categories
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
