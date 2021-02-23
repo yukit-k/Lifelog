@@ -37,11 +37,15 @@ struct TodayTaskItemView: View {
                         Text(log.wrappedName)
                             .font(.headline)
                             .foregroundColor(isCompleted ? .white : .primary)
+                            .frame(height:35)
+                            .truncationMode(.tail)
                         Spacer()
                     }
-                    Text("\(log.wrappedCategoryIcon)\(log.wrappedCategory) / \(log.wrappedSubCategory)")
+                    Text("\(log.wrappedCategoryIcon)\(log.wrappedCategory) / \(log.wrappedSubCategoryIcon)\(log.wrappedSubCategory)")
                         .font(.caption)
                         .foregroundColor(isCompleted ? .white : .primary)
+                        .frame(height:15)
+                        .truncationMode(.tail)
                 }
                 Spacer()
             }
